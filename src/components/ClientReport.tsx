@@ -261,7 +261,7 @@ const ClientReport: React.FC<{
             <img
               src="/brainworx png for website copy.png"
               alt="BrainWorx Logo"
-              className="h-24 mx-auto mb-4"
+              className="h-16 mx-auto mb-4"
             />
           </div>
           <h2 className="text-2xl md:text-3xl font-bold mb-2">

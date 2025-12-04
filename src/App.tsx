@@ -102,7 +102,7 @@ function App() {
             </div>
           </div>
           <div className="mt-8 pt-8 border-t border-gray-200">
-            <img src="/brainworx png for website copy.png" alt="BrainWorx" className="h-16 mx-auto opacity-50" />
+            <img src="/brainworx png for website copy.png" alt="BrainWorx" className="h-11 mx-auto opacity-50" />
           </div>
         </div>
       </div>
@@ -212,7 +212,7 @@ function App() {
         <nav className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <img src="/brainworx png for website copy.png" alt="Brainworx" className="h-16 w-auto" />
+              <img src="/brainworx png for website copy.png" alt="Brainworx" className="h-11 w-auto" />
             </div>
 
             <div className="hidden md:flex items-center space-x-8">
@@ -355,7 +355,7 @@ function App() {
                   <img
                     src="/brainworx png for website copy.png"
                     alt="Brain Transformation"
-                    className="w-full max-w-md mx-auto drop-shadow-2xl"
+                    className="w-full max-w-xs mx-auto drop-shadow-2xl"
                   />
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-r from-[#3DB3E3]/20 to-[#1FAFA3]/20 blur-3xl rounded-full"></div>
@@ -731,7 +731,7 @@ function App() {
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
               <div className="flex items-center space-x-3 mb-4">
-                <img src="/brainworx png for website copy.png" alt="Brainworx" className="h-12 w-auto" />
+                <img src="/brainworx png for website copy.png" alt="Brainworx" className="h-8 w-auto" />
               </div>
               <p className="text-[#E6E9EF] text-sm leading-relaxed">
                 Empowering individuals and organizations to achieve peak performance through cognitive transformation.

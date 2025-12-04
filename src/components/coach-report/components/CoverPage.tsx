@@ -14,7 +14,7 @@ const CoverPage: React.FC<CoverPageProps> = ({ client, assessmentDate }) => {
           <img
             src="/brainworx png for website copy.png"
             alt="BrainWorx Logo"
-            className="h-32 mx-auto"
+            className="h-22 mx-auto"
           />
         </div>
 

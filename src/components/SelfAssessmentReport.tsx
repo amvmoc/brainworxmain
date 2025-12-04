@@ -106,7 +106,7 @@ export function SelfAssessmentReport({
             <img
               src="/brainworx png for website copy.png"
               alt="BrainWorx Logo"
-              className="h-24 mx-auto"
+              className="h-16 mx-auto"
             />
           </div>
           <h2 className="text-3xl font-bold text-[#0A2A5E] mb-2">{assessmentType.name}</h2>
