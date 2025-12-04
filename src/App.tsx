@@ -11,8 +11,6 @@ import NeuralImprintPatterns from './components/NeuralImprintPatterns';
 import { SelfAssessmentsPage } from './components/SelfAssessmentsPage';
 import { DisclaimerPage } from './components/DisclaimerPage';
 import { Library } from './components/Library';
-import CoachReport from './components/coach-report/CoachReport';
-import { sampleCoachData } from './data/sampleCoachData';
 import { supabase } from './lib/supabase';
 
 function App() {
@@ -25,7 +23,6 @@ function App() {
   const [showSelfAssessments, setShowSelfAssessments] = useState(false);
   const [showDisclaimer, setShowDisclaimer] = useState(false);
   const [showLibrary, setShowLibrary] = useState(false);
-  const [showCoachReport, setShowCoachReport] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [franchiseData, setFranchiseData] = useState<any>(null);
@@ -236,12 +233,6 @@ function App() {
                 className="text-[#0A2A5E] hover:text-[#3DB3E3] transition-colors font-medium"
               >
                 Library
-              </button>
-              <button
-                onClick={() => setShowCoachReport(true)}
-                className="text-[#0A2A5E] hover:text-[#3DB3E3] transition-colors font-medium"
-              >
-                Coach Report Demo
               </button>
               <a href="#about" className="text-[#0A2A5E] hover:text-[#3DB3E3] transition-colors font-medium">About</a>
               <button
@@ -827,18 +818,6 @@ function App() {
 
       {showLibrary && (
         <Library onClose={() => setShowLibrary(false)} />
-      )}
-
-      {showCoachReport && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-white">
-          <button
-            onClick={() => setShowCoachReport(false)}
-            className="fixed top-4 right-4 z-[60] bg-white text-gray-600 hover:text-gray-900 rounded-full p-3 shadow-lg border-2 border-gray-300"
-          >
-            <X size={24} />
-          </button>
-          <CoachReport data={sampleCoachData} />
-        </div>
       )}
 
       {showLoginModal && (
