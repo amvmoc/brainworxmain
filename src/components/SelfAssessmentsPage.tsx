@@ -16,7 +16,7 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
   const nipaCard = {
     id: 'nipa',
     name: 'NIPA - Full Neural Imprint Assessment',
-    description: 'The comprehensive 344-question Neural Imprint Patterns Assessment (NIPA) provides an in-depth analysis of your cognitive patterns, emotional responses, behavioral tendencies, and life experiences. This flagship assessment offers the most complete profile of your neural imprints.',
+    description: 'This is our comprehensive client assessment with 344 in-depth questions. Unlike the shorter self-assessments above, NIPA provides a complete analysis of your cognitive patterns, emotional responses, behavioral tendencies, and life experiences across all 16 Neural Imprint Patterns. This flagship assessment includes a professional 45-minute debrief session to help you understand and apply your results.',
     icon: Brain,
     color: 'from-[#0A2A5E] to-[#3DB3E3]',
     iconColor: 'text-[#0A2A5E]',
@@ -25,16 +25,17 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
     targetAudience: 'Adults & Teens 16+',
     questionCount: 344,
     price: 'R950',
+    assessmentType: 'Full Client Assessment',
     features: [
-      'Complete neural imprint profile',
-      '45-minute debrief session included',
-      'Comprehensive pattern analysis',
-      'Detailed recommendations',
-      'Cognitive & emotional insights',
-      'Behavioral tendency mapping'
+      'Full 344-question comprehensive assessment',
+      'Professional 45-minute debrief session',
+      'Complete profile across all 16 patterns',
+      'Two-round assessment process',
+      'Detailed personalized recommendations',
+      'In-depth cognitive & emotional insights'
     ],
-    instructions: 'Answer all questions honestly based on your current experiences and feelings. There are no right or wrong answers. The assessment typically takes 45-60 minutes to complete. You can save your progress and return at any time.',
-    disclaimer: 'This is a self-reflection and coaching tool, not a clinical diagnostic instrument. It is designed to support personal growth and self-awareness.'
+    instructions: 'This is a comprehensive two-round assessment. Round 1 includes 343 questions covering all aspects of your neural imprint patterns. Round 2 focuses on deeper analysis. The full assessment typically takes 60-90 minutes. You can save your progress and return at any time. After completion, you will receive a detailed report and a 45-minute debrief session with a qualified practitioner.',
+    disclaimer: 'This is a self-reflection and coaching tool, not a clinical diagnostic instrument. It is designed to support personal growth and self-awareness through professional guidance.'
   };
 
   const assessmentCards = [
@@ -109,7 +110,10 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
                 </div>
                 <div>
                   <h1 className="text-4xl font-bold">{nipaCard.name}</h1>
-                  <div className="flex items-center gap-4 mt-2">
+                  <div className="flex items-center gap-2 mt-2 flex-wrap">
+                    <span className="px-3 py-1 bg-white rounded-full text-sm font-bold text-[#0A2A5E]">
+                      Full Client Assessment
+                    </span>
                     <span className="flex items-center gap-1 text-white/90">
                       <Clock size={16} />
                       {nipaCard.questionCount} questions
@@ -130,6 +134,16 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
               <p className="text-gray-700 text-lg leading-relaxed mb-6">
                 {nipaCard.description}
               </p>
+
+              <div className="bg-gradient-to-r from-[#0A2A5E]/10 to-[#3DB3E3]/10 border-2 border-[#0A2A5E]/30 rounded-xl p-6 mb-6">
+                <h3 className="font-bold text-[#0A2A5E] mb-2 flex items-center gap-2">
+                  <Heart size={20} className="text-[#0A2A5E]" />
+                  What Makes NIPA Different?
+                </h3>
+                <p className="text-gray-700 leading-relaxed">
+                  <strong>NIPA is our flagship client assessment</strong> — not a brief self-assessment. While the coach assessments above (48-60 questions) provide focused insights for specific areas, NIPA offers a comprehensive two-round evaluation covering all 16 Neural Imprint Patterns. You'll receive a detailed professional report and a 45-minute one-on-one debrief session to help you understand and apply your results to your life.
+                </p>
+              </div>
 
               <div className={`${nipaCard.bgColor} border ${nipaCard.borderColor} rounded-xl p-6 mb-6`}>
                 <h3 className="font-bold text-[#0A2A5E] mb-3 flex items-center gap-2">
@@ -328,7 +342,12 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
                         <h2 className="text-3xl font-bold">
                           {isNIPA ? card.name : cardData.type.name}
                         </h2>
-                        <div className="flex items-center gap-4 mt-2">
+                        <div className="flex items-center gap-2 mt-2 flex-wrap">
+                          {isNIPA && (
+                            <span className="px-3 py-1 bg-white rounded-full text-sm font-bold text-[#0A2A5E]">
+                              Full Client Assessment
+                            </span>
+                          )}
                           <span className="flex items-center gap-1 text-white/90">
                             <Clock size={16} />
                             {isNIPA ? card.questionCount : cardData.type.questions.length} questions
