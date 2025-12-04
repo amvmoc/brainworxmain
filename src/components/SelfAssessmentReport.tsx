@@ -102,8 +102,12 @@ export function SelfAssessmentReport({
         </button>
 
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-[#3DB3E3] to-[#1FAFA3] rounded-full mb-4">
-            <Brain className="text-white" size={40} />
+          <div className="mb-6">
+            <img
+              src="/brainworx png for website copy.png"
+              alt="BrainWorx Logo"
+              className="h-24 mx-auto"
+            />
           </div>
           <h2 className="text-3xl font-bold text-[#0A2A5E] mb-2">{assessmentType.name}</h2>
           <p className="text-gray-600">Your Neural Imprint Profile Analysis</p>

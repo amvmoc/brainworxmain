@@ -10,8 +10,12 @@ const CoverPage: React.FC<CoverPageProps> = ({ client, assessmentDate }) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-900 to-cyan-500 flex items-center justify-center p-8 print:page-break-after-always">
       <div className="text-center text-white space-y-8">
-        <div className="inline-flex items-center justify-center w-32 h-32 bg-white/20 backdrop-blur-sm rounded-full mb-8">
-          <span className="text-7xl">🧠</span>
+        <div className="mb-8">
+          <img
+            src="/brainworx png for website copy.png"
+            alt="BrainWorx Logo"
+            className="h-32 mx-auto"
+          />
         </div>
 
         <h1 className="text-5xl md:text-6xl font-bold mb-4">

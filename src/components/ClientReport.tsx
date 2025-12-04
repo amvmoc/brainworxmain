@@ -258,9 +258,11 @@ const ClientReport: React.FC<{
 
         <header className="bg-gradient-to-r from-blue-500 to-cyan-600 text-white text-center px-6 py-10">
           <div className="mb-6">
-            <h1 className="text-4xl md:text-5xl font-extrabold drop-shadow-lg">
-              🧠 BrainWorx
-            </h1>
+            <img
+              src="/brainworx png for website copy.png"
+              alt="BrainWorx Logo"
+              className="h-24 mx-auto mb-4"
+            />
           </div>
           <h2 className="text-2xl md:text-3xl font-bold mb-2">
             Your Neural Imprint Assessment Results
