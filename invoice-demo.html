@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brainworx Invoice Sample</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .invoice-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 60px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .invoice-header {
+            margin-bottom: 40px;
+        }
+
+        .invoice-header h1 {
+            color: #0A2A5E;
+            font-size: 42px;
+            margin-bottom: 8px;
+        }
+
+        .accent-bar {
+            width: 80px;
+            height: 4px;
+            background: #3DB3E3;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .info-section h3 {
+            color: #6B7280;
+            font-size: 12px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .info-section p {
+            color: #1F2937;
+            line-height: 1.6;
+            margin: 4px 0;
+        }
+
+        .info-section .company-name {
+            font-weight: bold;
+            font-size: 18px;
+            color: #0A2A5E;
+        }
+
+        .invoice-details {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            padding: 20px;
+            background: #F9FAFB;
+            border-radius: 8px;
+            margin-bottom: 40px;
+        }
+
+        .detail-item p:first-child {
+            color: #6B7280;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .detail-item p:last-child {
+            color: #0A2A5E;
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 40px;
+        }
+
+        thead {
+            border-bottom: 2px solid #0A2A5E;
+        }
+
+        th {
+            text-align: left;
+            padding: 16px 8px;
+            color: #374151;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        th:nth-child(2), td:nth-child(2) {
+            text-align: center;
+        }
+
+        th:nth-child(3), td:nth-child(3),
+        th:nth-child(4), td:nth-child(4) {
+            text-align: right;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        td {
+            padding: 20px 8px;
+            color: #1F2937;
+        }
+
+        .total-section {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 40px;
+        }
+
+        .total-box {
+            width: 320px;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 16px 0;
+            border-top: 2px solid #0A2A5E;
+            font-size: 18px;
+            font-weight: bold;
+            color: #0A2A5E;
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            background: #D1FAE5;
+            color: #065F46;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .notes-section {
+            padding: 20px;
+            background: #F9FAFB;
+            border-radius: 8px;
+            margin-bottom: 40px;
+        }
+
+        .notes-section h3 {
+            color: #6B7280;
+            font-size: 12px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .notes-section p {
+            color: #374151;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .footer {
+            text-align: center;
+            padding-top: 40px;
+            border-top: 1px solid #E5E7EB;
+            color: #6B7280;
+            font-size: 14px;
+        }
+
+        .footer p {
+            margin: 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice-container">
+        <div class="invoice-header">
+            <h1>INVOICE</h1>
+            <div class="accent-bar"></div>
+        </div>
+
+        <div class="info-grid">
+            <div class="info-section">
+                <h3>From</h3>
+                <p class="company-name">Brainworx</p>
+                <p>Mossel Bay, South Africa</p>
+                <p>info@brainworx.co.za</p>
+            </div>
+
+            <div class="info-section">
+                <h3>Bill To</h3>
+                <p class="company-name">Sarah Johnson</p>
+                <p>sarah.johnson@email.com</p>
+                <p>123 Main Street<br>Cape Town, 8001<br>South Africa</p>
+            </div>
+        </div>
+
+        <div class="invoice-details">
+            <div class="detail-item">
+                <p>Invoice Number</p>
+                <p>251120142530</p>
+            </div>
+            <div class="detail-item">
+                <p>Invoice Date</p>
+                <p>November 20, 2025</p>
+            </div>
+            <div class="detail-item">
+                <p>Due Date</p>
+                <p>December 20, 2025</p>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Qty</th>
+                    <th>Unit Price</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Full NIP Assessment - Teen (128 Questions)</td>
+                    <td style="text-align: center;">1</td>
+                    <td style="text-align: right;">$299.00</td>
+                    <td style="text-align: right; font-weight: 600;">$299.00</td>
+                </tr>
+                <tr>
+                    <td>Comprehensive Analysis Report</td>
+                    <td style="text-align: center;">1</td>
+                    <td style="text-align: right;">$49.00</td>
+                    <td style="text-align: right; font-weight: 600;">$49.00</td>
+                </tr>
+                <tr>
+                    <td>Follow-up Consultation (30 minutes)</td>
+                    <td style="text-align: center;">1</td>
+                    <td style="text-align: right;">$75.00</td>
+                    <td style="text-align: right; font-weight: 600;">$75.00</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="total-section">
+            <div class="total-box">
+                <div class="total-row">
+                    <span>Total:</span>
+                    <span>$423.00</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="status-grid">
+            <div class="info-section">
+                <h3>Payment Status</h3>
+                <div>
+                    <span class="status-badge">Paid</span>
+                </div>
+                <p style="margin-top: 12px; font-size: 14px; color: #6B7280;">
+                    Payment Method: Credit Card
+                </p>
+                <p style="font-size: 14px; color: #6B7280;">
+                    Paid on: November 20, 2025
+                </p>
+            </div>
+
+            <div class="info-section">
+                <h3>Assessment Type</h3>
+                <p>Full NIP Assessment</p>
+            </div>
+        </div>
+
+        <div class="notes-section">
+            <h3>Notes</h3>
+            <p>Thank you for choosing Brainworx Neural Imprint Assessments. Your comprehensive assessment results will be delivered within 5-7 business days. A follow-up consultation has been scheduled to discuss your results in detail.</p>
+        </div>
+
+        <div class="footer">
+            <p>Thank you for your business!</p>
+            <p>For questions about this invoice, please contact info@brainworx.co.za</p>
+        </div>
+    </div>
+</body>
+</html>

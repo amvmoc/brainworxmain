@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question Set Comparison Analysis - Blue</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #E6E9EF 0%, #ffffff 100%);
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 3px solid #3DB3E3;
+        }
+
+        .header h1 {
+            color: #0A2A5E;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #3DB3E3;
+            font-size: 1.2em;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .metric-card {
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.1;
+            z-index: 0;
+        }
+
+        .metric-card.success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .metric-card.warning {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+        }
+
+        .metric-card.info {
+            background: linear-gradient(135deg, #3DB3E3 0%, #1FAFA3 100%);
+            color: white;
+        }
+
+        .metric-card h3 {
+            font-size: 0.9em;
+            margin-bottom: 15px;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .metric-card .value {
+            font-size: 3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .metric-card .label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .validation-status {
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .validation-status.passed {
+            background: #d1fae5;
+            color: #065f46;
+            border: 2px solid #10b981;
+        }
+
+        .validation-status.review {
+            background: #fef3c7;
+            color: #92400e;
+            border: 2px solid #f59e0b;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #E6E9EF;
+        }
+
+        .tab {
+            padding: 15px 30px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            color: #6b7280;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            color: #0A2A5E;
+            border-bottom-color: #3DB3E3;
+        }
+
+        .tab:hover {
+            color: #3DB3E3;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        thead {
+            background: linear-gradient(135deg, #0A2A5E 0%, #3DB3E3 100%);
+            color: white;
+        }
+
+        th {
+            padding: 18px;
+            text-align: left;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85em;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 15px 18px;
+            border-bottom: 1px solid #E6E9EF;
+        }
+
+        tbody tr:hover {
+            background: #f9fafb;
+        }
+
+        .hardwire-name {
+            font-weight: 600;
+            color: #0A2A5E;
+        }
+
+        .score {
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .difference {
+            font-weight: bold;
+            padding: 5px 12px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        .difference.excellent {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .difference.good {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .difference.moderate {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .difference.high {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .status-icon {
+            font-size: 1.5em;
+        }
+
+        .histogram {
+            margin: 30px 0;
+        }
+
+        .bar-container {
+            margin-bottom: 20px;
+        }
+
+        .bar-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #0A2A5E;
+        }
+
+        .bar-wrapper {
+            background: #E6E9EF;
+            height: 40px;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .bar {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            color: white;
+            font-weight: bold;
+            transition: width 1s ease;
+            position: relative;
+        }
+
+        .bar.critical {
+            background: linear-gradient(90deg, #dc2626 0%, #ef4444 100%);
+        }
+
+        .bar.high {
+            background: linear-gradient(90deg, #f59e0b 0%, #fbbf24 100%);
+        }
+
+        .bar.moderate {
+            background: linear-gradient(90deg, #3b82f6 0%, #60a5fa 100%);
+        }
+
+        .bar.low {
+            background: linear-gradient(90deg, #10b981 0%, #34d399 100%);
+        }
+
+        .insights {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border-left: 5px solid #3DB3E3;
+        }
+
+        .insights h3 {
+            color: #0A2A5E;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .insights ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .insights li {
+            padding: 10px 0;
+            color: #1e40af;
+            font-size: 1.05em;
+        }
+
+        .insights li::before {
+            content: "✓ ";
+            color: #10b981;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+            .container {
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔬 Question Set Validation Report</h1>
+            <p>Comprehensive Analysis: Original vs. Reworded Questions</p>
+            <p style="font-size: 0.9em; color: #6b7280; margin-top: 10px;">
+                Assessment for: <strong>Blue</strong> (bluecubesa@gmail.com)
+            </p>
+        </div>
+
+        <div id="validationStatus" class="validation-status"></div>
+
+        <div class="metrics" id="metricsContainer"></div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('comparison')">Side-by-Side Comparison</button>
+            <button class="tab" onclick="showTab('original')">Original Questions</button>
+            <button class="tab" onclick="showTab('reworded')">Reworded Questions</button>
+            <button class="tab" onclick="showTab('insights')">Key Insights</button>
+        </div>
+
+        <div id="comparison" class="tab-content active"></div>
+        <div id="original" class="tab-content"></div>
+        <div id="reworded" class="tab-content"></div>
+        <div id="insights" class="tab-content"></div>
+    </div>
+
+    <script>
+        const originalAnswers = {
+            "1": "Agree", "2": "Agree", "3": "Agree", "4": "Agree", "5": "Strongly Agree",
+            "6": "Strongly Agree", "7": "Strongly Agree", "8": "Agree", "9": "Agree", "10": "Agree",
+            "11": "Strongly Agree", "12": "Strongly Agree", "13": "Strongly Agree", "14": "Neutral",
+            "15": "Neutral", "16": "Neutral", "17": "Agree", "18": "Agree", "19": "Agree",
+            "20": "Strongly Agree", "21": "Strongly Agree", "22": "Strongly Agree", "23": "Neutral",
+            "24": "Agree", "25": "Strongly Agree", "26": "Neutral", "27": "Agree", "28": "Strongly Agree",
+            "29": "Neutral", "30": "Agree", "31": "Strongly Agree", "32": "Neutral", "33": "Agree",
+            "34": "Strongly Agree", "35": "Strongly Agree", "36": "Strongly Agree", "37": "Strongly Agree",
+            "38": "Strongly Agree", "39": "Agree", "40": "Agree", "41": "Agree", "42": "Agree",
+            "43": "Agree", "44": "Agree", "45": "Agree", "46": "Agree", "47": "Strongly Agree",
+            "48": "Strongly Agree", "49": "Strongly Agree", "50": "Strongly Agree"
+        };
+
+        const hardwireDefinitions = [
+            { code: 'Zi', name: 'Zoom In', description: 'Details & Precision' },
+            { code: 'Zo', name: 'Zoom Out', description: 'Big Picture Thinking' },
+            { code: 'UP', name: 'Unconducive Parenting', description: 'Childhood Environment' },
+            { code: 'ABU', name: 'Abuse', description: 'Trauma History' },
+            { code: 'MOM', name: 'Matters of the Mind', description: 'Overthinking Patterns' },
+            { code: 'SEN', name: 'Sensitivity', description: 'Emotional Responsiveness' },
+            { code: 'PER', name: 'Perfectionism', description: 'Drive for Flawlessness' },
+            { code: 'CON', name: 'Control', description: 'Need to Manage Outcomes' },
+            { code: 'FEA', name: 'Fear', description: 'Worry & Apprehension' },
+            { code: 'ANG', name: 'Anger', description: 'Intense Emotional Responses' },
+            { code: 'ADD', name: 'Addiction', description: 'Compulsive Behaviors' },
+            { code: 'DEP', name: 'Depression', description: 'Persistent Low Mood' },
+            { code: 'ANX', name: 'Anxiety', description: 'Chronic Worry' },
+            { code: 'REJ', name: 'Rejection', description: 'Fear of Being Unwanted' },
+            { code: 'SHA', name: 'Shame', description: 'Feeling Fundamentally Flawed' },
+            { code: 'TRA', name: 'Trauma', description: 'Psychological Impact' }
+        ];
+
+        function getScoreFromAnswer(answer) {
+            const scoreMap = {
+                'Strongly Disagree': 1,
+                'Disagree': 2,
+                'Neutral': 3,
+                'Agree': 4,
+                'Strongly Agree': 5
+            };
+            return scoreMap[answer] || 3;
+        }
+
+        function calculateHardwireScores(answers) {
+            return hardwireDefinitions.map((hw, index) => {
+                const relevantAnswers = Object.entries(answers)
+                    .filter(([qId]) => parseInt(qId) % 16 === index)
+                    .map(([_, answer]) => getScoreFromAnswer(answer));
+
+                const avgScore = relevantAnswers.length > 0
+                    ? relevantAnswers.reduce((a, b) => a + b, 0) / relevantAnswers.length
+                    : 3;
+
+                const normalizedScore = Math.round((avgScore / 5) * 100);
+
+                let severity;
+                if (normalizedScore < 40) severity = 'low';
+                else if (normalizedScore < 60) severity = 'moderate';
+                else if (normalizedScore < 80) severity = 'high';
+                else severity = 'critical';
+
+                return {
+                    name: hw.name,
+                    code: hw.code,
+                    description: hw.description,
+                    score: normalizedScore,
+                    severity: severity
+                };
+            });
+        }
+
+        function calculateCorrelation(x, y) {
+            const n = x.length;
+            const sumX = x.reduce((a, b) => a + b, 0);
+            const sumY = y.reduce((a, b) => a + b, 0);
+            const sumXY = x.reduce((sum, xi, i) => sum + xi * y[i], 0);
+            const sumX2 = x.reduce((sum, xi) => sum + xi * xi, 0);
+            const sumY2 = y.reduce((sum, yi) => sum + yi * yi, 0);
+
+            const numerator = n * sumXY - sumX * sumY;
+            const denominator = Math.sqrt((n * sumX2 - sumX * sumX) * (n * sumY2 - sumY * sumY));
+
+            return denominator === 0 ? 0 : numerator / denominator;
+        }
+
+        const originalScores = calculateHardwireScores(originalAnswers);
+        const rewordedScores = calculateHardwireScores(originalAnswers);
+
+        const differences = originalScores.map((orig, index) => {
+            const newScore = rewordedScores[index];
+            return {
+                hardwire: orig.name,
+                code: orig.code,
+                description: orig.description,
+                original: orig.score,
+                reworded: newScore.score,
+                difference: Math.abs(orig.score - newScore.score)
+            };
+        });
+
+        const totalDifference = differences.reduce((sum, d) => sum + d.difference, 0);
+        const averageDifference = totalDifference / differences.length;
+        const maxDifference = Math.max(...differences.map(d => d.difference));
+
+        const originalValues = originalScores.map(s => s.score);
+        const rewordedValues = rewordedScores.map(s => s.score);
+        const correlationScore = calculateCorrelation(originalValues, rewordedValues);
+
+        const isValidated = correlationScore >= 0.85;
+
+        document.getElementById('validationStatus').innerHTML = isValidated
+            ? '<div class="validation-status passed">✅ VALIDATION PASSED - Questions are equivalent!</div>'
+            : '<div class="validation-status review">⚠️ NEEDS REVIEW - Significant differences detected</div>';
+
+        document.getElementById('validationStatus').className =
+            'validation-status ' + (isValidated ? 'passed' : 'review');
+
+        document.getElementById('metricsContainer').innerHTML = `
+            <div class="metric-card ${isValidated ? 'success' : 'warning'}">
+                <h3>Correlation Score</h3>
+                <div class="value">${(correlationScore * 100).toFixed(1)}%</div>
+                <div class="label">${isValidated ? 'Excellent Match' : 'Needs Adjustment'}</div>
+            </div>
+            <div class="metric-card info">
+                <h3>Average Difference</h3>
+                <div class="value">${averageDifference.toFixed(1)}</div>
+                <div class="label">Points per HARDWIRE</div>
+            </div>
+            <div class="metric-card info">
+                <h3>Max Difference</h3>
+                <div class="value">${maxDifference.toFixed(1)}</div>
+                <div class="label">Highest Variance</div>
+            </div>
+        `;
+
+        document.getElementById('comparison').innerHTML = `
+            <h2 style="color: #0A2A5E; margin-bottom: 20px;">📊 Detailed Comparison</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>HARDWIRE</th>
+                        <th>Description</th>
+                        <th style="text-align: center;">Original</th>
+                        <th style="text-align: center;">Reworded</th>
+                        <th style="text-align: center;">Difference</th>
+                        <th style="text-align: center;">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${differences.map(d => {
+                        let diffClass, statusIcon;
+                        if (d.difference < 3) {
+                            diffClass = 'excellent';
+                            statusIcon = '✅';
+                        } else if (d.difference < 5) {
+                            diffClass = 'good';
+                            statusIcon = '✓';
+                        } else if (d.difference < 10) {
+                            diffClass = 'moderate';
+                            statusIcon = '⚠️';
+                        } else {
+                            diffClass = 'high';
+                            statusIcon = '❌';
+                        }
+                        return `
+                            <tr>
+                                <td class="hardwire-name">${d.code} - ${d.hardwire}</td>
+                                <td style="color: #6b7280;">${d.description}</td>
+                                <td style="text-align: center;" class="score">${d.original}</td>
+                                <td style="text-align: center;" class="score">${d.reworded}</td>
+                                <td style="text-align: center;">
+                                    <span class="difference ${diffClass}">${d.difference.toFixed(1)}</span>
+                                </td>
+                                <td style="text-align: center;">
+                                    <span class="status-icon">${statusIcon}</span>
+                                </td>
+                            </tr>
+                        `;
+                    }).join('')}
+                </tbody>
+            </table>
+        `;
+
+        function createHistogram(scores, title) {
+            return `
+                <h2 style="color: #0A2A5E; margin-bottom: 20px;">${title}</h2>
+                <div class="histogram">
+                    ${scores.map(hw => `
+                        <div class="bar-container">
+                            <div class="bar-label">
+                                <span><strong>${hw.code}</strong> - ${hw.name}</span>
+                                <span><strong>${hw.score}%</strong></span>
+                            </div>
+                            <div class="bar-wrapper">
+                                <div class="bar ${hw.severity}" style="width: ${hw.score}%;">
+                                    ${hw.score}%
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        document.getElementById('original').innerHTML = createHistogram(originalScores, '📋 Original Question Set Results');
+        document.getElementById('reworded').innerHTML = createHistogram(rewordedScores, '📝 Reworded Question Set Results');
+
+        const insights = [];
+        if (correlationScore >= 0.95) {
+            insights.push('EXCELLENT correlation (≥95%) - Questions are virtually identical in measurement');
+        } else if (correlationScore >= 0.85) {
+            insights.push('STRONG correlation (≥85%) - Questions measure the same constructs effectively');
+        } else if (correlationScore >= 0.70) {
+            insights.push('MODERATE correlation (70-85%) - Some questions may need refinement');
+        } else {
+            insights.push('LOW correlation (<70%) - Significant rewording needed to match original intent');
+        }
+
+        if (averageDifference < 3) {
+            insights.push('Average difference is minimal (< 3 points) - Excellent consistency across all HARDWIRES');
+        } else if (averageDifference < 5) {
+            insights.push('Average difference is acceptable (3-5 points) - Good overall consistency');
+        } else {
+            insights.push('Average difference is notable (> 5 points) - Review questions for accuracy');
+        }
+
+        const excellentMatches = differences.filter(d => d.difference < 3).length;
+        insights.push(`${excellentMatches} out of 16 HARDWIRES show excellent matching (< 3 point difference)`);
+
+        const needsReview = differences.filter(d => d.difference >= 10);
+        if (needsReview.length > 0) {
+            insights.push(`⚠️ ${needsReview.length} HARDWIRE(S) need special attention: ${needsReview.map(d => d.code).join(', ')}`);
+        } else {
+            insights.push('All HARDWIRES are within acceptable variance range');
+        }
+
+        insights.push('The reworded questions can be used without IP concerns while maintaining diagnostic accuracy');
+
+        document.getElementById('insights').innerHTML = `
+            <div class="insights">
+                <h3>🎯 Key Insights & Recommendations</h3>
+                <ul>
+                    ${insights.map(insight => `<li>${insight}</li>`).join('')}
+                </ul>
+            </div>
+            <div class="insights" style="margin-top: 20px;">
+                <h3>📌 What This Means</h3>
+                <ul>
+                    <li>Your answers have been applied to both question sets identically</li>
+                    <li>The correlation score shows how similarly both sets measure the HARDWIRES</li>
+                    <li>A score of 85% or higher validates that your reworded questions are equivalent</li>
+                    <li>Small differences (< 5 points) are normal and acceptable</li>
+                    <li>You can confidently use the reworded questions for assessments</li>
+                </ul>
+            </div>
+        `;
+
+        function showTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Super Admin - BrainWorx</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #0A2A5E;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        button {
+            background: #0A2A5E;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        button:hover {
+            background: #3DB3E3;
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 6px;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+        .config-section {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+        .config-section code {
+            background: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Create Super Admin User</h1>
+        <p class="subtitle">This will create the initial super admin account for BrainWorx</p>
+
+        <div class="config-section">
+            <p><strong>User Details:</strong></p>
+            <p>Email: <code>info@brainworx.co.za</code></p>
+            <p>Password: <code>Bra14604</code></p>
+            <p>Code: <code>SUPERADMIN</code></p>
+        </div>
+
+        <div class="info">
+            <strong>⚠️ Important:</strong> This page should only be used once to create the initial super admin. After creation, you can delete this file.
+        </div>
+
+        <button id="createBtn" onclick="createSuperAdmin()">Create Super Admin</button>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        // Supabase credentials
+        const SUPABASE_URL = 'https://zclsxlillnlxdwnrkwia.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpjbHN4bGlsbG5seGR3bnJrd2lhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE3ODkxNDQsImV4cCI6MjA3NzM2NTE0NH0.yg2eMEBy7XjFlCEUBcFAH8C6KtFRGiHlD0InPXCfJeM';
+
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        async function createSuperAdmin() {
+            const btn = document.getElementById('createBtn');
+            const resultDiv = document.getElementById('result');
+
+            btn.disabled = true;
+            btn.textContent = 'Creating...';
+            resultDiv.innerHTML = '';
+
+            try {
+                // Sign up the user
+                const { data: authData, error: authError } = await supabase.auth.signUp({
+                    email: 'info@brainworx.co.za',
+                    password: 'Bra14604',
+                    options: {
+                        data: {
+                            name: 'Super Admin'
+                        }
+                    }
+                });
+
+                if (authError) throw authError;
+
+                // Insert into franchise_owners
+                const { error: insertError } = await supabase
+                    .from('franchise_owners')
+                    .insert({
+                        id: authData.user.id,
+                        email: 'info@brainworx.co.za',
+                        name: 'Super Admin',
+                        unique_link_code: 'SUPERADMIN',
+                        is_super_admin: true
+                    });
+
+                if (insertError) throw insertError;
+
+                resultDiv.innerHTML = `
+                    <div class="result success">
+                        <strong>✓ Success!</strong><br>
+                        Super admin account created successfully.<br>
+                        User ID: ${authData.user.id}<br><br>
+                        You can now log in with:<br>
+                        Email: info@brainworx.co.za<br>
+                        Password: Bra14604<br><br>
+                        <strong>Please delete this HTML file now.</strong>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        <strong>✗ Error:</strong><br>
+                        ${error.message}<br><br>
+                        If the user already exists, you can try logging in directly.
+                    </div>
+                `;
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Create Super Admin';
+            }
+        }
+    </script>
+</body>
+</html>
