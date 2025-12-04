@@ -15,7 +15,8 @@
         <p class="text-blue-100">How coaches view their self-assessment results in the application</p>
         <div class="mt-4 bg-white/10 backdrop-blur-sm rounded-lg p-4">
           <p class="text-sm mb-2">📍 <strong>Location in App:</strong> Main Menu → "Self Assessment" → Complete Assessment → View Report</p>
-          <p class="text-sm">💡 <strong>Available Assessments:</strong> Teen Career (60Q), Teen ADHD (48Q), Parent ADHD (48Q)</p>
+          <p class="text-sm">💡 <strong>Available Assessments:</strong> NIPA Full Client Assessment (344Q), Teen Career (60Q), Teen ADHD (48Q), Parent ADHD (48Q)</p>
+          <p class="text-xs mt-2 text-cyan-200">🧪 Test data uses 2-3-4 repeating pattern for all assessments</p>
         </div>
       </div>
     </div>
@@ -24,7 +25,10 @@
     <div class="bg-white border-b shadow-sm sticky top-0 z-10">
       <div class="max-w-7xl mx-auto px-6">
         <div class="flex gap-2 overflow-x-auto py-4">
-          <button onclick="showReport('teen-career')" id="tab-teen-career" class="tab-btn active px-6 py-3 rounded-lg font-semibold whitespace-nowrap transition-all">
+          <button onclick="showReport('nipa')" id="tab-nipa" class="tab-btn active px-6 py-3 rounded-lg font-semibold whitespace-nowrap transition-all">
+            🧠 NIPA Full Assessment
+          </button>
+          <button onclick="showReport('teen-career')" id="tab-teen-career" class="tab-btn px-6 py-3 rounded-lg font-semibold whitespace-nowrap transition-all">
             🎯 Teen Career Report
           </button>
           <button onclick="showReport('teen-adhd')" id="tab-teen-adhd" class="tab-btn px-6 py-3 rounded-lg font-semibold whitespace-nowrap transition-all">
@@ -39,8 +43,531 @@
 
     <!-- Report Container -->
     <div class="max-w-7xl mx-auto px-6 py-8">
+      <!-- NIPA Full Assessment Report -->
+      <div id="report-nipa" class="report-section">
+        <div class="bg-white rounded-2xl shadow-xl p-8 mb-6">
+          <!-- Header -->
+          <div class="text-center mb-8 pb-6 border-b">
+            <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-900 to-cyan-500 rounded-full mb-4">
+              <span class="text-4xl">🧠</span>
+            </div>
+            <h2 class="text-3xl font-bold text-gray-800 mb-2">NIPA - Full Neural Imprint Assessment</h2>
+            <p class="text-gray-600">Complete Neural Imprint Profile Analysis Across All 20 Patterns</p>
+            <p class="text-sm text-gray-500 mt-2">Assessment Type: Full Client Assessment | Questions: 344 (343 + 1 Round 2)</p>
+            <div class="inline-block mt-3 px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">
+              Includes 45-minute Professional Debrief Session
+            </div>
+          </div>
+
+          <!-- Overall Stats -->
+          <div class="grid md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-gradient-to-br from-blue-900 to-cyan-500 rounded-xl p-6 text-white">
+              <div class="flex items-center gap-3 mb-2">
+                <span class="text-2xl">📊</span>
+                <h3 class="text-lg font-semibold">Overall Profile</h3>
+              </div>
+              <p class="text-5xl font-bold">60%</p>
+              <p class="text-sm mt-2 opacity-90">Moderate Intensity</p>
+            </div>
+
+            <div class="bg-yellow-50 border-2 border-yellow-300 rounded-xl p-6 text-center">
+              <p class="text-sm text-yellow-800 font-semibold mb-2">High Priority</p>
+              <p class="text-5xl font-bold text-yellow-600">20</p>
+              <p class="text-xs text-yellow-700 mt-1">patterns at 60%</p>
+            </div>
+
+            <div class="bg-blue-50 border-2 border-blue-300 rounded-xl p-6 text-center">
+              <p class="text-sm text-blue-800 font-semibold mb-2">Total Patterns</p>
+              <p class="text-5xl font-bold text-blue-600">20</p>
+              <p class="text-xs text-blue-700 mt-1">comprehensive coverage</p>
+            </div>
+
+            <div class="bg-green-50 border-2 border-green-300 rounded-xl p-6 text-center">
+              <p class="text-sm text-green-800 font-semibold mb-2">Questions</p>
+              <p class="text-5xl font-bold text-green-600">344</p>
+              <p class="text-xs text-green-700 mt-1">two-round process</p>
+            </div>
+          </div>
+
+          <!-- Test Pattern Info -->
+          <div class="bg-cyan-50 border-l-4 border-cyan-500 p-6 rounded-r-lg mb-8">
+            <p class="text-cyan-900 font-semibold mb-2">🧪 Simulated Test Data</p>
+            <p class="text-cyan-800 text-sm">Test pattern: 2, 3, 4 repeating (Disagree, Neutral, Agree on 5-point scale)</p>
+            <p class="text-cyan-800 text-sm">Average score: 3.0 / 5.0 = 60% across all patterns</p>
+          </div>
+
+          <!-- All 20 Neural Imprint Patterns -->
+          <div class="mb-8">
+            <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+              <span>📊</span> All 20 Neural Imprint Patterns
+            </h3>
+            <div class="space-y-3">
+              <!-- Pattern 1: Mind In Distress -->
+              <div class="border-l-4 border-yellow-500 bg-yellow-50 rounded-lg p-4">
+                <div class="flex justify-between items-center mb-2">
+                  <div class="flex items-center gap-3">
+                    <span class="text-xl font-bold text-yellow-600">#1</span>
+                    <div>
+                      <h4 class="text-base font-bold text-gray-800">DIS - Mind In Distress</h4>
+                      <p class="text-xs text-gray-600">17 questions • Raw avg: 3.0/5.0</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <span class="px-3 py-1 rounded-full text-white text-xs font-bold bg-yellow-500">Medium</span>
+                    <span class="text-2xl font-bold text-gray-800">60%</span>
+                  </div>
+                </div>
+                <div class="w-full bg-gray-300 rounded-full h-2">
+                  <div class="bg-yellow-500 h-2 rounded-full" style="width: 60%"></div>
+                </div>
+              </div>
+
+              <!-- Pattern 2: High Gear -->
+              <div class="border-l-4 border-yellow-500 bg-yellow-50 rounded-lg p-4">
+                <div class="flex justify-between items-center mb-2">
+                  <div class="flex items-center gap-3">
+                    <span class="text-xl font-bold text-yellow-600">#2</span>
+                    <div>
+                      <h4 class="text-base font-bold text-gray-800">HYP - High Gear</h4>
+                      <p class="text-xs text-gray-600">17 questions • Raw avg: 3.0/5.0</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <span class="px-3 py-1 rounded-full text-white text-xs font-bold bg-yellow-500">Medium</span>
+                    <span class="text-2xl font-bold text-gray-800">60%</span>
+                  </div>
+                </div>
+                <div class="w-full bg-gray-300 rounded-full h-2">
+                  <div class="bg-yellow-500 h-2 rounded-full" style="width: 60%"></div>
+                </div>
+              </div>
+
+              <!-- Pattern 3: Anchored Anger -->
+              <div class="border-l-4 border-yellow-500 bg-yellow-50 rounded-lg p-4">
+                <div class="flex justify-between items-center mb-2">
+                  <div class="flex items-center gap-3">
+                    <span class="text-xl font-bold text-yellow-600">#3</span>
+                    <div>
+                      <h4 class="text-base font-bold text-gray-800">ANG - Anchored Anger</h4>
+                      <p class="text-xs text-gray-600">17 questions • Raw avg: 3.0/5.0</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <span class="px-3 py-1 rounded-full text-white text-xs font-bold bg-yellow-500">Medium</span>
+                    <span class="text-2xl font-bold text-gray-800">60%</span>
+                  </div>
+                </div>
+                <div class="w-full bg-gray-300 rounded-full h-2">
+                  <div class="bg-yellow-500 h-2 rounded-full" style="width: 60%"></div>
+                </div>
+              </div>
+
+              <!-- Pattern 4: Burned Out -->
+              <div class="border-l-4 border-yellow-500 bg-yellow-50 rounded-lg p-4">
+                <div class="flex justify-between items-center mb-2">
+                  <div class="flex items-center gap-3">
+                    <span class="text-xl font-bold text-yellow-600">#4</span>
+                    <div>
+                      <h4 class="text-base font-bold text-gray-800">BURN - Burned Out</h4>
+                      <p class="text-xs text-gray-600">17 questions • Raw avg: 3.0/5.0</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <span class="px-3 py-1 rounded-full text-white text-xs font-bold bg-yellow-500">Medium</span>
+                    <span class="text-2xl font-bold text-gray-800">60%</span>
+                  </div>
+                </div>
+                <div class="w-full bg-gray-300 rounded-full h-2">
+                  <div class="bg-yellow-500 h-2 rounded-full" style="width: 60%"></div>
+                </div>
+              </div>
+
+              <!-- Pattern 5: Time & Order -->
+              <div class="border-l-4 border-yellow-500 bg-yellow-50 rounded-lg p-4">
+                <div class="flex justify-between items-center mb-2">
+                  <div class="flex items-center gap-3">
+                    <span class="text-xl font-bold text-yellow-600">#5</span>
+                    <div>
+                      <h4 class="text-base font-bold text-gray-800">ORG - Time & Order</h4>
+                      <p class="text-xs text-gray-600">17 questions • Raw avg: 3.0/5.0</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <span class="px-3 py-1 rounded-full text-white text-xs font-bold bg-yellow-500">Medium</span>
+                    <span class="text-2xl font-bold text-gray-800">60%</span>
+                  </div>
+                </div>
+                <div class="w-full bg-gray-300 rounded-full h-2">
+                  <div class="bg-yellow-500 h-2 rounded-full" style="width: 60%"></div>
+                </div>
+              </div>
+
+              <!-- Pattern 6: Scattered Focus -->
+              <div class="border-l-4 border-yellow-500 bg-yellow-50 rounded-lg p-4">
+                <div class="flex justify-between items-center mb-2">
+                  <div class="flex items-center gap-3">
+                    <span class="text-xl font-bold text-yellow-600">#6</span>
+                    <div>
+                      <h4 class="text-base font-bold text-gray-800">FOC - Scattered Focus</h4>
+                      <p class="text-xs text-gray-600">17 questions • Raw avg: 3.0/5.0</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <span class="px-3 py-1 rounded-full text-white text-xs font-bold bg-yellow-500">Medium</span>
+                    <span class="text-2xl font-bold text-gray-800">60%</span>
+                  </div>
+                </div>
+                <div class="w-full bg-gray-300 rounded-full h-2">
+                  <div class="bg-yellow-500 h-2 rounded-full" style="width: 60%"></div>
+                </div>
+              </div>
+
+              <!-- Pattern 7: Self-Harm Tendency -->
+              <div class="border-l-4 border-yellow-500 bg-yellow-50 rounded-lg p-4">
+                <div class="flex justify-between items-center mb-2">
+                  <div class="flex items-center gap-3">
+                    <span class="text-xl font-bold text-yellow-600">#7</span>
+                    <div>
+                      <h4 class="text-base font-bold text-gray-800">SHT - Self-Harm Tendency</h4>
+                      <p class="text-xs text-gray-600">17 questions • Raw avg: 3.0/5.0</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <span class="px-3 py-1 rounded-full text-white text-xs font-bold bg-yellow-500">Medium</span>
+                    <span class="text-2xl font-bold text-gray-800">60%</span>
+                  </div>
+                </div>
+                <div class="w-full bg-gray-300 rounded-full h-2">
+                  <div class="bg-yellow-500 h-2 rounded-full" style="width: 60%"></div>
+                </div>
+              </div>
+
+              <!-- Pattern 8: Stuck State -->
+              <div class="border-l-4 border-yellow-500 bg-yellow-50 rounded-lg p-4">
+                <div class="flex justify-between items-center mb-2">
+                  <div class="flex items-center gap-3">
+                    <span class="text-xl font-bold text-yellow-600">#8</span>
+                    <div>
+                      <h4 class="text-base font-bold text-gray-800">TRAP - Stuck State</h4>
+                      <p class="text-xs text-gray-600">17 questions • Raw avg: 3.0/5.0</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <span class="px-3 py-1 rounded-full text-white text-xs font-bold bg-yellow-500">Medium</span>
+                    <span class="text-2xl font-bold text-gray-800">60%</span>
+                  </div>
+                </div>
+                <div class="w-full bg-gray-300 rounded-full h-2">
+                  <div class="bg-yellow-500 h-2 rounded-full" style="width: 60%"></div>
+                </div>
+              </div>
+
+              <!-- Pattern 9: Impulse Driver -->
+              <div class="border-l-4 border-yellow-500 bg-yellow-50 rounded-lg p-4">
+                <div class="flex justify-between items-center mb-2">
+                  <div class="flex items-center gap-3">
+                    <span class="text-xl font-bold text-yellow-600">#9</span>
+                    <div>
+                      <h4 class="text-base font-bold text-gray-800">IMP - Impulse Driver</h4>
+                      <p class="text-xs text-gray-600">17 questions • Raw avg: 3.0/5.0</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <span class="px-3 py-1 rounded-full text-white text-xs font-bold bg-yellow-500">Medium</span>
+                    <span class="text-2xl font-bold text-gray-800">60%</span>
+                  </div>
+                </div>
+                <div class="w-full bg-gray-300 rounded-full h-2">
+                  <div class="bg-yellow-500 h-2 rounded-full" style="width: 60%"></div>
+                </div>
+              </div>
+
+              <!-- Pattern 10: Attitude -->
+              <div class="border-l-4 border-yellow-500 bg-yellow-50 rounded-lg p-4">
+                <div class="flex justify-between items-center mb-2">
+                  <div class="flex items-center gap-3">
+                    <span class="text-xl font-bold text-yellow-600">#10</span>
+                    <div>
+                      <h4 class="text-base font-bold text-gray-800">RES - Attitude</h4>
+                      <p class="text-xs text-gray-600">17 questions • Raw avg: 3.0/5.0</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <span class="px-3 py-1 rounded-full text-white text-xs font-bold bg-yellow-500">Medium</span>
+                    <span class="text-2xl font-bold text-gray-800">60%</span>
+                  </div>
+                </div>
+                <div class="w-full bg-gray-300 rounded-full h-2">
+                  <div class="bg-yellow-500 h-2 rounded-full" style="width: 60%"></div>
+                </div>
+              </div>
+
+              <!-- Pattern 11: Addictive Loops -->
+              <div class="border-l-4 border-yellow-500 bg-yellow-50 rounded-lg p-4">
+                <div class="flex justify-between items-center mb-2">
+                  <div class="flex items-center gap-3">
+                    <span class="text-xl font-bold text-yellow-600">#11</span>
+                    <div>
+                      <h4 class="text-base font-bold text-gray-800">CPL - Addictive Loops</h4>
+                      <p class="text-xs text-gray-600">17 questions • Raw avg: 3.0/5.0</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <span class="px-3 py-1 rounded-full text-white text-xs font-bold bg-yellow-500">Medium</span>
+                    <span class="text-2xl font-bold text-gray-800">60%</span>
+                  </div>
+                </div>
+                <div class="w-full bg-gray-300 rounded-full h-2">
+                  <div class="bg-yellow-500 h-2 rounded-full" style="width: 60%"></div>
+                </div>
+              </div>
+
+              <!-- Pattern 12: Negative Projection -->
+              <div class="border-l-4 border-yellow-500 bg-yellow-50 rounded-lg p-4">
+                <div class="flex justify-between items-center mb-2">
+                  <div class="flex items-center gap-3">
+                    <span class="text-xl font-bold text-yellow-600">#12</span>
+                    <div>
+                      <h4 class="text-base font-bold text-gray-800">NEGP - Negative Projection</h4>
+                      <p class="text-xs text-gray-600">17 questions • Raw avg: 3.0/5.0</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <span class="px-3 py-1 rounded-full text-white text-xs font-bold bg-yellow-500">Medium</span>
+                    <span class="text-2xl font-bold text-gray-800">60%</span>
+                  </div>
+                </div>
+                <div class="w-full bg-gray-300 rounded-full h-2">
+                  <div class="bg-yellow-500 h-2 rounded-full" style="width: 60%"></div>
+                </div>
+              </div>
+
+              <!-- Pattern 13: Not Understanding -->
+              <div class="border-l-4 border-yellow-500 bg-yellow-50 rounded-lg p-4">
+                <div class="flex justify-between items-center mb-2">
+                  <div class="flex items-center gap-3">
+                    <span class="text-xl font-bold text-yellow-600">#13</span>
+                    <div>
+                      <h4 class="text-base font-bold text-gray-800">NUH - Not Understanding</h4>
+                      <p class="text-xs text-gray-600">17 questions • Raw avg: 3.0/5.0</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <span class="px-3 py-1 rounded-full text-white text-xs font-bold bg-yellow-500">Medium</span>
+                    <span class="text-2xl font-bold text-gray-800">60%</span>
+                  </div>
+                </div>
+                <div class="w-full bg-gray-300 rounded-full h-2">
+                  <div class="bg-yellow-500 h-2 rounded-full" style="width: 60%"></div>
+                </div>
+              </div>
+
+              <!-- Pattern 14: Dogma -->
+              <div class="border-l-4 border-yellow-500 bg-yellow-50 rounded-lg p-4">
+                <div class="flex justify-between items-center mb-2">
+                  <div class="flex items-center gap-3">
+                    <span class="text-xl font-bold text-yellow-600">#14</span>
+                    <div>
+                      <h4 class="text-base font-bold text-gray-800">DOG - Dogma</h4>
+                      <p class="text-xs text-gray-600">17 questions • Raw avg: 3.0/5.0</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <span class="px-3 py-1 rounded-full text-white text-xs font-bold bg-yellow-500">Medium</span>
+                    <span class="text-2xl font-bold text-gray-800">60%</span>
+                  </div>
+                </div>
+                <div class="w-full bg-gray-300 rounded-full h-2">
+                  <div class="bg-yellow-500 h-2 rounded-full" style="width: 60%"></div>
+                </div>
+              </div>
+
+              <!-- Pattern 15: Inside Out -->
+              <div class="border-l-4 border-yellow-500 bg-yellow-50 rounded-lg p-4">
+                <div class="flex justify-between items-center mb-2">
+                  <div class="flex items-center gap-3">
+                    <span class="text-xl font-bold text-yellow-600">#15</span>
+                    <div>
+                      <h4 class="text-base font-bold text-gray-800">INFL - Inside Out</h4>
+                      <p class="text-xs text-gray-600">17 questions • Raw avg: 3.0/5.0</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <span class="px-3 py-1 rounded-full text-white text-xs font-bold bg-yellow-500">Medium</span>
+                    <span class="text-2xl font-bold text-gray-800">60%</span>
+                  </div>
+                </div>
+                <div class="w-full bg-gray-300 rounded-full h-2">
+                  <div class="bg-yellow-500 h-2 rounded-full" style="width: 60%"></div>
+                </div>
+              </div>
+
+              <!-- Pattern 16: Victim Loops -->
+              <div class="border-l-4 border-yellow-500 bg-yellow-50 rounded-lg p-4">
+                <div class="flex justify-between items-center mb-2">
+                  <div class="flex items-center gap-3">
+                    <span class="text-xl font-bold text-yellow-600">#16</span>
+                    <div>
+                      <h4 class="text-base font-bold text-gray-800">BULLY - Victim Loops</h4>
+                      <p class="text-xs text-gray-600">17 questions • Raw avg: 3.0/5.0</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <span class="px-3 py-1 rounded-full text-white text-xs font-bold bg-yellow-500">Medium</span>
+                    <span class="text-2xl font-bold text-gray-800">60%</span>
+                  </div>
+                </div>
+                <div class="w-full bg-gray-300 rounded-full h-2">
+                  <div class="bg-yellow-500 h-2 rounded-full" style="width: 60%"></div>
+                </div>
+              </div>
+
+              <!-- Pattern 17: Lack State -->
+              <div class="border-l-4 border-yellow-500 bg-yellow-50 rounded-lg p-4">
+                <div class="flex justify-between items-center mb-2">
+                  <div class="flex items-center gap-3">
+                    <span class="text-xl font-bold text-yellow-600">#17</span>
+                    <div>
+                      <h4 class="text-base font-bold text-gray-800">LACK - Lack State</h4>
+                      <p class="text-xs text-gray-600">17 questions • Raw avg: 3.0/5.0</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <span class="px-3 py-1 rounded-full text-white text-xs font-bold bg-yellow-500">Medium</span>
+                    <span class="text-2xl font-bold text-gray-800">60%</span>
+                  </div>
+                </div>
+                <div class="w-full bg-gray-300 rounded-full h-2">
+                  <div class="bg-yellow-500 h-2 rounded-full" style="width: 60%"></div>
+                </div>
+              </div>
+
+              <!-- Pattern 18: Dim Reality -->
+              <div class="border-l-4 border-yellow-500 bg-yellow-50 rounded-lg p-4">
+                <div class="flex justify-between items-center mb-2">
+                  <div class="flex items-center gap-3">
+                    <span class="text-xl font-bold text-yellow-600">#18</span>
+                    <div>
+                      <h4 class="text-base font-bold text-gray-800">DIM - Dim Reality</h4>
+                      <p class="text-xs text-gray-600">17 questions • Raw avg: 3.0/5.0</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <span class="px-3 py-1 rounded-full text-white text-xs font-bold bg-yellow-500">Medium</span>
+                    <span class="text-2xl font-bold text-gray-800">60%</span>
+                  </div>
+                </div>
+                <div class="w-full bg-gray-300 rounded-full h-2">
+                  <div class="bg-yellow-500 h-2 rounded-full" style="width: 60%"></div>
+                </div>
+              </div>
+
+              <!-- Pattern 19: Inward Focus -->
+              <div class="border-l-4 border-yellow-500 bg-yellow-50 rounded-lg p-4">
+                <div class="flex justify-between items-center mb-2">
+                  <div class="flex items-center gap-3">
+                    <span class="text-xl font-bold text-yellow-600">#19</span>
+                    <div>
+                      <h4 class="text-base font-bold text-gray-800">INWF - Inward Focus</h4>
+                      <p class="text-xs text-gray-600">17 questions • Raw avg: 3.0/5.0</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <span class="px-3 py-1 rounded-full text-white text-xs font-bold bg-yellow-500">Medium</span>
+                    <span class="text-2xl font-bold text-gray-800">60%</span>
+                  </div>
+                </div>
+                <div class="w-full bg-gray-300 rounded-full h-2">
+                  <div class="bg-yellow-500 h-2 rounded-full" style="width: 60%"></div>
+                </div>
+              </div>
+
+              <!-- Pattern 20: Deceiver -->
+              <div class="border-l-4 border-yellow-500 bg-yellow-50 rounded-lg p-4">
+                <div class="flex justify-between items-center mb-2">
+                  <div class="flex items-center gap-3">
+                    <span class="text-xl font-bold text-yellow-600">#20</span>
+                    <div>
+                      <h4 class="text-base font-bold text-gray-800">DEC - Deceiver</h4>
+                      <p class="text-xs text-gray-600">17 questions • Raw avg: 3.0/5.0</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <span class="px-3 py-1 rounded-full text-white text-xs font-bold bg-yellow-500">Medium</span>
+                    <span class="text-2xl font-bold text-gray-800">60%</span>
+                  </div>
+                </div>
+                <div class="w-full bg-gray-300 rounded-full h-2">
+                  <div class="bg-yellow-500 h-2 rounded-full" style="width: 60%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Summary Statistics -->
+          <div class="bg-gray-50 rounded-xl p-6 mb-8">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">📈 Summary Statistics</h3>
+            <div class="grid grid-cols-3 gap-4">
+              <div class="text-center">
+                <p class="text-3xl font-bold text-red-500">0</p>
+                <p class="text-sm text-gray-600">High (60-100%)</p>
+              </div>
+              <div class="text-center">
+                <p class="text-3xl font-bold text-yellow-500">20</p>
+                <p class="text-sm text-gray-600">Medium (40-59%)</p>
+              </div>
+              <div class="text-center">
+                <p class="text-3xl font-bold text-blue-500">0</p>
+                <p class="text-sm text-gray-600">Low (0-39%)</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Professional Debrief Info -->
+          <div class="bg-gradient-to-r from-blue-900 to-cyan-500 rounded-xl p-6 text-white mb-8">
+            <h3 class="text-2xl font-bold mb-4 flex items-center gap-2">
+              <span>💬</span> Next Step: Professional Debrief Session
+            </h3>
+            <p class="text-blue-100 mb-4">
+              Your NIPA assessment includes a comprehensive 45-minute one-on-one debrief session with a qualified Neural Imprint practitioner.
+            </p>
+            <div class="grid md:grid-cols-2 gap-4">
+              <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                <p class="font-semibold mb-2">What to Expect:</p>
+                <ul class="text-sm text-blue-100 space-y-1">
+                  <li>• Deep dive into your top patterns</li>
+                  <li>• Personalized interpretation of results</li>
+                  <li>• Practical strategies for transformation</li>
+                  <li>• Q&A about your specific situation</li>
+                </ul>
+              </div>
+              <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                <p class="font-semibold mb-2">How to Schedule:</p>
+                <ul class="text-sm text-blue-100 space-y-1">
+                  <li>• Check your email for booking link</li>
+                  <li>• Select convenient time slot</li>
+                  <li>• Prepare any questions in advance</li>
+                  <li>• Session via video call or phone</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Completion Notice -->
+          <div class="pt-6 border-t">
+            <div class="bg-green-50 border border-green-200 rounded-xl p-4 text-center">
+              <div class="flex items-center justify-center gap-2 mb-2">
+                <span class="text-2xl">✅</span>
+                <p class="text-green-800 font-medium">Assessment Complete</p>
+              </div>
+              <p class="text-sm text-green-600">Your comprehensive NIPA results have been saved and sent to your email</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Teen Career Report -->
-      <div id="report-teen-career" class="report-section">
+      <div id="report-teen-career" class="report-section hidden">
         <div class="bg-white rounded-2xl shadow-xl p-8 mb-6">
           <!-- Header -->
           <div class="text-center mb-8 pb-6 border-b">
