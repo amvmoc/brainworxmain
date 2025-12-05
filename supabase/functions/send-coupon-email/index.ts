@@ -52,7 +52,7 @@ Deno.serve(async (req: Request) => {
       },
     });
 
-    const baseUrl = Deno.env.get('VITE_APP_URL') || 'http://localhost:5173';
+    const baseUrl = 'https://www.brainworx.co.za';
     const redemptionLink = `${baseUrl}?coupon=${couponCode}`;
 
     console.log('Sending coupon email to:', recipientEmail);
