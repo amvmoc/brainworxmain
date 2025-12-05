@@ -43,33 +43,31 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
   ) => {
     setShowCouponModal(false);
 
-    // Map assessment type to the correct assessment
-    const assessmentTypeMap: Record<string, typeof selfAssessmentTypes[0] | 'nipa'> = {
-      'tcf': selfAssessmentTypes[0], // Teen Career/Future
-      'tadhd': selfAssessmentTypes[1], // Teen ADHD
-      'pcadhd': selfAssessmentTypes[2], // Parent/Child ADHD
-      'nipa': 'nipa'
+    const assessmentNameMap: Record<string, string> = {
+      'Full Assessment (343 Questions)': 'nipa',
+      'Full ADHD Assessment (128 Questions)': 'nipa',
+      'Teen Career & Future Direction': 'career',
+      'Teen ADHD Screener (48 Questions)': 'teen-adhd',
+      'Parent ADHD Screener (48 Questions)': 'parent-adhd'
     };
 
-    const mappedAssessment = assessmentTypeMap[assessmentType.toLowerCase()];
+    const assessmentId = assessmentNameMap[assessmentType] || assessmentType;
 
-    if (mappedAssessment === 'nipa') {
-      // For NIPA, redirect to GetStartedOptions with the payment type
-      alert('Coupon redeemed successfully! Starting NIPA assessment...');
+    if (assessmentId === 'nipa') {
       if (onStartPayment) {
         onStartPayment('nipa');
       }
-    } else if (mappedAssessment && typeof mappedAssessment !== 'string') {
-      // For self-assessments, start the questionnaire
-      setQuestionnaireData({
-        assessmentType: mappedAssessment,
-        email: userEmail,
-        franchiseOwnerId: franchiseOwnerId
-      });
-      setStartQuestionnaire(true);
     } else {
-      alert('Coupon redeemed successfully! You can now start your assessment.');
-      onClose();
+      const selectedAssessment = selfAssessmentTypes.find(type => type.id === assessmentId);
+
+      if (selectedAssessment) {
+        setQuestionnaireData({
+          assessmentType: selectedAssessment,
+          email: userEmail,
+          franchiseOwnerId: franchiseOwnerId
+        });
+        setStartQuestionnaire(true);
+      }
     }
   };
 

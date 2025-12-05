@@ -108,7 +108,26 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
     setFranchiseOwnerId(couponFranchiseOwnerId);
     setShowCouponModal(false);
     setPreviousStep('email');
-    setStep('patterns_info');
+
+    const assessmentTypeMap: Record<string, string> = {
+      'Full Assessment (343 Questions)': 'nipa',
+      'Full ADHD Assessment (128 Questions)': 'nipa',
+      'Teen Career & Future Direction': 'career',
+      'Teen ADHD Screener (48 Questions)': 'teen-adhd',
+      'Parent ADHD Screener (48 Questions)': 'parent-adhd'
+    };
+
+    const mappedType = assessmentTypeMap[assessmentType] || assessmentType;
+
+    if (mappedType === 'nipa') {
+      setStep('patterns_info');
+    } else {
+      const selectedAssessment = selfAssessmentTypes.find(type => type.id === mappedType);
+      if (selectedAssessment) {
+        setSelectedAssessmentType(selectedAssessment);
+        setStep('self_assessment');
+      }
+    }
   };
 
   if (step === 'patterns_info') {
