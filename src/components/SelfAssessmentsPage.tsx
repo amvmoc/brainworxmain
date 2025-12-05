@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Briefcase, Users, Brain, Heart, ArrowRight, X, CheckCircle, Clock, Ticket, RotateCcw } from 'lucide-react';
 import { selfAssessmentTypes } from '../data/selfAssessmentQuestions';
 import { SelfAssessmentQuestionnaire } from './SelfAssessmentQuestionnaire';
+import { Questionnaire } from './Questionnaire';
 import { CouponRedemption } from './CouponRedemption';
 import { supabase } from '../lib/supabase';
 
@@ -21,8 +22,13 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
   const [checkingProgress, setCheckingProgress] = useState(false);
   const [noProgressFound, setNoProgressFound] = useState(false);
   const [startQuestionnaire, setStartQuestionnaire] = useState(false);
+  const [startNIPAQuestionnaire, setStartNIPAQuestionnaire] = useState(false);
   const [questionnaireData, setQuestionnaireData] = useState<{
     assessmentType: typeof selfAssessmentTypes[0];
+    email: string;
+    franchiseOwnerId: string;
+  } | null>(null);
+  const [nipaQuestionnaireData, setNipaQuestionnaireData] = useState<{
     email: string;
     franchiseOwnerId: string;
   } | null>(null);
@@ -108,10 +114,13 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
         });
         setStartQuestionnaire(true);
       } else {
-        alert('Assessment found! Redirecting you to continue...');
         setShowResumeModal(false);
         setShowChoiceModal(false);
-        window.location.href = `/?email=${encodeURIComponent(resumeEmail)}`;
+        setNipaQuestionnaireData({
+          email: resumeEmail,
+          franchiseOwnerId: existingResponse.franchise_owner_id || ''
+        });
+        setStartNIPAQuestionnaire(true);
       }
     } else {
       setNoProgressFound(true);
@@ -204,6 +213,18 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
         coachLink=""
         email={questionnaireData.email}
         franchiseOwnerId={questionnaireData.franchiseOwnerId}
+      />
+    );
+  }
+
+  // Show NIPA questionnaire when resuming
+  if (startNIPAQuestionnaire && nipaQuestionnaireData) {
+    return (
+      <Questionnaire
+        onClose={onClose}
+        coachLink=""
+        email={nipaQuestionnaireData.email}
+        franchiseOwnerId={nipaQuestionnaireData.franchiseOwnerId}
       />
     );
   }
