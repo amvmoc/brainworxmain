@@ -31,7 +31,7 @@ export function CouponManagement() {
     code: '',
     name: '',
     email: '',
-    assessmentType: 'Full ADHD Assessment',
+    assessmentType: 'Full ADHD Assessment (128 Questions)',
     maxUses: 1
   });
 
@@ -106,7 +106,7 @@ export function CouponManagement() {
         code: '',
         name: '',
         email: '',
-        assessmentType: 'Full ADHD Assessment',
+        assessmentType: 'Full ADHD Assessment (128 Questions)',
         maxUses: 1
       });
       loadCoupons();
@@ -168,7 +168,7 @@ export function CouponManagement() {
                 code: generateCode(),
                 name: '',
                 email: '',
-                assessmentType: 'Full ADHD Assessment',
+                assessmentType: 'Full ADHD Assessment (128 Questions)',
                 maxUses: 1
               });
               setShowCreateModal(true);
@@ -313,9 +313,10 @@ export function CouponManagement() {
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#3DB3E3] focus:border-transparent"
                   required
                 >
-                  <option value="Full ADHD Assessment">Full ADHD Assessment</option>
-                  <option value="Self Assessment">Self Assessment</option>
-                  <option value="Quick Screener">Quick Screener</option>
+                  <option value="Full ADHD Assessment (128 Questions)">Full ADHD Assessment (128 Questions)</option>
+                  <option value="Teen Career & Future Direction">Teen Career & Future Direction</option>
+                  <option value="Teen ADHD Screener (48 Questions)">Teen ADHD Screener (48 Questions)</option>
+                  <option value="Parent ADHD Screener (48 Questions)">Parent ADHD Screener (48 Questions)</option>
                 </select>
               </div>
 
