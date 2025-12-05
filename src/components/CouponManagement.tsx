@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Ticket, Plus, Trash2, Eye, Copy, Check, X } from 'lucide-react';
+import { Ticket, Plus, Trash2, Eye, Copy, Check, X, Mail, Loader } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
 interface Coupon {
@@ -30,6 +30,7 @@ export function CouponManagement() {
   const [selectedCoupon, setSelectedCoupon] = useState<string | null>(null);
   const [redemptions, setRedemptions] = useState<Redemption[]>([]);
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
+  const [resendingEmail, setResendingEmail] = useState<string | null>(null);
   const [newCoupon, setNewCoupon] = useState({
     code: '',
     name: '',
@@ -187,6 +188,52 @@ export function CouponManagement() {
     });
   };
 
+  const handleResendEmail = async (coupon: Coupon) => {
+    if (!coupon.recipient_email || !coupon.recipient_name) {
+      alert('This coupon does not have recipient information');
+      return;
+    }
+
+    setResendingEmail(coupon.id);
+
+    try {
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+      const emailResponse = await fetch(`${supabaseUrl}/functions/v1/send-coupon-email`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${supabaseAnonKey}`,
+        },
+        body: JSON.stringify({
+          recipientName: coupon.recipient_name,
+          recipientEmail: coupon.recipient_email,
+          couponCode: coupon.code,
+          assessmentType: coupon.assessment_type
+        })
+      });
+
+      if (emailResponse.ok) {
+        await supabase
+          .from('coupon_codes')
+          .update({ email_sent: true })
+          .eq('id', coupon.id);
+
+        alert('Email resent successfully!');
+        loadCoupons();
+      } else {
+        const result = await emailResponse.json();
+        throw new Error(result.error || 'Failed to send email');
+      }
+    } catch (error: any) {
+      console.error('Error resending email:', error);
+      alert(`Failed to resend email: ${error.message}`);
+    } finally {
+      setResendingEmail(null);
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
@@ -282,16 +329,34 @@ export function CouponManagement() {
                     </button>
                   </td>
                   <td className="px-6 py-4">
-                    <button
-                      onClick={() => {
-                        setSelectedCoupon(coupon.id);
-                        loadRedemptions(coupon.id);
-                      }}
-                      className="flex items-center gap-1 text-[#3DB3E3] hover:text-[#0A2A5E] transition-colors"
-                    >
-                      <Eye size={16} />
-                      View Uses
-                    </button>
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={() => {
+                          setSelectedCoupon(coupon.id);
+                          loadRedemptions(coupon.id);
+                        }}
+                        className="flex items-center gap-1 text-[#3DB3E3] hover:text-[#0A2A5E] transition-colors"
+                      >
+                        <Eye size={16} />
+                        View Uses
+                      </button>
+
+                      {coupon.recipient_email && (
+                        <button
+                          onClick={() => handleResendEmail(coupon)}
+                          disabled={resendingEmail === coupon.id}
+                          className="flex items-center gap-1 text-[#1FAFA3] hover:text-[#0A2A5E] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                          title="Resend email to recipient"
+                        >
+                          {resendingEmail === coupon.id ? (
+                            <Loader size={16} className="animate-spin" />
+                          ) : (
+                            <Mail size={16} />
+                          )}
+                          Resend
+                        </button>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}
