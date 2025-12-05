@@ -90,10 +90,26 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
     }
 
     if (existingResponse) {
-      alert('Assessment found! Redirecting you to continue...');
-      setShowResumeModal(false);
-      setShowChoiceModal(false);
-      window.location.href = `/?email=${encodeURIComponent(resumeEmail)}`;
+      const assessmentTypeMap: Record<string, typeof selfAssessmentTypes[0]> = {
+        'tcf': selfAssessmentTypes[0],
+        'tadhd': selfAssessmentTypes[1],
+        'pcadhd': selfAssessmentTypes[2]
+      };
+
+      const mappedAssessment = assessmentTypeMap[existingResponse.assessment_type];
+
+      if (mappedAssessment) {
+        setShowResumeModal(false);
+        setShowChoiceModal(false);
+        setQuestionnaireData({
+          assessmentType: mappedAssessment,
+          email: resumeEmail,
+          franchiseOwnerId: existingResponse.franchise_owner_id || ''
+        });
+        setStartQuestionnaire(true);
+      } else {
+        alert('This assessment type is not supported for resuming from this page.');
+      }
     } else {
       setNoProgressFound(true);
     }
