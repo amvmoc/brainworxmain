@@ -49,7 +49,7 @@ Deno.serve(async (req: Request) => {
       throw new Error('Only super admins can create users');
     }
 
-    const { email, password, name, uniqueLinkCode, isSuperAdmin } = await req.json();
+    const { email, password, name, uniqueLinkCode, role } = await req.json();
 
     if (!email || !password || !name || !uniqueLinkCode) {
       throw new Error('Missing required fields');
@@ -77,7 +77,7 @@ Deno.serve(async (req: Request) => {
         name,
         email,
         unique_link_code: uniqueLinkCode,
-        is_super_admin: isSuperAdmin || false,
+        is_super_admin: role === 'super_admin',
       });
 
     if (insertError) {

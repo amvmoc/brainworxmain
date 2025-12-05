@@ -43,7 +43,7 @@ export function SuperAdminDashboard({ franchiseOwnerName, onLogout }: SuperAdmin
     password: '',
     name: '',
     uniqueLinkCode: '',
-    isSuperAdmin: false
+    role: 'franchise_owner' as 'franchise_owner' | 'super_admin'
   });
 
   useEffect(() => {
@@ -128,7 +128,7 @@ export function SuperAdminDashboard({ franchiseOwnerName, onLogout }: SuperAdmin
         password: '',
         name: '',
         uniqueLinkCode: '',
-        isSuperAdmin: false
+        role: 'franchise_owner'
       });
 
       await loadAllData();
@@ -483,7 +483,7 @@ export function SuperAdminDashboard({ franchiseOwnerName, onLogout }: SuperAdmin
                     password: '',
                     name: '',
                     uniqueLinkCode: generateUniqueCode(),
-                    isSuperAdmin: false
+                    role: 'franchise_owner'
                   });
                   setShowAddUserModal(true);
                 }}
@@ -617,18 +617,23 @@ export function SuperAdminDashboard({ franchiseOwnerName, onLogout }: SuperAdmin
                 <p className="mt-1 text-sm text-gray-500">Auto-generated code (you can edit or regenerate)</p>
               </div>
 
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  id="isSuperAdmin"
-                  checked={newUser.isSuperAdmin}
-                  onChange={(e) => setNewUser({ ...newUser, isSuperAdmin: e.target.checked })}
-                  className="w-4 h-4 text-[#3DB3E3] border-gray-300 rounded focus:ring-[#3DB3E3]"
-                />
-                <label htmlFor="isSuperAdmin" className="text-sm font-medium text-gray-700 flex items-center gap-1">
-                  <Shield size={16} />
-                  Super Admin
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  User Role
                 </label>
+                <select
+                  value={newUser.role}
+                  onChange={(e) => setNewUser({ ...newUser, role: e.target.value as 'franchise_owner' | 'super_admin' })}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#3DB3E3] focus:border-transparent"
+                >
+                  <option value="franchise_owner">Franchise Owner</option>
+                  <option value="super_admin">Super Admin</option>
+                </select>
+                <p className="mt-1 text-sm text-gray-500">
+                  {newUser.role === 'super_admin'
+                    ? 'Full access to all data and settings'
+                    : 'Access to own assessments and clients only'}
+                </p>
               </div>
 
               {addUserError && (
@@ -648,7 +653,7 @@ export function SuperAdminDashboard({ franchiseOwnerName, onLogout }: SuperAdmin
                       password: '',
                       name: '',
                       uniqueLinkCode: '',
-                      isSuperAdmin: false
+                      role: 'franchise_owner'
                     });
                   }}
                   className="flex-1 bg-gray-200 text-gray-700 px-4 py-3 rounded-lg hover:bg-gray-300 transition-all font-medium"
