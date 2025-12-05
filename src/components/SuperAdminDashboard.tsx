@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { LogOut, Users, TrendingUp, FileText, DollarSign, LayoutDashboard, Eye, Search, UserPlus, Mail, Shield, Edit2, Loader, RefreshCw, Ticket } from 'lucide-react';
+import { LogOut, Users, TrendingUp, FileText, DollarSign, LayoutDashboard, Eye, Search, UserPlus, Mail, Shield, Edit2, Loader, RefreshCw, Ticket, Trash2, Key } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { InvoicesPage } from './InvoicesPage';
 import { SelfAssessmentsPage } from './SelfAssessmentsPage';
@@ -36,8 +36,12 @@ export function SuperAdminDashboard({ franchiseOwnerName, onLogout }: SuperAdmin
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [showAddUserModal, setShowAddUserModal] = useState(false);
+  const [showEditPasswordModal, setShowEditPasswordModal] = useState(false);
+  const [showDeleteUserModal, setShowDeleteUserModal] = useState(false);
   const [addUserLoading, setAddUserLoading] = useState(false);
   const [addUserError, setAddUserError] = useState('');
+  const [selectedUser, setSelectedUser] = useState<any>(null);
+  const [newPassword, setNewPassword] = useState('');
   const [newUser, setNewUser] = useState({
     email: '',
     password: '',
@@ -135,6 +139,96 @@ export function SuperAdminDashboard({ franchiseOwnerName, onLogout }: SuperAdmin
       alert('User created successfully!');
     } catch (error: any) {
       setAddUserError(error.message);
+    } finally {
+      setAddUserLoading(false);
+    }
+  };
+
+  const handleChangePassword = async () => {
+    if (!selectedUser || !newPassword) {
+      alert('Please enter a new password');
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      alert('Password must be at least 6 characters');
+      return;
+    }
+
+    setAddUserLoading(true);
+    try {
+      const { data: session } = await supabase.auth.getSession();
+      const token = session.session?.access_token;
+
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/update-user-password`,
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            userId: selectedUser.user_id,
+            newPassword: newPassword,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to update password');
+      }
+
+      setShowEditPasswordModal(false);
+      setSelectedUser(null);
+      setNewPassword('');
+      alert('Password updated successfully!');
+    } catch (error: any) {
+      console.error('Error updating password:', error);
+      alert('Failed to update password: ' + error.message);
+    } finally {
+      setAddUserLoading(false);
+    }
+  };
+
+  const handleDeleteUser = async () => {
+    if (!selectedUser) return;
+
+    setAddUserLoading(true);
+    try {
+      const { data: session } = await supabase.auth.getSession();
+      const token = session.session?.access_token;
+
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/delete-franchise-user`,
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            userId: selectedUser.user_id,
+            franchiseOwnerId: selectedUser.id,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to delete user');
+      }
+
+      setShowDeleteUserModal(false);
+      setSelectedUser(null);
+      await loadAllData();
+      alert('User deleted successfully!');
+    } catch (error: any) {
+      console.error('Error deleting user:', error);
+      alert('Failed to delete user: ' + error.message);
     } finally {
       setAddUserLoading(false);
     }
@@ -514,6 +608,7 @@ export function SuperAdminDashboard({ franchiseOwnerName, onLogout }: SuperAdmin
                     <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Link Code</th>
                     <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Role</th>
                     <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Created</th>
+                    <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -536,6 +631,31 @@ export function SuperAdminDashboard({ franchiseOwnerName, onLogout }: SuperAdmin
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-600">
                         {formatDate(user.created_at)}
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => {
+                              setSelectedUser(user);
+                              setNewPassword('');
+                              setShowEditPasswordModal(true);
+                            }}
+                            className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                            title="Change Password"
+                          >
+                            <Key size={18} />
+                          </button>
+                          <button
+                            onClick={() => {
+                              setSelectedUser(user);
+                              setShowDeleteUserModal(true);
+                            }}
+                            className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                            title="Delete User"
+                          >
+                            <Trash2 size={18} />
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -695,6 +815,123 @@ export function SuperAdminDashboard({ franchiseOwnerName, onLogout }: SuperAdmin
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {showEditPasswordModal && selectedUser && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8">
+            <h2 className="text-2xl font-bold text-[#0A2A5E] mb-2">Change Password</h2>
+            <p className="text-gray-600 mb-6">
+              Update password for <span className="font-semibold">{selectedUser.name}</span>
+            </p>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  New Password
+                </label>
+                <input
+                  type="password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#3DB3E3] focus:border-transparent"
+                  placeholder="Enter new password"
+                  minLength={6}
+                  autoFocus
+                />
+                <p className="mt-1 text-sm text-gray-500">Minimum 6 characters</p>
+              </div>
+
+              <div className="flex gap-4">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowEditPasswordModal(false);
+                    setSelectedUser(null);
+                    setNewPassword('');
+                  }}
+                  className="flex-1 bg-gray-200 text-gray-700 px-4 py-3 rounded-lg hover:bg-gray-300 transition-all font-medium"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleChangePassword}
+                  disabled={addUserLoading || newPassword.length < 6}
+                  className="flex-1 bg-[#0A2A5E] text-white px-4 py-3 rounded-lg hover:bg-[#3DB3E3] disabled:opacity-50 transition-all font-medium flex items-center justify-center gap-2"
+                >
+                  {addUserLoading ? (
+                    <>
+                      <Loader className="animate-spin" size={20} />
+                      Updating...
+                    </>
+                  ) : (
+                    <>
+                      <Key size={20} />
+                      Update Password
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showDeleteUserModal && selectedUser && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-3 bg-red-100 rounded-full">
+                <Trash2 className="text-red-600" size={24} />
+              </div>
+              <h2 className="text-2xl font-bold text-[#0A2A5E]">Delete User</h2>
+            </div>
+
+            <p className="text-gray-600 mb-6">
+              Are you sure you want to delete <span className="font-semibold">{selectedUser.name}</span>?
+              This will permanently remove their account and all associated data. This action cannot be undone.
+            </p>
+
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+              <p className="text-sm text-red-800 font-medium">Warning: This action is irreversible</p>
+              <ul className="mt-2 text-sm text-red-700 list-disc list-inside space-y-1">
+                <li>User will be logged out immediately</li>
+                <li>All their client data will remain but be unlinked</li>
+                <li>Their unique link code will become available</li>
+              </ul>
+            </div>
+
+            <div className="flex gap-4">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowDeleteUserModal(false);
+                  setSelectedUser(null);
+                }}
+                className="flex-1 bg-gray-200 text-gray-700 px-4 py-3 rounded-lg hover:bg-gray-300 transition-all font-medium"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteUser}
+                disabled={addUserLoading}
+                className="flex-1 bg-red-600 text-white px-4 py-3 rounded-lg hover:bg-red-700 disabled:opacity-50 transition-all font-medium flex items-center justify-center gap-2"
+              >
+                {addUserLoading ? (
+                  <>
+                    <Loader className="animate-spin" size={20} />
+                    Deleting...
+                  </>
+                ) : (
+                  <>
+                    <Trash2 size={20} />
+                    Delete User
+                  </>
+                )}
+              </button>
+            </div>
           </div>
         </div>
       )}
