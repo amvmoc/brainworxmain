@@ -29,9 +29,10 @@ export function CouponManagement() {
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
   const [newCoupon, setNewCoupon] = useState({
     code: '',
+    name: '',
+    email: '',
     assessmentType: 'Full ADHD Assessment',
-    maxUses: 1,
-    expiresAt: ''
+    maxUses: 1
   });
 
   useEffect(() => {
@@ -83,11 +84,11 @@ export function CouponManagement() {
     e.preventDefault();
     try {
       const { data: session } = await supabase.auth.getSession();
-      const { data: franchiseOwner } = await supabase
-        .from('franchise_owners')
-        .select('id')
-        .eq('user_id', session.session?.user.id)
-        .single();
+      const userId = session.session?.user.id;
+
+      if (!userId) {
+        throw new Error('User not authenticated');
+      }
 
       const { error } = await supabase
         .from('coupon_codes')
@@ -95,8 +96,7 @@ export function CouponManagement() {
           code: newCoupon.code,
           assessment_type: newCoupon.assessmentType,
           max_uses: newCoupon.maxUses,
-          expires_at: newCoupon.expiresAt || null,
-          created_by: franchiseOwner?.id
+          created_by: userId
         });
 
       if (error) throw error;
@@ -104,9 +104,10 @@ export function CouponManagement() {
       setShowCreateModal(false);
       setNewCoupon({
         code: '',
+        name: '',
+        email: '',
         assessmentType: 'Full ADHD Assessment',
-        maxUses: 1,
-        expiresAt: ''
+        maxUses: 1
       });
       loadCoupons();
       alert('Coupon created successfully!');
@@ -164,8 +165,11 @@ export function CouponManagement() {
           <button
             onClick={() => {
               setNewCoupon({
-                ...newCoupon,
-                code: generateCode()
+                code: generateCode(),
+                name: '',
+                email: '',
+                assessmentType: 'Full ADHD Assessment',
+                maxUses: 1
               });
               setShowCreateModal(true);
             }}
@@ -183,7 +187,6 @@ export function CouponManagement() {
                 <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Code</th>
                 <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Assessment</th>
                 <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Uses</th>
-                <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Expires</th>
                 <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Status</th>
                 <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Actions</th>
               </tr>
@@ -214,9 +217,6 @@ export function CouponManagement() {
                     <span className="text-gray-800 font-semibold">
                       {coupon.current_uses} / {coupon.max_uses}
                     </span>
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-600">
-                    {coupon.expires_at ? formatDate(coupon.expires_at) : 'Never'}
                   </td>
                   <td className="px-6 py-4">
                     <button
@@ -263,6 +263,34 @@ export function CouponManagement() {
             <form onSubmit={handleCreateCoupon} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Recipient Name
+                </label>
+                <input
+                  type="text"
+                  value={newCoupon.name}
+                  onChange={(e) => setNewCoupon({ ...newCoupon, name: e.target.value })}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#3DB3E3] focus:border-transparent"
+                  placeholder="John Doe"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Recipient Email
+                </label>
+                <input
+                  type="email"
+                  value={newCoupon.email}
+                  onChange={(e) => setNewCoupon({ ...newCoupon, email: e.target.value })}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#3DB3E3] focus:border-transparent"
+                  placeholder="john@example.com"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Coupon Code
                 </label>
                 <input
@@ -302,18 +330,6 @@ export function CouponManagement() {
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#3DB3E3] focus:border-transparent"
                   min="1"
                   required
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Expires At (Optional)
-                </label>
-                <input
-                  type="datetime-local"
-                  value={newCoupon.expiresAt}
-                  onChange={(e) => setNewCoupon({ ...newCoupon, expiresAt: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#3DB3E3] focus:border-transparent"
                 />
               </div>
 
