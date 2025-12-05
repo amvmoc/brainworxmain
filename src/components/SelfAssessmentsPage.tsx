@@ -1,8 +1,9 @@
 // Self-assessments with mandatory payment gateway
 import { useState } from 'react';
-import { Briefcase, Users, Brain, Heart, ArrowRight, X, CheckCircle, Clock } from 'lucide-react';
+import { Briefcase, Users, Brain, Heart, ArrowRight, X, CheckCircle, Clock, Ticket } from 'lucide-react';
 import { selfAssessmentTypes } from '../data/selfAssessmentQuestions';
 import { SelfAssessmentQuestionnaire } from './SelfAssessmentQuestionnaire';
+import { CouponRedemption } from './CouponRedemption';
 
 interface SelfAssessmentsPageProps {
   onClose: () => void;
@@ -12,6 +13,19 @@ interface SelfAssessmentsPageProps {
 export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessmentsPageProps) {
   const [selectedAssessment, setSelectedAssessment] = useState<typeof selfAssessmentTypes[0] | null>(null);
   const [selectedNIPA, setSelectedNIPA] = useState(false);
+  const [showCouponModal, setShowCouponModal] = useState(false);
+
+  const handleCouponRedemption = (
+    assessmentType: string,
+    couponId: string,
+    franchiseOwnerId: string,
+    userName: string,
+    userEmail: string
+  ) => {
+    setShowCouponModal(false);
+    alert('Coupon redeemed successfully! You can now start your assessment.');
+    onClose();
+  };
 
   const nipaCard = {
     id: 'nipa',
@@ -174,23 +188,32 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
                 </p>
               </div>
 
-              <div className="flex gap-4">
+              <div className="space-y-4">
+                <div className="flex gap-4">
+                  <button
+                    onClick={() => setSelectedNIPA(false)}
+                    className="flex-1 bg-gray-200 text-gray-700 px-8 py-4 rounded-xl hover:bg-gray-300 transition-all duration-300 font-bold text-lg"
+                  >
+                    Back to Assessments
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (onStartPayment) {
+                        onStartPayment('nipa');
+                      }
+                    }}
+                    className={`flex-1 bg-gradient-to-r ${nipaCard.color} text-white px-8 py-4 rounded-xl hover:shadow-xl transition-all duration-300 font-bold text-lg flex items-center justify-center gap-2 group`}
+                  >
+                    Proceed to Payment
+                    <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                  </button>
+                </div>
                 <button
-                  onClick={() => setSelectedNIPA(false)}
-                  className="flex-1 bg-gray-200 text-gray-700 px-8 py-4 rounded-xl hover:bg-gray-300 transition-all duration-300 font-bold text-lg"
+                  onClick={() => setShowCouponModal(true)}
+                  className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white px-8 py-4 rounded-xl hover:shadow-xl transition-all duration-300 font-bold text-lg flex items-center justify-center gap-2 group"
                 >
-                  Back to Assessments
-                </button>
-                <button
-                  onClick={() => {
-                    if (onStartPayment) {
-                      onStartPayment('nipa');
-                    }
-                  }}
-                  className={`flex-1 bg-gradient-to-r ${nipaCard.color} text-white px-8 py-4 rounded-xl hover:shadow-xl transition-all duration-300 font-bold text-lg flex items-center justify-center gap-2 group`}
-                >
-                  Proceed to Payment
-                  <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                  <Ticket size={20} />
+                  Have a Coupon Code?
                 </button>
               </div>
             </div>
@@ -270,29 +293,38 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
                 </p>
               </div>
 
-              <div className="flex gap-4">
+              <div className="space-y-4">
+                <div className="flex gap-4">
+                  <button
+                    onClick={() => setSelectedAssessment(null)}
+                    className="flex-1 bg-gray-200 text-gray-700 px-8 py-4 rounded-xl hover:bg-gray-300 transition-all duration-300 font-bold text-lg"
+                  >
+                    Back to Assessments
+                  </button>
+                  <button
+                    onClick={() => {
+                      const paymentTypeMap: Record<string, 'tcf' | 'tadhd' | 'pcadhd'> = {
+                        'teen-career': 'tcf',
+                        'teen-adhd': 'tadhd',
+                        'parent-adhd': 'pcadhd'
+                      };
+                      const paymentType = paymentTypeMap[selectedAssessment.id];
+                      if (onStartPayment) {
+                        onStartPayment(paymentType);
+                      }
+                    }}
+                    className={`flex-1 bg-gradient-to-r ${card.color} text-white px-8 py-4 rounded-xl hover:shadow-xl transition-all duration-300 font-bold text-lg flex items-center justify-center gap-2 group`}
+                  >
+                    Proceed to Payment
+                    <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                  </button>
+                </div>
                 <button
-                  onClick={() => setSelectedAssessment(null)}
-                  className="flex-1 bg-gray-200 text-gray-700 px-8 py-4 rounded-xl hover:bg-gray-300 transition-all duration-300 font-bold text-lg"
+                  onClick={() => setShowCouponModal(true)}
+                  className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white px-8 py-4 rounded-xl hover:shadow-xl transition-all duration-300 font-bold text-lg flex items-center justify-center gap-2 group"
                 >
-                  Back to Assessments
-                </button>
-                <button
-                  onClick={() => {
-                    const paymentTypeMap: Record<string, 'tcf' | 'tadhd' | 'pcadhd'> = {
-                      'teen-career': 'tcf',
-                      'teen-adhd': 'tadhd',
-                      'parent-adhd': 'pcadhd'
-                    };
-                    const paymentType = paymentTypeMap[selectedAssessment.id];
-                    if (onStartPayment) {
-                      onStartPayment(paymentType);
-                    }
-                  }}
-                  className={`flex-1 bg-gradient-to-r ${card.color} text-white px-8 py-4 rounded-xl hover:shadow-xl transition-all duration-300 font-bold text-lg flex items-center justify-center gap-2 group`}
-                >
-                  Proceed to Payment
-                  <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                  <Ticket size={20} />
+                  Have a Coupon Code?
                 </button>
               </div>
             </div>
@@ -438,6 +470,13 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
           </div>
         </div>
       </div>
+
+      {showCouponModal && (
+        <CouponRedemption
+          onRedemptionSuccess={handleCouponRedemption}
+          onCancel={() => setShowCouponModal(false)}
+        />
+      )}
     </div>
   );
 }
