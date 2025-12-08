@@ -1,4 +1,5 @@
 import { createClient } from 'npm:@supabase/supabase-js@2.57.4';
+import { createTransport } from "npm:nodemailer@6.9.7";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -17,11 +18,6 @@ Deno.serve(async (req: Request) => {
   try {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-    const resendApiKey = Deno.env.get('RESEND_API_KEY');
-
-    if (!resendApiKey) {
-      throw new Error('RESEND_API_KEY not configured');
-    }
 
     const supabase = createClient(supabaseUrl, supabaseKey);
     const { responseId, customerEmail, customerName, results } = await req.json();
@@ -59,18 +55,26 @@ Deno.serve(async (req: Request) => {
       `;
     });
 
-    // Send email via Resend
-    const emailResponse = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${resendApiKey}`,
+    // Setup Gmail transporter
+    const GMAIL_USER = "payments@brainworx.co.za";
+    const GMAIL_PASSWORD = "iuhzjjhughbnwsvf";
+
+    const transporter = createTransport({
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
+      auth: {
+        user: GMAIL_USER,
+        pass: GMAIL_PASSWORD,
       },
-      body: JSON.stringify({
-        from: 'BrainWorx Assessment <assessments@brainworxassessment.com>',
-        to: customerEmail,
-        subject: 'Your Neural Imprint Patterns 2.0 Assessment Results',
-        html: `
+    });
+
+    // Send email via Gmail
+    await transporter.sendMail({
+      from: `BrainWorx Assessment <${GMAIL_USER}>`,
+      to: customerEmail,
+      subject: 'Your Neural Imprint Patterns 2.0 Assessment Results',
+      html: `
           <!DOCTYPE html>
           <html>
             <head>
@@ -124,18 +128,12 @@ Deno.serve(async (req: Request) => {
             </body>
           </html>
         `,
-      }),
     });
 
-    if (!emailResponse.ok) {
-      const errorText = await emailResponse.text();
-      throw new Error(`Failed to send email: ${errorText}`);
-    }
-
-    const emailData = await emailResponse.json();
+    console.log('✓ Email sent successfully to:', customerEmail);
 
     return new Response(
-      JSON.stringify({ success: true, emailId: emailData.id }),
+      JSON.stringify({ success: true, message: 'Email sent successfully' }),
       {
         headers: {
           ...corsHeaders,
