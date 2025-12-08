@@ -77,6 +77,16 @@ const patternDescriptions: Record<string, { description: string, clinicalSignifi
   }
 };
 
+function convertAnswerToNumber(answer: string): number {
+  const answerLower = answer.toLowerCase();
+  if (answerLower.includes('strongly agree')) return 5;
+  if (answerLower.includes('agree')) return 4;
+  if (answerLower.includes('neutral')) return 3;
+  if (answerLower.includes('disagree') && !answerLower.includes('strongly')) return 2;
+  if (answerLower.includes('strongly disagree')) return 1;
+  return parseInt(answer) || 3;
+}
+
 export function generateCoachReportData(
   customerName: string,
   answers: Record<string, string>,
@@ -89,7 +99,7 @@ export function generateCoachReportData(
       if ((qId - 1) % 20 === index) {
         const answer = answers[qId.toString()];
         if (answer) {
-          relevantAnswers.push(parseInt(answer));
+          relevantAnswers.push(convertAnswerToNumber(answer));
         }
       }
     }
