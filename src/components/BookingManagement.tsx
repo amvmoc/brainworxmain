@@ -50,8 +50,11 @@ export function BookingManagement({ franchiseOwnerId }: BookingManagementProps) 
     try {
       let query = supabase
         .from('bookings')
-        .select('*')
-        .eq('franchise_owner_id', franchiseOwnerId);
+        .select('*');
+
+      if (franchiseOwnerId !== 'super_admin_all') {
+        query = query.eq('franchise_owner_id', franchiseOwnerId);
+      }
 
       const today = new Date().toISOString().split('T')[0];
 

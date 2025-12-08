@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { LogOut, Users, TrendingUp, FileText, DollarSign, LayoutDashboard, Eye, Search, UserPlus, Mail, Shield, Edit2, Loader, RefreshCw, Ticket, Trash2, Key } from 'lucide-react';
+import { LogOut, Users, TrendingUp, FileText, DollarSign, LayoutDashboard, Eye, Search, UserPlus, Mail, Shield, Edit2, Loader, RefreshCw, Ticket, Trash2, Key, Calendar } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { InvoicesPage } from './InvoicesPage';
-import { SelfAssessmentsPage } from './SelfAssessmentsPage';
 import { LibraryManagement } from './LibraryManagement';
 import { CouponManagement } from './CouponManagement';
+import { CalendarManagement } from './CalendarManagement';
+import { BookingManagement } from './BookingManagement';
 import { HomePage } from './HomePage';
 import { ClientReport } from './ClientReport';
 import { SelfAssessmentReport } from './SelfAssessmentReport';
@@ -34,7 +35,8 @@ interface SalesLog {
 }
 
 export function SuperAdminDashboard({ franchiseOwnerName, onLogout }: SuperAdminDashboardProps) {
-  const [currentView, setCurrentView] = useState<'overview' | 'sales' | 'responses' | 'invoices' | 'self_assessments' | 'users' | 'library' | 'coupons' | 'visitor_view' | 'tests'>('overview');
+  const [currentView, setCurrentView] = useState<'overview' | 'sales' | 'responses' | 'invoices' | 'calendar' | 'users' | 'library' | 'coupons' | 'visitor_view' | 'tests'>('overview');
+  const [calendarTab, setCalendarTab] = useState<'availability' | 'bookings'>('bookings');
   const [salesLogs, setSalesLogs] = useState<SalesLog[]>([]);
   const [responses, setResponses] = useState<any[]>([]);
   const [selfAssessments, setSelfAssessments] = useState<any[]>([]);
@@ -391,17 +393,6 @@ export function SuperAdminDashboard({ franchiseOwnerName, onLogout }: SuperAdmin
               Full Assessments
             </button>
             <button
-              onClick={() => setCurrentView('self_assessments')}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg whitespace-nowrap transition-all ${
-                currentView === 'self_assessments'
-                  ? 'bg-white text-[#0A2A5E] font-semibold'
-                  : 'bg-white/20 text-white hover:bg-white/30'
-              }`}
-            >
-              <FileText size={20} />
-              Self Assessments
-            </button>
-            <button
               onClick={() => setCurrentView('tests')}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg whitespace-nowrap transition-all ${
                 currentView === 'tests'
@@ -411,6 +402,17 @@ export function SuperAdminDashboard({ franchiseOwnerName, onLogout }: SuperAdmin
             >
               <Eye size={20} />
               Tests
+            </button>
+            <button
+              onClick={() => setCurrentView('calendar')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg whitespace-nowrap transition-all ${
+                currentView === 'calendar'
+                  ? 'bg-white text-[#0A2A5E] font-semibold'
+                  : 'bg-white/20 text-white hover:bg-white/30'
+              }`}
+            >
+              <Calendar size={20} />
+              Calendar
             </button>
             <button
               onClick={() => setCurrentView('invoices')}
@@ -643,8 +645,36 @@ export function SuperAdminDashboard({ franchiseOwnerName, onLogout }: SuperAdmin
           <InvoicesPage franchiseOwnerId="super_admin_all" />
         )}
 
-        {currentView === 'self_assessments' && (
-          <SelfAssessmentsPage franchiseOwnerId="super_admin_all" />
+        {currentView === 'calendar' && (
+          <div className="space-y-6">
+            <div className="flex gap-4 mb-6">
+              <button
+                onClick={() => setCalendarTab('bookings')}
+                className={`px-6 py-3 rounded-lg font-semibold transition-all ${
+                  calendarTab === 'bookings'
+                    ? 'bg-[#0A2A5E] text-white'
+                    : 'bg-white text-[#0A2A5E] hover:bg-gray-100'
+                }`}
+              >
+                All Bookings
+              </button>
+              <button
+                onClick={() => setCalendarTab('availability')}
+                className={`px-6 py-3 rounded-lg font-semibold transition-all ${
+                  calendarTab === 'availability'
+                    ? 'bg-[#0A2A5E] text-white'
+                    : 'bg-white text-[#0A2A5E] hover:bg-gray-100'
+                }`}
+              >
+                Manage Availability
+              </button>
+            </div>
+            {calendarTab === 'bookings' ? (
+              <BookingManagement franchiseOwnerId="super_admin_all" />
+            ) : (
+              <CalendarManagement franchiseOwnerId="super_admin_all" />
+            )}
+          </div>
         )}
 
         {currentView === 'users' && (
