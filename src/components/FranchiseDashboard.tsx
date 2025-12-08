@@ -60,7 +60,7 @@ export function FranchiseDashboard({
       let selfAssessmentQuery = supabase
         .from('self_assessment_responses')
         .select('*')
-        .eq('status', 'analyzed');
+        .in('status', ['analyzed', 'completed']);
 
       if (!isSuperAdmin) {
         nipaQuery = nipaQuery.eq('franchise_owner_id', franchiseOwnerId);

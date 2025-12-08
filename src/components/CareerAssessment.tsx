@@ -67,6 +67,7 @@ interface CareerAssessmentProps {
   email?: string;
   customerName?: string;
   franchiseOwnerId?: string | null;
+  couponId?: string | null;
 }
 
 const questions: Question[] = [
@@ -279,7 +280,8 @@ export function CareerAssessment({
   onClose,
   email = '',
   customerName = '',
-  franchiseOwnerId = null
+  franchiseOwnerId = null,
+  couponId = null
 }: CareerAssessmentProps) {
   const [currentSection, setCurrentSection] = useState<SectionId>("A");
   const [answers, setAnswers] = useState<AnswersState>({});
@@ -363,6 +365,22 @@ export function CareerAssessment({
         .single();
 
       if (error) throw error;
+
+      if (couponId) {
+        await supabase
+          .from('coupon_redemptions')
+          .update({ response_id: data.id })
+          .eq('coupon_id', couponId)
+          .eq('user_email', customerInfo.email);
+
+        await supabase
+          .from('coupon_codes')
+          .update({
+            is_active: false,
+            current_uses: 1
+          })
+          .eq('id', couponId);
+      }
 
       setRiaSecCode(riaSecCode);
       setShowResults(true);

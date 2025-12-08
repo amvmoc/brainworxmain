@@ -29,6 +29,7 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
   const [franchiseOwnerId, setFranchiseOwnerId] = useState<string | null>(null);
   const [showCouponModal, setShowCouponModal] = useState(!!initialCouponCode);
   const [customerName, setCustomerName] = useState('');
+  const [couponId, setCouponId] = useState<string | null>(null);
 
   useEffect(() => {
     if (franchiseCode || coachLink) {
@@ -101,7 +102,7 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
 
   const handleCouponRedemption = (
     assessmentType: string,
-    couponId: string,
+    redemptionCouponId: string,
     couponFranchiseOwnerId: string,
     userName: string,
     userEmail: string
@@ -109,6 +110,7 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
     setEmail(userEmail);
     setCustomerName(userName);
     setFranchiseOwnerId(couponFranchiseOwnerId);
+    setCouponId(redemptionCouponId);
     setShowCouponModal(false);
     setPreviousStep('email');
 
@@ -174,6 +176,7 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
         email={email}
         customerName={customerName}
         franchiseOwnerId={franchiseOwnerId}
+        couponId={couponId}
       />
     );
   }
