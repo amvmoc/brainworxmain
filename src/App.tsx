@@ -12,6 +12,7 @@ import { SelfAssessmentsPage } from './components/SelfAssessmentsPage';
 import { DisclaimerPage } from './components/DisclaimerPage';
 import { Library } from './components/Library';
 import { PublicBookingPage } from './components/PublicBookingPage';
+import { PublicResultsView } from './components/PublicResultsView';
 import { supabase } from './lib/supabase';
 
 function App() {
@@ -33,8 +34,17 @@ function App() {
   const [bookingFranchiseCode, setBookingFranchiseCode] = useState<string | null>(null);
   const [preselectedPaymentType, setPreselectedPaymentType] = useState<'tcf' | 'tadhd' | 'pcadhd' | null>(null);
   const [couponCode, setCouponCode] = useState<string | null>(null);
+  const [shareToken, setShareToken] = useState<string | null>(null);
 
   useEffect(() => {
+    const currentPath = window.location.pathname;
+    const resultsMatch = currentPath.match(/\/results\/([a-f0-9-]+)/);
+
+    if (resultsMatch && resultsMatch[1]) {
+      setShareToken(resultsMatch[1]);
+      return;
+    }
+
     const urlParams = new URLSearchParams(window.location.search);
     const verifyToken = urlParams.get('verify_token');
     const fhCode = urlParams.get('fh');
@@ -98,6 +108,10 @@ function App() {
 
   const urlParams = new URLSearchParams(window.location.search);
   const verifyToken = urlParams.get('verify_token');
+
+  if (shareToken) {
+    return <PublicResultsView shareToken={shareToken} />;
+  }
 
   if (MAINTENANCE_MODE) {
     return (
