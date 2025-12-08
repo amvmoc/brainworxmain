@@ -11,7 +11,7 @@ interface EmailRequest {
   customerEmail: string;
   franchiseOwnerEmail?: string;
   franchiseOwnerName?: string;
-  responseId?: string;
+  responseId: string;
   analysis: {
     overallScore: number;
     categoryScores: Record<string, number>;
@@ -30,9 +30,36 @@ Deno.serve(async (req: Request) => {
   }
 
   try {
-    const { customerName, customerEmail, franchiseOwnerEmail, franchiseOwnerName, analysis }: EmailRequest = await req.json();
+    const { customerName, customerEmail, franchiseOwnerEmail, franchiseOwnerName, responseId, analysis }: EmailRequest = await req.json();
 
     const BRAINWORX_EMAIL = 'admin@brainworx.com';
+    const SITE_URL = Deno.env.get('SITE_URL') || 'https://brainworx.co.za';
+
+    // Fetch share token and franchise code from database
+    const { createClient } = await import('npm:@supabase/supabase-js@2.39.0');
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    const { data: response } = await supabase
+      .from('responses')
+      .select('share_token, franchise_owner_id')
+      .eq('id', responseId)
+      .single();
+
+    let franchiseCode = '';
+    if (response?.franchise_owner_id) {
+      const { data: franchiseOwner } = await supabase
+        .from('franchise_owners')
+        .select('unique_link_code')
+        .eq('id', response.franchise_owner_id)
+        .single();
+
+      franchiseCode = franchiseOwner?.unique_link_code || '';
+    }
+
+    const resultsUrl = `${SITE_URL}/results/${response?.share_token}`;
+    const bookingUrl = franchiseCode ? `${SITE_URL}/book/${franchiseCode}` : `${SITE_URL}`;
 
     const customerEmailBody = `
       <!DOCTYPE html>
@@ -87,8 +114,19 @@ Deno.serve(async (req: Request) => {
             </div>
             
             <p style="margin-top: 30px; padding: 20px; background: #E6E9EF; border-radius: 10px;">
-              <strong>Next Steps:</strong> Our team will review your results and reach out within 24-48 hours to discuss personalized program options that align with your development goals.
+              <strong>Next Steps:</strong> Review your full results and book a consultation to discuss personalized program options.
             </p>
+
+            <div style="text-align: center; margin: 30px 0;">
+              <a href="${resultsUrl}" style="display: inline-block; padding: 15px 30px; background: linear-gradient(135deg, #3DB3E3, #1FAFA3); color: white; text-decoration: none; border-radius: 8px; font-weight: bold; margin: 10px;">
+                View Full Results
+              </a>
+              ${bookingUrl !== SITE_URL ? `
+              <a href="${bookingUrl}" style="display: inline-block; padding: 15px 30px; background: #0A2A5E; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; margin: 10px;">
+                Book Consultation
+              </a>
+              ` : ''}
+            </div>
           </div>
           
           <div class="footer">
@@ -150,7 +188,19 @@ Deno.serve(async (req: Request) => {
             </ul>
 
             <p style="margin-top: 20px; padding: 15px; background: #E6F7FF; border-left: 4px solid #3DB3E3; border-radius: 4px;">
-              <strong>Next Steps:</strong> This prospect is ready for a consultation. Review their full results in your dashboard and schedule a follow-up within 24-48 hours.
+              <strong>Next Steps:</strong> This prospect is ready for a consultation. Review their full results and follow up within 24-48 hours.
+            </p>
+
+            <div style="text-align: center; margin: 20px 0;">
+              <a href="${resultsUrl}" style="display: inline-block; padding: 12px 24px; background: #3DB3E3; color: white; text-decoration: none; border-radius: 6px; font-weight: bold;">
+                View Full Results
+              </a>
+            </div>
+
+            <p style="margin-top: 15px; padding: 12px; background: #FFF5E6; border-radius: 6px; font-size: 14px;">
+              <strong>Customer's View Link:</strong><br/>
+              <a href="${resultsUrl}" style="color: #3DB3E3; word-break: break-all;">${resultsUrl}</a><br/>
+              ${bookingUrl !== SITE_URL ? `<strong style="margin-top: 10px; display: block;">Booking Link:</strong> <a href="${bookingUrl}" style="color: #3DB3E3;">${bookingUrl}</a>` : ''}
             </p>
           </div>
         </div>
@@ -234,6 +284,8 @@ Deno.serve(async (req: Request) => {
 
     console.log('=== Email Notifications Prepared ===');
     console.log('1. Customer Email:', customerEmail);
+    console.log('   Results URL:', resultsUrl);
+    console.log('   Booking URL:', bookingUrl);
     console.log('   Preview:', customerEmailBody.substring(0, 100) + '...');
 
     if (franchiseOwnerEmail) {
@@ -244,12 +296,21 @@ Deno.serve(async (req: Request) => {
     console.log('3. BrainWorx Admin Email:', BRAINWORX_EMAIL);
     console.log('   Preview:', brainworxEmailBody.substring(0, 100) + '...');
     console.log('=================================');
+    console.log('NOTE: To actually send emails, integrate an email service like:');
+    console.log('- Resend (https://resend.com)');
+    console.log('- SendGrid (https://sendgrid.com)');
+    console.log('- AWS SES (https://aws.amazon.com/ses/)');
+    console.log('=================================');
 
     return new Response(
       JSON.stringify({
         success: true,
-        message: 'Analysis emails prepared and ready to send',
+        message: 'Analysis emails prepared with results and booking links. Configure an email service (Resend/SendGrid/AWS SES) to actually send emails.',
         emailsSent,
+        links: {
+          resultsUrl,
+          bookingUrl
+        },
         analysis: {
           score: analysis.overallScore,
           strengths: analysis.strengths.length,

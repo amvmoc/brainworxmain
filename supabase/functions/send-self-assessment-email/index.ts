@@ -18,6 +18,7 @@ interface EmailRequest {
     severity: string;
   }>;
   recommendations: string[];
+  responseId?: string;
 }
 
 Deno.serve(async (req: Request) => {
@@ -35,8 +36,44 @@ Deno.serve(async (req: Request) => {
       assessmentType,
       overallScore,
       topImprints,
-      recommendations
+      recommendations,
+      responseId
     }: EmailRequest = await req.json();
+
+    const SITE_URL = Deno.env.get('SITE_URL') || 'https://brainworx.co.za';
+
+    let resultsUrl = '';
+    let bookingUrl = SITE_URL;
+
+    // Fetch share token and franchise code if responseId is provided
+    if (responseId) {
+      const { createClient } = await import('npm:@supabase/supabase-js@2.39.0');
+      const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+      const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+      const supabase = createClient(supabaseUrl, supabaseKey);
+
+      const { data: response } = await supabase
+        .from('self_assessment_responses')
+        .select('share_token, franchise_owner_id')
+        .eq('id', responseId)
+        .maybeSingle();
+
+      if (response?.share_token) {
+        resultsUrl = `${SITE_URL}/results/${response.share_token}`;
+      }
+
+      if (response?.franchise_owner_id) {
+        const { data: franchiseOwner } = await supabase
+          .from('franchise_owners')
+          .select('unique_link_code')
+          .eq('id', response.franchise_owner_id)
+          .maybeSingle();
+
+        if (franchiseOwner?.unique_link_code) {
+          bookingUrl = `${SITE_URL}/book/${franchiseOwner.unique_link_code}`;
+        }
+      }
+    }
 
     const topImprintsHtml = topImprints
       .map(
@@ -123,6 +160,21 @@ Deno.serve(async (req: Request) => {
               <h3 style="color: #0A2A5E; margin-top: 0;">Next Steps</h3>
               <p style="margin-bottom: 0;">To dive deeper into your results and create a personalized action plan, we recommend scheduling a 45-minute coaching session with our certified BrainWorx coaches.</p>
             </div>
+
+            ${resultsUrl || bookingUrl !== SITE_URL ? `
+            <div style="text-align: center; margin: 30px 0;">
+              ${resultsUrl ? `
+              <a href="${resultsUrl}" style="display: inline-block; padding: 15px 30px; background: linear-gradient(135deg, #3DB3E3, #1FAFA3); color: white; text-decoration: none; border-radius: 8px; font-weight: bold; margin: 10px;">
+                View Full Results
+              </a>
+              ` : ''}
+              ${bookingUrl !== SITE_URL ? `
+              <a href="${bookingUrl}" style="display: inline-block; padding: 15px 30px; background: #0A2A5E; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; margin: 10px;">
+                Book Consultation
+              </a>
+              ` : ''}
+            </div>
+            ` : ''}
 
             <div style="background-color: #fef2f2; border-left: 4px solid #ef4444; padding: 15px; margin-top: 20px; border-radius: 4px;">
               <p style="margin: 0; font-size: 12px; color: #666;"><strong>Important Disclaimer:</strong> This assessment is a self-reflection and coaching tool, not a medical or psychological diagnosis. Results should not be used to start, change, or stop any medication or treatment. Please consult with licensed professionals for medical or mental health concerns.</p>

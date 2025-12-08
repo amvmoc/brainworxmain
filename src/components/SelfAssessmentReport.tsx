@@ -84,7 +84,8 @@ export function SelfAssessmentReport({
           assessmentType: assessmentType.name,
           overallScore: analysisResults.overallScore,
           topImprints: analysisResults.topImprints.slice(0, 5),
-          recommendations: analysisResults.recommendations
+          recommendations: analysisResults.recommendations,
+          responseId: responseId
         })
       });
     } catch (error) {
