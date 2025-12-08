@@ -165,6 +165,7 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
         coachLink={coachLink}
         email={email}
         franchiseOwnerId={franchiseOwnerId}
+        couponId={couponId}
       />
     );
   }

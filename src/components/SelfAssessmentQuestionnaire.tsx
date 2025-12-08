@@ -10,6 +10,7 @@ interface SelfAssessmentQuestionnaireProps {
   coachLink?: string;
   email?: string;
   franchiseOwnerId?: string | null;
+  couponId?: string | null;
 }
 
 export function SelfAssessmentQuestionnaire({
@@ -17,7 +18,8 @@ export function SelfAssessmentQuestionnaire({
   assessmentType,
   coachLink,
   email,
-  franchiseOwnerId
+  franchiseOwnerId,
+  couponId
 }: SelfAssessmentQuestionnaireProps) {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<Record<number, number>>({});
@@ -154,6 +156,19 @@ export function SelfAssessmentQuestionnaire({
           completed_at: new Date().toISOString()
         })
         .eq('id', responseId);
+
+      if (couponId) {
+        await supabase
+          .from('coupon_redemptions')
+          .update({ response_id: responseId })
+          .eq('coupon_id', couponId)
+          .eq('user_email', customerInfo.email);
+
+        await supabase
+          .from('coupon_codes')
+          .update({ is_active: false })
+          .eq('id', couponId);
+      }
 
       setShowAnalysis(true);
     }
