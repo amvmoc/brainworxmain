@@ -19,88 +19,242 @@ export interface SelfAssessmentType {
   };
 }
 
-// Teen Career & Future Work/Study Direction Assessment
+// Teen Career & Future Work/Study Direction Assessment (132 Questions - NIP + RIASEC)
 export const careerAssessmentQuestions: SelfAssessmentQuestion[] = [
-  { id: 1, text: "I enjoy listening to people's problems and helping them think of ways forward.", neuralImprint: "INFLUENCE", domain: "Interest_People" },
-  { id: 2, text: "I can see myself in a job where I support or care for others (for example teaching, counselling, nursing or youth work).", neuralImprint: "INFLUENCE", domain: "Interest_People" },
-  { id: 3, text: "I feel alive when I am part of something that encourages or builds up other people.", neuralImprint: "INFLUENCE", domain: "Interest_People" },
-  { id: 4, text: "Friends often come to me for advice or to talk about what is going on in their lives.", neuralImprint: "LEFT/RIGHT", domain: "Interest_People" },
-  { id: 5, text: "I enjoy fixing, building or working with tools, equipment or my hands.", neuralImprint: "LEFT/RIGHT", domain: "Interest_Practical" },
-  { id: 6, text: "I would rather do practical tasks than write long essays.", neuralImprint: "LEFT/RIGHT", domain: "Interest_Practical" },
-  { id: 7, text: "The idea of working in a trade or technical job (for example mechanic, electrician, chef) appeals to me.", neuralImprint: "RES", domain: "Interest_Practical" },
-  { id: 8, text: "I like seeing a physical result of my work, like something I have made or repaired.", neuralImprint: "TRAP", domain: "Interest_Practical" },
-  { id: 9, text: "I enjoy creative activities like drawing, music, dance, design, video or content creation.", neuralImprint: "LEFT/RIGHT", domain: "Interest_Creative" },
-  { id: 10, text: "I often have ideas for stories, designs, videos or projects and like turning them into something real.", neuralImprint: "CPL", domain: "Interest_Creative" },
-  { id: 11, text: "I would like a future where I can express myself creatively in my work.", neuralImprint: "DEC", domain: "Interest_Creative" },
-  { id: 12, text: "I care about how things look and feel (for example colours, style, branding).", neuralImprint: "NAR", domain: "Interest_Creative" },
-  { id: 13, text: "I enjoy solving puzzles, logic problems or working with numbers.", neuralImprint: "LEFT/RIGHT", domain: "Interest_Systems" },
-  { id: 14, text: "I am curious about how systems work (for example apps, machines, finances) and like figuring them out.", neuralImprint: "DIS", domain: "Interest_Systems" },
-  { id: 15, text: "I like planning steps, organising information or creating lists and structures.", neuralImprint: "DOG", domain: "Interest_Systems" },
-  { id: 16, text: "I can imagine myself in work like IT, engineering, finance or science.", neuralImprint: "DIS", domain: "Interest_Systems" },
-  { id: 17, text: "In group tasks or projects, I often end up taking the lead.", neuralImprint: "INFLUENCE", domain: "Interest_Leadership" },
-  { id: 18, text: "I enjoy organising people and making sure things get done.", neuralImprint: "INFLUENCE", domain: "Interest_Leadership" },
-  { id: 19, text: "The idea of guiding or leading others (for example manager, pastor, coach, business owner) is exciting to me.", neuralImprint: "NAR", domain: "Interest_Leadership" },
-  { id: 20, text: "I like persuading others or presenting ideas to a group.", neuralImprint: "INFLUENCE", domain: "Interest_Leadership" },
-  { id: 21, text: "I like the idea of a job with a clear routine and predictable tasks.", neuralImprint: "DOG", domain: "Interest_Stability" },
-  { id: 22, text: "I feel calmer when I know exactly what is expected of me each day.", neuralImprint: "BURN", domain: "Interest_Stability" },
-  { id: 23, text: "I can imagine myself in reliable support roles (for example admin, receptionist, back-office).", neuralImprint: "TRAP", domain: "Interest_Stability" },
-  { id: 24, text: "I would rather have a safe, steady income than take big risks for a more exciting job.", neuralImprint: "LACK", domain: "Interest_Stability" },
-  { id: 25, text: "It is hard for me to concentrate in noisy, busy places like open classrooms or malls.", neuralImprint: "DIS", domain: "Env_QuietBusy" },
-  { id: 26, text: "I prefer smaller, quieter spaces when I need to think or work.", neuralImprint: "BURN", domain: "Env_QuietBusy" },
-  { id: 27, text: "I feel energised in lively environments where there is a lot happening.", neuralImprint: "CPL", domain: "Env_QuietBusy" },
-  { id: 28, text: "I like schools or workplaces that have a buzz and constant interaction.", neuralImprint: "CPL", domain: "Env_QuietBusy" },
-  { id: 29, text: "I do my best when my timetable or schedule is clearly planned out.", neuralImprint: "DOG", domain: "Env_Structure" },
-  { id: 30, text: "I get stressed when teachers or leaders change plans at the last minute.", neuralImprint: "ANG", domain: "Env_Structure" },
-  { id: 31, text: "I prefer flexible days where I can decide the order in which I do tasks.", neuralImprint: "RES", domain: "Env_Structure" },
-  { id: 32, text: "Very strict, rule-heavy environments make me feel trapped.", neuralImprint: "TRAP", domain: "Env_Structure" },
-  { id: 33, text: "I enjoy working in teams and bouncing ideas off other people.", neuralImprint: "INFLUENCE", domain: "Env_TeamSolo" },
-  { id: 34, text: "I prefer working alone where I can go at my own pace.", neuralImprint: "RES", domain: "Env_TeamSolo" },
-  { id: 35, text: "Group projects usually energise me rather than drain me.", neuralImprint: "INFLUENCE", domain: "Env_TeamSolo" },
-  { id: 36, text: "I need regular time on my own to think or reset after being with people.", neuralImprint: "BURN", domain: "Env_TeamSolo" },
-  { id: 37, text: "I get bored quickly if I have to do the same kind of task every day.", neuralImprint: "RES", domain: "Env_Change" },
-  { id: 38, text: "I enjoy learning new things and changing up what I do.", neuralImprint: "CPL", domain: "Env_Change" },
-  { id: 39, text: "I prefer jobs where things do not change too much from week to week.", neuralImprint: "DOG", domain: "Env_Change" },
-  { id: 40, text: "Sudden changes at school or home can throw me off balance.", neuralImprint: "NEG", domain: "Env_Change" },
-  { id: 41, text: "I understand things best when I can try them myself, not just listen.", neuralImprint: "LEFT/RIGHT", domain: "Learn_HandsOn" },
-  { id: 42, text: "Practical experiments, projects or demonstrations help information stick for me.", neuralImprint: "DIS", domain: "Learn_HandsOn" },
-  { id: 43, text: "I would enjoy courses with lots of practical work (for example labs, workshops, placements).", neuralImprint: "LEFT/RIGHT", domain: "Learn_HandsOn" },
-  { id: 44, text: "I struggle to stay focused in long, theory-heavy lessons.", neuralImprint: "DIS", domain: "Learn_HandsOn" },
-  { id: 45, text: "I enjoy understanding ideas and concepts in depth, even when they are abstract.", neuralImprint: "LEFT/RIGHT", domain: "Learn_Theory" },
-  { id: 46, text: "I do not mind reading longer texts if the topic really interests me.", neuralImprint: "BURN", domain: "Learn_Theory" },
-  { id: 47, text: "I can imagine myself studying at university with lots of reading and lectures.", neuralImprint: "LEFT/RIGHT", domain: "Learn_Theory" },
-  { id: 48, text: "I learn best when I can talk things through with other people.", neuralImprint: "INFLUENCE", domain: "Learn_Social" },
-  { id: 49, text: "Study groups or explaining work to friends helps me remember it better.", neuralImprint: "INFLUENCE", domain: "Learn_Social" },
-  { id: 50, text: "I find it fairly easy to motivate myself to study without someone checking on me.", neuralImprint: "DOG", domain: "Learn_SelfDiscipline" },
-  { id: 51, text: "I often leave school work until the last minute, even when I care about the results.", neuralImprint: "CPL", domain: "Learn_SelfDiscipline" },
-  { id: 52, text: "I usually need external deadlines or pressure before I really start working.", neuralImprint: "RES", domain: "Learn_SelfDiscipline" },
-  { id: 53, text: "Sometimes I think I am not clever enough for the kind of future I want.", neuralImprint: "SHT", domain: "Risk_SelfWorth" },
-  { id: 54, text: "My past school marks make me doubt whether I can succeed after school.", neuralImprint: "NEG", domain: "Risk_SelfWorth" },
-  { id: 55, text: "I often compare myself to others and feel behind in life or success.", neuralImprint: "VICTIM", domain: "Risk_SelfWorth" },
-  { id: 56, text: "I feel overwhelmed when I think about my future after school.", neuralImprint: "BURN", domain: "Risk_StressBurnout" },
-  { id: 57, text: "I get stressed easily when I have many tasks or exams at the same time.", neuralImprint: "BURN", domain: "Risk_StressBurnout" },
-  { id: 58, text: "It is hard to stay focused on long-term goals; short-term fun usually wins.", neuralImprint: "CPL", domain: "Risk_Motivation" },
-  { id: 59, text: "Sometimes when adults talk about planning my future, I think 'what is the point?'.", neuralImprint: "RES", domain: "Risk_Motivation" },
-  { id: 60, text: "Messages from my family or community about which careers are acceptable strongly influence my choices.", neuralImprint: "DOG", domain: "Risk_FamilyBeliefs" }
+  // SECTION A – INTERESTS
+  // A1 – Helping & People Care
+  { id: 1, text: "I feel good when I support someone who is struggling.", neuralImprint: "INFLUENCE", domain: "A1_HELPING" },
+  { id: 2, text: "Friends often come to me when they have personal problems.", neuralImprint: "INFLUENCE", domain: "A1_HELPING" },
+  { id: 3, text: "I enjoy listening to people and trying to understand how they feel.", neuralImprint: "INFLUENCE", domain: "A1_HELPING" },
+  { id: 4, text: "I like the idea of a job where I can help people feel better.", neuralImprint: "INFLUENCE", domain: "A1_HELPING" },
+
+  // A2 – Technical & Mechanical
+  { id: 5, text: "I enjoy understanding how machines, devices or systems work.", neuralImprint: "DIS", domain: "A2_TECHNICAL" },
+  { id: 6, text: "I like fixing things that are broken.", neuralImprint: "LEFT/RIGHT", domain: "A2_TECHNICAL" },
+  { id: 7, text: "I am curious about how cars, computers or gadgets are put together.", neuralImprint: "DIS", domain: "A2_TECHNICAL" },
+  { id: 8, text: "I enjoy following steps or diagrams to build or assemble something.", neuralImprint: "DOG", domain: "A2_TECHNICAL" },
+
+  // A3 – Creative & Design
+  { id: 9, text: "I enjoy coming up with new ideas for stories, videos, art or music.", neuralImprint: "CPL", domain: "A3_CREATIVE" },
+  { id: 10, text: "I like making things look good visually (posters, rooms, presentations).", neuralImprint: "LEFT/RIGHT", domain: "A3_CREATIVE" },
+  { id: 11, text: "I enjoy expressing myself through drawing, writing, music or design.", neuralImprint: "NAR", domain: "A3_CREATIVE" },
+  { id: 12, text: "I like imagining new concepts or worlds in my mind.", neuralImprint: "CPL", domain: "A3_CREATIVE" },
+
+  // A4 – Business & Entrepreneurship
+  { id: 13, text: "I like thinking about how to make money from ideas or products.", neuralImprint: "INFLUENCE", domain: "A4_BUSINESS" },
+  { id: 14, text: "I enjoy finding ways to promote or 'sell' something I believe in.", neuralImprint: "INFLUENCE", domain: "A4_BUSINESS" },
+  { id: 15, text: "I notice business opportunities around me (things that could be improved or sold).", neuralImprint: "DIS", domain: "A4_BUSINESS" },
+  { id: 16, text: "I like the idea of starting my own small business one day.", neuralImprint: "CPL", domain: "A4_BUSINESS" },
+
+  // A5 – Outdoor & Practical
+  { id: 17, text: "I enjoy working with my hands and being physically active.", neuralImprint: "LEFT/RIGHT", domain: "A5_OUTDOOR" },
+  { id: 18, text: "I would rather move around than sit at a desk all day.", neuralImprint: "RES", domain: "A5_OUTDOOR" },
+  { id: 19, text: "I like tasks like building, repairing, planting or setting things up.", neuralImprint: "LEFT/RIGHT", domain: "A5_OUTDOOR" },
+  { id: 20, text: "I enjoy being outdoors more than being in an office or classroom.", neuralImprint: "RES", domain: "A5_OUTDOOR" },
+
+  // A6 – Investigative & Analytical
+  { id: 21, text: "I enjoy solving puzzles or tricky problems.", neuralImprint: "DIS", domain: "A6_INVESTIGATIVE" },
+  { id: 22, text: "I like understanding why things happen, not just that they happen.", neuralImprint: "DIS", domain: "A6_INVESTIGATIVE" },
+  { id: 23, text: "I enjoy doing research or searching for information on topics that interest me.", neuralImprint: "DIS", domain: "A6_INVESTIGATIVE" },
+  { id: 24, text: "I like subjects or activities where I have to think deeply and analyse.", neuralImprint: "LEFT/RIGHT", domain: "A6_INVESTIGATIVE" },
+
+  // SECTION B – PERSONALITY / WORK STYLE
+  // B1 – Planner / Structured
+  { id: 25, text: "I like having a clear plan before I start something.", neuralImprint: "DOG", domain: "B1_PLANNER" },
+  { id: 26, text: "I feel uncomfortable when plans change at the last minute.", neuralImprint: "ANG", domain: "B1_PLANNER" },
+  { id: 27, text: "I often plan my school work or tasks ahead of time.", neuralImprint: "DOG", domain: "B1_PLANNER" },
+  { id: 28, text: "I get stressed if I don't know what is going to happen next.", neuralImprint: "BURN", domain: "B1_PLANNER" },
+
+  // B2 – Detail Orientation
+  { id: 29, text: "I notice small mistakes or details that other people miss.", neuralImprint: "DIS", domain: "B2_DETAIL" },
+  { id: 30, text: "I get bored if I have to check small details for a long time.", neuralImprint: "RES", domain: "B2_DETAIL" },
+  { id: 31, text: "I like understanding the overall idea before I focus on details.", neuralImprint: "DIS", domain: "B2_DETAIL" },
+  { id: 32, text: "I enjoy tasks where accuracy and neatness are important.", neuralImprint: "DOG", domain: "B2_DETAIL" },
+
+  // B3 – Introverted vs Extraverted Energy (higher = more introverted)
+  { id: 33, text: "Being with lots of people for a long time drains my energy.", neuralImprint: "BURN", domain: "B3_INTROVERSION" },
+  { id: 34, text: "I feel energised when I meet new people and talk a lot.", neuralImprint: "INFLUENCE", domain: "B3_INTROVERSION" },
+  { id: 35, text: "I prefer a few close friends rather than many casual friends.", neuralImprint: "RES", domain: "B3_INTROVERSION" },
+  { id: 36, text: "I usually feel comfortable speaking up in a group.", neuralImprint: "INFLUENCE", domain: "B3_INTROVERSION" },
+
+  // B4 – Persistence / Grit
+  { id: 37, text: "If something is difficult, I usually keep going until I figure it out.", neuralImprint: "DOG", domain: "B4_PERSISTENCE" },
+  { id: 38, text: "I give up quickly if I don't succeed the first time.", neuralImprint: "RES", domain: "B4_PERSISTENCE" },
+  { id: 39, text: "I am willing to put in effort over a long time to reach a goal.", neuralImprint: "DOG", domain: "B4_PERSISTENCE" },
+  { id: 40, text: "When I fail at something, I try to learn from it and try again.", neuralImprint: "INFLUENCE", domain: "B4_PERSISTENCE" },
+
+  // B5 – Structure Preference
+  { id: 41, text: "I like clear rules and instructions.", neuralImprint: "DOG", domain: "B5_STRUCTURE" },
+  { id: 42, text: "I get frustrated when people keep changing the way things are done.", neuralImprint: "ANG", domain: "B5_STRUCTURE" },
+  { id: 43, text: "I enjoy having the freedom to work in my own way.", neuralImprint: "CPL", domain: "B5_STRUCTURE" },
+  { id: 44, text: "I prefer knowing exactly what is expected of me before I start.", neuralImprint: "DOG", domain: "B5_STRUCTURE" },
+
+  // B6 – Risk & Change Comfort
+  { id: 45, text: "I enjoy trying new things, even if I might fail.", neuralImprint: "CPL", domain: "B6_RISK" },
+  { id: 46, text: "I feel nervous when I have to make big changes in my life.", neuralImprint: "BURN", domain: "B6_RISK" },
+  { id: 47, text: "I like taking on challenges that push me out of my comfort zone.", neuralImprint: "INFLUENCE", domain: "B6_RISK" },
+  { id: 48, text: "I prefer to stay with what I know rather than experiment.", neuralImprint: "RES", domain: "B6_RISK" },
+
+  // SECTION C – VALUES
+  // C1 – Security & Stability
+  { id: 49, text: "Having a stable job and steady income is very important to me.", neuralImprint: "DOG", domain: "C1_SECURITY" },
+  { id: 50, text: "I would rather choose a safe career than a risky but exciting one.", neuralImprint: "RES", domain: "C1_SECURITY" },
+  { id: 51, text: "I want a job where I can plan my life with some certainty.", neuralImprint: "DOG", domain: "C1_SECURITY" },
+
+  // C2 – Meaning & Helping Others
+  { id: 52, text: "I want my work to make a real difference in people's lives.", neuralImprint: "INFLUENCE", domain: "C2_MEANING" },
+  { id: 53, text: "I would rather have meaningful work than a job that only pays well.", neuralImprint: "NAR", domain: "C2_MEANING" },
+  { id: 54, text: "I want to feel that my work is connected to something bigger than myself.", neuralImprint: "NAR", domain: "C2_MEANING" },
+
+  // C3 – Achievement & Success
+  { id: 55, text: "I want to be very successful in whatever I choose to do.", neuralImprint: "NAR", domain: "C3_ACHIEVEMENT" },
+  { id: 56, text: "I feel motivated when I have clear goals to achieve.", neuralImprint: "DOG", domain: "C3_ACHIEVEMENT" },
+  { id: 57, text: "I like the idea of setting big goals and working hard to reach them.", neuralImprint: "INFLUENCE", domain: "C3_ACHIEVEMENT" },
+
+  // C4 – Freedom & Autonomy
+  { id: 58, text: "I don't like being tightly controlled or micromanaged.", neuralImprint: "RES", domain: "C4_FREEDOM" },
+  { id: 59, text: "I want a career where I have some say in how I work.", neuralImprint: "CPL", domain: "C4_FREEDOM" },
+  { id: 60, text: "I value having flexibility to organise my own time.", neuralImprint: "CPL", domain: "C4_FREEDOM" },
+
+  // C5 – Recognition & Status
+  { id: 61, text: "It is important to me that people respect the work I do.", neuralImprint: "NAR", domain: "C5_RECOGNITION" },
+  { id: 62, text: "I like the idea of being known as an expert in my field.", neuralImprint: "NAR", domain: "C5_RECOGNITION" },
+  { id: 63, text: "I would enjoy a job where I can feel proud of my title or position.", neuralImprint: "NAR", domain: "C5_RECOGNITION" },
+
+  // C6 – Creativity & Self-Expression
+  { id: 64, text: "I want space to bring my own ideas and style into my work.", neuralImprint: "CPL", domain: "C6_CREATIVITY" },
+  { id: 65, text: "I would struggle in a job where I must always do things in one fixed way.", neuralImprint: "RES", domain: "C6_CREATIVITY" },
+  { id: 66, text: "It is important to me that I can express who I am through my work.", neuralImprint: "NAR", domain: "C6_CREATIVITY" },
+
+  // SECTION D – STRENGTHS / ABILITIES (SELF-VIEW)
+  // D1 – Verbal / Communication
+  { id: 67, text: "I can explain ideas clearly so that others understand.", neuralImprint: "INFLUENCE", domain: "D1_VERBAL" },
+  { id: 68, text: "I enjoy reading or writing more than most people my age.", neuralImprint: "LEFT/RIGHT", domain: "D1_VERBAL" },
+  { id: 69, text: "I am often the one who helps classmates understand school work.", neuralImprint: "INFLUENCE", domain: "D1_VERBAL" },
+
+  // D2 – Numerical / Logical
+  { id: 70, text: "I find it easy to work with numbers and basic calculations.", neuralImprint: "LEFT/RIGHT", domain: "D2_NUMERICAL" },
+  { id: 71, text: "I enjoy subjects or tasks where logic and problem-solving are needed.", neuralImprint: "DIS", domain: "D2_NUMERICAL" },
+  { id: 72, text: "I can usually see patterns in information or data.", neuralImprint: "DIS", domain: "D2_NUMERICAL" },
+
+  // D3 – People Insight / Empathy
+  { id: 73, text: "I quickly pick up when someone is upset, even if they don't say it.", neuralImprint: "DIS", domain: "D3_EMPATHY" },
+  { id: 74, text: "Friends often say I understand them well.", neuralImprint: "INFLUENCE", domain: "D3_EMPATHY" },
+  { id: 75, text: "I can usually see both sides when people disagree.", neuralImprint: "DIS", domain: "D3_EMPATHY" },
+
+  // D4 – Practical / Technical / Hands-on
+  { id: 76, text: "I am good at learning how to use new tools, apps or equipment.", neuralImprint: "LEFT/RIGHT", domain: "D4_PRACTICAL" },
+  { id: 77, text: "I can often figure out how to fix things without much help.", neuralImprint: "DIS", domain: "D4_PRACTICAL" },
+  { id: 78, text: "I am confident with practical tasks like setting up, building or installing things.", neuralImprint: "LEFT/RIGHT", domain: "D4_PRACTICAL" },
+
+  // D5 – Creative / Innovative
+  { id: 79, text: "I often come up with original ideas or new ways to do things.", neuralImprint: "CPL", domain: "D5_CREATIVE_STRENGTH" },
+  { id: 80, text: "I enjoy turning an idea into something visible (a drawing, design, video, etc.).", neuralImprint: "CPL", domain: "D5_CREATIVE_STRENGTH" },
+  { id: 81, text: "I can usually think of more than one solution when faced with a problem.", neuralImprint: "DIS", domain: "D5_CREATIVE_STRENGTH" },
+
+  // D6 – Leadership / Initiative
+  { id: 82, text: "I naturally take the lead when a group needs direction.", neuralImprint: "INFLUENCE", domain: "D6_LEADERSHIP" },
+  { id: 83, text: "I am comfortable making decisions when others are unsure.", neuralImprint: "INFLUENCE", domain: "D6_LEADERSHIP" },
+  { id: 84, text: "People often look to me when something needs to get organised.", neuralImprint: "INFLUENCE", domain: "D6_LEADERSHIP" },
+
+  // SECTION E – WORK ENVIRONMENT PREFERENCES
+  // E1 – People vs Data/Things (high = people focus)
+  { id: 85, text: "I would rather work with people than with data or machines.", neuralImprint: "INFLUENCE", domain: "E1_PEOPLE" },
+  { id: 86, text: "I would enjoy a job where I talk to people most of the day.", neuralImprint: "INFLUENCE", domain: "E1_PEOPLE" },
+  { id: 87, text: "I would enjoy a job where I mainly work with information, systems or objects.", neuralImprint: "LEFT/RIGHT", domain: "E1_PEOPLE" },
+
+  // E2 – Structure Preference (Environment)
+  { id: 88, text: "I prefer a job with clear rules, routines and schedules.", neuralImprint: "DOG", domain: "E2_STRUCTURE_ENV" },
+  { id: 89, text: "I would like a job where each day is different from the last.", neuralImprint: "CPL", domain: "E2_STRUCTURE_ENV" },
+  { id: 90, text: "I would feel stressed in a job with no clear routines.", neuralImprint: "BURN", domain: "E2_STRUCTURE_ENV" },
+
+  // E3 – Pace (high = faster/busier)
+  { id: 91, text: "I would enjoy working in a busy, fast-moving environment.", neuralImprint: "CPL", domain: "E3_PACE" },
+  { id: 92, text: "I prefer a calm, steady pace where I can take my time.", neuralImprint: "DOG", domain: "E3_PACE" },
+  { id: 93, text: "I enjoy having many tasks happening at once.", neuralImprint: "CPL", domain: "E3_PACE" },
+
+  // E4 – Team vs Solo (high = team)
+  { id: 94, text: "I would rather work in a team than work alone most of the time.", neuralImprint: "INFLUENCE", domain: "E4_TEAM" },
+  { id: 95, text: "I do my best work when I can focus alone without interruptions.", neuralImprint: "RES", domain: "E4_TEAM" },
+  { id: 96, text: "I like being part of a group where everyone contributes something.", neuralImprint: "INFLUENCE", domain: "E4_TEAM" },
+
+  // E5 – Physical vs Desk-Based (high = physical)
+  { id: 97, text: "I would enjoy a job where I move around a lot.", neuralImprint: "LEFT/RIGHT", domain: "E5_PHYSICAL" },
+  { id: 98, text: "I don't mind sitting at a desk for long periods.", neuralImprint: "DOG", domain: "E5_PHYSICAL" },
+  { id: 99, text: "I like using my body and physical energy in my activities.", neuralImprint: "LEFT/RIGHT", domain: "E5_PHYSICAL" },
+
+  // E6 – Variety vs Routine (high = variety)
+  { id: 100, text: "I like knowing what I will be doing every day at work.", neuralImprint: "DOG", domain: "E6_VARIETY" },
+  { id: 101, text: "I would get bored if my job was the same every day.", neuralImprint: "RES", domain: "E6_VARIETY" },
+  { id: 102, text: "I enjoy having a mix of different tasks and responsibilities.", neuralImprint: "CPL", domain: "E6_VARIETY" },
+
+  // SECTION R – RIASEC CAREER INTERESTS (Yes = 2, Maybe = 1, No = 0)
+  // Realistic (R)
+  { id: 103, text: "I enjoy working with tools, machines or equipment.", neuralImprint: "LEFT/RIGHT", domain: "R_REALISTIC" },
+  { id: 104, text: "I like repairing or fixing physical things.", neuralImprint: "LEFT/RIGHT", domain: "R_REALISTIC" },
+  { id: 105, text: "I prefer practical, hands-on tasks rather than theories.", neuralImprint: "LEFT/RIGHT", domain: "R_REALISTIC" },
+  { id: 106, text: "I would enjoy a job that involves working outdoors.", neuralImprint: "LEFT/RIGHT", domain: "R_REALISTIC" },
+  { id: 107, text: "I like building or assembling things.", neuralImprint: "LEFT/RIGHT", domain: "R_REALISTIC" },
+
+  // Investigative (I)
+  { id: 108, text: "I enjoy figuring out how and why things work.", neuralImprint: "DIS", domain: "R_INVESTIGATIVE" },
+  { id: 109, text: "I like science, experiments or research tasks.", neuralImprint: "DIS", domain: "R_INVESTIGATIVE" },
+  { id: 110, text: "I enjoy analysing data, facts or information.", neuralImprint: "DIS", domain: "R_INVESTIGATIVE" },
+  { id: 111, text: "I like solving complex problems or puzzles.", neuralImprint: "DIS", domain: "R_INVESTIGATIVE" },
+  { id: 112, text: "I would enjoy a job where I investigate questions and find answers.", neuralImprint: "DIS", domain: "R_INVESTIGATIVE" },
+
+  // Artistic (A)
+  { id: 113, text: "I enjoy drawing, writing, music or other creative activities.", neuralImprint: "CPL", domain: "R_ARTISTIC" },
+  { id: 114, text: "I like expressing myself through design, colour or style.", neuralImprint: "NAR", domain: "R_ARTISTIC" },
+  { id: 115, text: "I prefer open-ended tasks where I can use my imagination.", neuralImprint: "CPL", domain: "R_ARTISTIC" },
+  { id: 116, text: "I am attracted to jobs that involve art, media or creativity.", neuralImprint: "CPL", domain: "R_ARTISTIC" },
+  { id: 117, text: "I enjoy creating something new rather than following strict instructions.", neuralImprint: "CPL", domain: "R_ARTISTIC" },
+
+  // Social (S)
+  { id: 118, text: "I enjoy helping people with their problems or challenges.", neuralImprint: "INFLUENCE", domain: "R_SOCIAL" },
+  { id: 119, text: "I like teaching, tutoring or explaining things to others.", neuralImprint: "INFLUENCE", domain: "R_SOCIAL" },
+  { id: 120, text: "I feel energised when I can support or encourage other people.", neuralImprint: "INFLUENCE", domain: "R_SOCIAL" },
+  { id: 121, text: "I would enjoy working in a job that improves people's lives.", neuralImprint: "INFLUENCE", domain: "R_SOCIAL" },
+  { id: 122, text: "I like working in groups where cooperation is important.", neuralImprint: "INFLUENCE", domain: "R_SOCIAL" },
+
+  // Enterprising (E)
+  { id: 123, text: "I enjoy leading or organising activities for others.", neuralImprint: "INFLUENCE", domain: "R_ENTERPRISING" },
+  { id: 124, text: "I like persuading people or selling ideas, products or services.", neuralImprint: "INFLUENCE", domain: "R_ENTERPRISING" },
+  { id: 125, text: "I am comfortable taking risks to reach a goal.", neuralImprint: "CPL", domain: "R_ENTERPRISING" },
+  { id: 126, text: "I would enjoy running my own business or project.", neuralImprint: "CPL", domain: "R_ENTERPRISING" },
+  { id: 127, text: "I like positions where I can take charge and make decisions.", neuralImprint: "INFLUENCE", domain: "R_ENTERPRISING" },
+
+  // Conventional (C)
+  { id: 128, text: "I enjoy organising information, files or records.", neuralImprint: "DOG", domain: "R_CONVENTIONAL" },
+  { id: 129, text: "I like working with numbers, lists or schedules.", neuralImprint: "DOG", domain: "R_CONVENTIONAL" },
+  { id: 130, text: "I prefer tasks with clear rules, procedures and structures.", neuralImprint: "DOG", domain: "R_CONVENTIONAL" },
+  { id: 131, text: "I would enjoy a job that involves accuracy and attention to detail.", neuralImprint: "DOG", domain: "R_CONVENTIONAL" },
+  { id: 132, text: "I feel satisfied when I can keep things neat, ordered and under control.", neuralImprint: "DOG", domain: "R_CONVENTIONAL" },
 ];
 
 export const careerAssessment: SelfAssessmentType = {
   id: 'teen-career',
-  name: 'Teen Career & Future Work/Study Direction',
-  description: 'This assessment is for teenagers who want to understand what kind of future work and study paths might fit them best. It looks at your interests, the type of environments you function well in, how you like to learn, and some patterns that might help or hinder your future choices.',
+  name: 'Teen Career Direction Assessment (NIP + RIASEC)',
+  description: 'This comprehensive assessment helps teenagers understand what kind of future work and study paths might fit them best. It integrates Neural Imprint Patterns with RIASEC career interest theory to provide a detailed profile of your interests, work style, values, strengths, and environment preferences.',
   instructions: `How to answer:
 • Think about how you usually are over the last 6–12 months.
 • Answer honestly, not how you think you should be.
-• Use the scale 1–4:
-  1 = Not at all true of me
-  2 = A little true of me
-  3 = Often true of me
-  4 = Completely true of me`,
-  disclaimer: 'It uses the 16 Neural Imprint Patterns as a background lens, but it is NOT a formal psychometric career test and does NOT replace professional career counselling or psychological assessment. The results are designed for self-reflection, coaching and guided conversations with parents, mentors, teachers or counsellors.',
+• For Sections A–E, use the scale 1–5:
+  1 = Strongly disagree
+  2 = Disagree
+  3 = Not sure
+  4 = Agree
+  5 = Strongly agree
+• For Section R (RIASEC), use:
+  0 = No
+  1 = Maybe
+  2 = Yes`,
+  disclaimer: 'This assessment uses the 16 Neural Imprint Patterns and RIASEC career interest theory as analytical lenses, but it is NOT a formal psychometric career test and does NOT replace professional career counselling or psychological assessment. The results are designed for self-reflection, coaching and guided conversations with parents, mentors, teachers or counsellors.',
   questions: careerAssessmentQuestions,
   scale: {
     min: 1,
-    max: 4,
-    labels: ['Not at all true of me', 'A little true of me', 'Often true of me', 'Completely true of me']
+    max: 5,
+    labels: ['Strongly disagree', 'Disagree', 'Not sure', 'Agree', 'Strongly agree']
   }
 };
 
