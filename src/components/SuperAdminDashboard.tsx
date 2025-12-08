@@ -69,6 +69,18 @@ export function SuperAdminDashboard({ franchiseOwnerName, onLogout }: SuperAdmin
     loadAllData();
   }, []);
 
+  useEffect(() => {
+    if (viewingTestReport) {
+      window.scrollTo(0, 0);
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [viewingTestReport]);
+
   const generateUniqueCode = () => {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let code = '';
@@ -1198,11 +1210,11 @@ export function SuperAdminDashboard({ franchiseOwnerName, onLogout }: SuperAdmin
       {viewingTestReport && (
         <>
           {viewingTestReport.type === 'nipa' ? (
-            <div className="fixed inset-0 bg-black/80 z-50 overflow-y-auto">
-              <div className="relative">
+            <div className="fixed inset-0 bg-black/80 z-[100] overflow-y-auto" onClick={(e) => e.target === e.currentTarget && setViewingTestReport(null)}>
+              <div className="relative min-h-screen">
                 <button
                   onClick={() => setViewingTestReport(null)}
-                  className="fixed top-4 right-4 z-50 bg-white text-gray-900 rounded-full p-3 shadow-xl hover:shadow-2xl transition-all border-2 border-gray-300 hover:border-gray-500"
+                  className="sticky top-4 left-full mr-4 z-[110] bg-white text-gray-900 rounded-full p-3 shadow-xl hover:shadow-2xl transition-all border-2 border-gray-300 hover:border-gray-500"
                   title="Close report"
                 >
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

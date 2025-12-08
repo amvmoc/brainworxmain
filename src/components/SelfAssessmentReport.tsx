@@ -115,17 +115,18 @@ export function SelfAssessmentReport({
   if (!analysis) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-6xl w-full p-8 relative my-8">
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-gray-900 bg-white rounded-full p-2 shadow-lg hover:shadow-xl transition-all border-2 border-gray-200 hover:border-gray-400"
-          title="Close and return to main page"
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 overflow-y-auto">
+      <div className="min-h-screen py-8 px-4 flex items-start justify-center">
+        <div className="bg-white rounded-2xl shadow-2xl max-w-6xl w-full p-8 relative">
+          <button
+            onClick={onClose}
+            className="sticky top-4 float-right z-10 text-gray-400 hover:text-gray-900 bg-white rounded-full p-2 shadow-lg hover:shadow-xl transition-all border-2 border-gray-200 hover:border-gray-400"
+            title="Close and return to main page"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
 
         <div className="text-center mb-8">
           <div className="mb-6">
@@ -345,6 +346,7 @@ export function SelfAssessmentReport({
               Your results have been saved to {customerEmail}
             </p>
           </div>
+        </div>
         </div>
       </div>
     </div>
