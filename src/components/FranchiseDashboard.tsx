@@ -14,6 +14,8 @@ interface Response {
   completed_at: string;
   entry_type: string;
   answers: Record<string, string>;
+  assessment_type?: string;
+  response_type: 'nipa' | 'self_assessment';
 }
 
 interface FranchiseDashboardProps {
@@ -50,18 +52,41 @@ export function FranchiseDashboard({
   const loadProspects = async () => {
     setLoading(true);
     try {
-      let query = supabase
+      let nipaQuery = supabase
         .from('responses')
         .select('*')
         .eq('status', 'analyzed');
 
+      let selfAssessmentQuery = supabase
+        .from('self_assessment_responses')
+        .select('*')
+        .eq('status', 'analyzed');
+
       if (!isSuperAdmin) {
-        query = query.eq('franchise_owner_id', franchiseOwnerId);
+        nipaQuery = nipaQuery.eq('franchise_owner_id', franchiseOwnerId);
+        selfAssessmentQuery = selfAssessmentQuery.eq('franchise_owner_id', franchiseOwnerId);
       }
 
-      const { data } = await query.order('completed_at', { ascending: false });
+      const [nipaResult, selfAssessmentResult] = await Promise.all([
+        nipaQuery.order('completed_at', { ascending: false }),
+        selfAssessmentQuery.order('completed_at', { ascending: false })
+      ]);
 
-      setResponses(data || []);
+      const nipaResponses = (nipaResult.data || []).map(r => ({
+        ...r,
+        response_type: 'nipa' as const
+      }));
+
+      const selfAssessmentResponses = (selfAssessmentResult.data || []).map(r => ({
+        ...r,
+        response_type: 'self_assessment' as const
+      }));
+
+      const allResponses = [...nipaResponses, ...selfAssessmentResponses].sort((a, b) =>
+        new Date(b.completed_at).getTime() - new Date(a.completed_at).getTime()
+      );
+
+      setResponses(allResponses);
     } catch (error) {
       console.error('Error loading prospects:', error);
     } finally {
@@ -262,6 +287,7 @@ export function FranchiseDashboard({
                   <tr>
                     <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Name</th>
                     <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Email</th>
+                    <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Assessment Type</th>
                     <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Source</th>
                     <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Score</th>
                     <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Completed</th>
@@ -270,16 +296,25 @@ export function FranchiseDashboard({
                 </thead>
                 <tbody>
                   {responses.map((response) => (
-                    <tr key={response.id} className="border-b hover:bg-gray-50">
+                    <tr key={`${response.response_type}-${response.id}`} className="border-b hover:bg-gray-50">
                       <td className="px-6 py-4 font-medium text-[#0A2A5E]">{response.customer_name}</td>
                       <td className="px-6 py-4 text-gray-600">{response.customer_email}</td>
+                      <td className="px-6 py-4">
+                        <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                          response.response_type === 'nipa'
+                            ? 'bg-purple-100 text-purple-800'
+                            : 'bg-orange-100 text-orange-800'
+                        }`}>
+                          {response.response_type === 'nipa' ? 'NIPA Full' : response.assessment_type || 'Self Assessment'}
+                        </span>
+                      </td>
                       <td className="px-6 py-4">
                         <span className={`px-3 py-1 rounded-full text-sm font-medium ${
                           response.entry_type === 'coach_link'
                             ? 'bg-blue-100 text-blue-800'
                             : 'bg-green-100 text-green-800'
                         }`}>
-                          {response.entry_type === 'coach_link' ? 'Coach Link' : 'Email'}
+                          {response.entry_type === 'coach_link' ? 'Coach Link' : 'Coupon'}
                         </span>
                       </td>
                       <td className="px-6 py-4">
@@ -308,7 +343,7 @@ export function FranchiseDashboard({
 
       {selectedResponse && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-8 relative max-h-[90vh] overflow-y-auto">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full p-8 relative max-h-[90vh] overflow-y-auto">
             <button
               onClick={() => setSelectedResponse(null)}
               className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
@@ -316,9 +351,12 @@ export function FranchiseDashboard({
               ✕
             </button>
 
-            <h2 className="text-2xl font-bold text-[#0A2A5E] mb-6">
+            <h2 className="text-2xl font-bold text-[#0A2A5E] mb-2">
               {selectedResponse.customer_name} - Assessment Results
             </h2>
+            <p className="text-sm text-gray-600 mb-6">
+              {selectedResponse.response_type === 'nipa' ? 'NIPA Full Assessment (343 Questions)' : `Self Assessment: ${selectedResponse.assessment_type || 'Unknown'}`}
+            </p>
 
             <div className="space-y-6">
               <div className="grid md:grid-cols-2 gap-4">
@@ -329,7 +367,7 @@ export function FranchiseDashboard({
                 <div className="bg-[#E6E9EF] p-4 rounded-lg">
                   <p className="text-sm text-gray-600">Entry Type</p>
                   <p className="font-semibold text-[#0A2A5E]">
-                    {selectedResponse.entry_type === 'coach_link' ? 'Coach Link' : 'Email Visitor'}
+                    {selectedResponse.entry_type === 'coach_link' ? 'Coach Link' : 'Coupon Redemption'}
                   </p>
                 </div>
               </div>
@@ -339,7 +377,44 @@ export function FranchiseDashboard({
                 <p className="text-5xl font-bold">{selectedResponse.analysis_results?.overallScore || 'N/A'}%</p>
               </div>
 
-              {selectedResponse.analysis_results && (
+              {selectedResponse.analysis_results && selectedResponse.response_type === 'self_assessment' && (
+                <div className="space-y-4">
+                  {selectedResponse.analysis_results.topImprints && (
+                    <div>
+                      <h3 className="font-semibold text-[#0A2A5E] mb-3">Top Neural Imprints</h3>
+                      <div className="space-y-2">
+                        {selectedResponse.analysis_results.topImprints.slice(0, 5).map((imprint: any, idx: number) => (
+                          <div key={idx} className="bg-gray-50 p-3 rounded-lg flex justify-between items-center">
+                            <div>
+                              <p className="font-semibold text-gray-800">{imprint.code} - {imprint.name}</p>
+                              <p className="text-xs text-gray-600">{imprint.itemCount} questions</p>
+                            </div>
+                            <span className={`px-3 py-1 rounded-full text-white text-xs font-bold ${
+                              imprint.severity === 'high' ? 'bg-red-500' :
+                              imprint.severity === 'moderate' ? 'bg-yellow-500' : 'bg-green-500'
+                            }`}>
+                              {imprint.percentage}%
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {selectedResponse.analysis_results.recommendations && (
+                    <div>
+                      <h3 className="font-semibold text-[#0A2A5E] mb-2">Recommendations</h3>
+                      <ul className="space-y-1">
+                        {selectedResponse.analysis_results.recommendations.slice(0, 3).map((rec: string, idx: number) => (
+                          <li key={idx} className="text-sm text-gray-700">• {rec}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {selectedResponse.analysis_results && selectedResponse.response_type === 'nipa' && (
                 <div className="space-y-4">
                   <div>
                     <h3 className="font-semibold text-[#0A2A5E] mb-2">Top Strengths</h3>
@@ -362,21 +437,30 @@ export function FranchiseDashboard({
               )}
 
               <div className="mt-6 flex gap-3">
-                <button
-                  onClick={() => viewClientReport(selectedResponse)}
-                  className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-[#3DB3E3] to-[#1FAFA3] text-white px-6 py-3 rounded-lg hover:shadow-lg transition-all font-semibold"
-                >
-                  <FileCheck size={20} />
-                  View Full Client Report
-                </button>
-                <button
-                  onClick={() => sendClientReport(selectedResponse)}
-                  disabled={sendingEmail}
-                  className="flex-1 flex items-center justify-center gap-2 bg-[#0A2A5E] text-white px-6 py-3 rounded-lg hover:bg-[#3DB3E3] transition-all font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <Mail size={20} />
-                  {sendingEmail ? 'Sending...' : emailSent ? 'Sent!' : 'Send Report via Email'}
-                </button>
+                {selectedResponse.response_type === 'nipa' && (
+                  <button
+                    onClick={() => viewClientReport(selectedResponse)}
+                    className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-[#3DB3E3] to-[#1FAFA3] text-white px-6 py-3 rounded-lg hover:shadow-lg transition-all font-semibold"
+                  >
+                    <FileCheck size={20} />
+                    View Full Client Report
+                  </button>
+                )}
+                {selectedResponse.response_type === 'nipa' && (
+                  <button
+                    onClick={() => sendClientReport(selectedResponse)}
+                    disabled={sendingEmail}
+                    className="flex-1 flex items-center justify-center gap-2 bg-[#0A2A5E] text-white px-6 py-3 rounded-lg hover:bg-[#3DB3E3] transition-all font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <Mail size={20} />
+                    {sendingEmail ? 'Sending...' : emailSent ? 'Sent!' : 'Send Report via Email'}
+                  </button>
+                )}
+                {selectedResponse.response_type === 'self_assessment' && (
+                  <div className="flex-1 bg-green-50 border border-green-200 rounded-lg p-4 text-center">
+                    <p className="text-sm text-green-800 font-medium">Results automatically emailed to client</p>
+                  </div>
+                )}
               </div>
             </div>
           </div>

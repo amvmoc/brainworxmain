@@ -51,6 +51,32 @@ export function SelfAssessmentReport({
 
       setAnalysis(analysisResults);
       setIsAnalyzing(false);
+
+      sendResultsEmail(response.customer_name, analysisResults);
+    }
+  };
+
+  const sendResultsEmail = async (customerName: string, analysisResults: SelfAssessmentAnalysis) => {
+    try {
+      const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-self-assessment-email`;
+
+      await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          customerName: customerName,
+          customerEmail: customerEmail,
+          assessmentType: assessmentType.name,
+          overallScore: analysisResults.overallScore,
+          topImprints: analysisResults.topImprints.slice(0, 5),
+          recommendations: analysisResults.recommendations
+        })
+      });
+    } catch (error) {
+      console.error('Error sending results email:', error);
     }
   };
 
