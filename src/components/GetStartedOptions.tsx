@@ -185,6 +185,22 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
     );
   }
 
+  if (showCouponModal) {
+    return (
+      <CouponRedemption
+        onRedemptionSuccess={handleCouponRedemption}
+        onCancel={() => {
+          setShowCouponModal(false);
+          setPaymentCouponCode('');
+          if (initialCouponCode) {
+            onClose();
+          }
+        }}
+        initialCouponCode={paymentCouponCode || initialCouponCode || undefined}
+      />
+    );
+  }
+
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
       <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative my-8">
@@ -651,17 +667,6 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
           </div>
         )}
       </div>
-
-      {showCouponModal && (
-        <CouponRedemption
-          onRedemptionSuccess={handleCouponRedemption}
-          onCancel={() => {
-            setShowCouponModal(false);
-            setPaymentCouponCode('');
-          }}
-          initialCouponCode={paymentCouponCode || initialCouponCode || undefined}
-        />
-      )}
     </div>
   );
 }
