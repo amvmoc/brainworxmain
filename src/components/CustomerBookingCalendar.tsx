@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Calendar, Clock, User, Mail, Phone, ChevronLeft, ChevronRight, Check } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import { isPublicHoliday, isWeekend, getHolidayLabel } from '../utils/holidays';
 
 interface TimeSlot {
   time: string;
@@ -271,26 +272,60 @@ export function CustomerBookingCalendar({ franchiseOwnerId, franchiseOwnerName, 
               const isSelected = selectedDate?.toDateString() === day.toDateString();
               const isToday = new Date().toDateString() === day.toDateString();
               const isPast = day < new Date(new Date().setHours(0, 0, 0, 0));
+              const isHoliday = isPublicHoliday(day);
+              const isWeekendDay = isWeekend(day);
+              const holidayLabel = getHolidayLabel(day);
 
               return (
-                <button
-                  key={index}
-                  onClick={() => !isPast && handleDateSelect(day)}
-                  disabled={isPast}
-                  className={`aspect-square p-2 rounded-lg transition-all ${
-                    isSelected
-                      ? 'bg-[#0A2A5E] text-white font-bold'
-                      : isToday
-                      ? 'bg-[#3DB3E3] text-white font-bold'
-                      : isPast
-                      ? 'text-gray-300 cursor-not-allowed'
-                      : 'hover:bg-gray-100'
-                  }`}
-                >
-                  {day.getDate()}
-                </button>
+                <div key={index} className="relative group">
+                  <button
+                    onClick={() => !isPast && handleDateSelect(day)}
+                    disabled={isPast}
+                    title={holidayLabel || (isWeekendDay ? 'Weekend' : '')}
+                    className={`w-full aspect-square p-2 rounded-lg transition-all relative ${
+                      isSelected
+                        ? 'bg-[#0A2A5E] text-white font-bold'
+                        : isToday
+                        ? 'bg-[#3DB3E3] text-white font-bold'
+                        : isPast
+                        ? 'text-gray-300 cursor-not-allowed'
+                        : isHoliday || isWeekendDay
+                        ? 'bg-red-50 text-red-600 font-bold hover:bg-red-100 border-2 border-red-300'
+                        : 'hover:bg-gray-100'
+                    }`}
+                  >
+                    <span className="relative z-10">{day.getDate()}</span>
+                  </button>
+                  {holidayLabel && (
+                    <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block z-50">
+                      <div className="bg-gray-900 text-white text-xs rounded-lg py-2 px-3 whitespace-nowrap shadow-lg">
+                        {holidayLabel}
+                        <div className="absolute top-full left-1/2 transform -translate-x-1/2 -mt-1">
+                          <div className="border-4 border-transparent border-t-gray-900"></div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
               );
             })}
+          </div>
+
+          <div className="mt-4 pt-4 border-t border-gray-200">
+            <div className="flex flex-wrap gap-3 text-xs">
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 bg-[#3DB3E3] rounded"></div>
+                <span className="text-gray-600">Today</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 bg-red-50 border-2 border-red-300 rounded"></div>
+                <span className="text-gray-600">Weekend / Holiday</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 bg-[#0A2A5E] rounded"></div>
+                <span className="text-gray-600">Selected</span>
+              </div>
+            </div>
           </div>
         </div>
 
