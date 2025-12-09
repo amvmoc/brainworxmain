@@ -36,7 +36,6 @@ Deno.serve(async (req: Request) => {
     const BRAINWORX_EMAIL = 'info@brainworx.co.za';
     const SITE_URL = Deno.env.get('SITE_URL') || 'https://brainworx.co.za';
 
-    // Fetch share token and franchise code from database
     const { createClient } = await import('npm:@supabase/supabase-js@2.39.0');
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -209,75 +208,6 @@ Deno.serve(async (req: Request) => {
       </html>
     `;
 
-    const brainworxEmailBody = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <style>
-          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: #0A2A5E; color: white; padding: 20px; border-radius: 10px; }
-          .content { padding: 20px; }
-          .data-row { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #ddd; }
-          .label { font-weight: bold; color: #0A2A5E; }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <div class="header">
-            <h2>New Assessment Completed - System Notification</h2>
-          </div>
-          <div class="content">
-            <h3>Customer Information</h3>
-            <div class="data-row">
-              <span class="label">Customer Name:</span>
-              <span>${customerName}</span>
-            </div>
-            <div class="data-row">
-              <span class="label">Customer Email:</span>
-              <span>${customerEmail}</span>
-            </div>
-            ${franchiseOwnerEmail ? `
-            <div class="data-row">
-              <span class="label">Franchise Owner:</span>
-              <span>${franchiseOwnerName} (${franchiseOwnerEmail})</span>
-            </div>
-            ` : ''}
-            <div class="data-row">
-              <span class="label">Overall Score:</span>
-              <span>${analysis.overallScore}%</span>
-            </div>
-            <div class="data-row">
-              <span class="label">Completion Date:</span>
-              <span>${new Date().toLocaleString()}</span>
-            </div>
-
-            <h3>Assessment Summary</h3>
-            <h4>Top Strengths:</h4>
-            <ul>
-              ${analysis.strengths.map(s => `<li>${s}</li>`).join('')}
-            </ul>
-
-            <h4>Areas for Growth:</h4>
-            <ul>
-              ${analysis.areasForGrowth.map(a => `<li>${a}</li>`).join('')}
-            </ul>
-
-            <h4>Recommendations:</h4>
-            <ul>
-              ${analysis.recommendations.map(r => `<li>${r}</li>`).join('')}
-            </ul>
-
-            <p style="margin-top: 20px; padding: 15px; background: #FFF5E6; border-left: 4px solid #FFB84D;">
-              <strong>System Note:</strong> Customer and ${franchiseOwnerEmail ? 'franchise owner' : 'admin'} have been notified. Follow up may be required for high-priority prospects.
-            </p>
-          </div>
-        </div>
-      </body>
-      </html>
-    `;
-
-    // Setup Gmail transporter
     const GMAIL_USER = "payments@brainworx.co.za";
     const GMAIL_PASSWORD = "iuhzjjhughbnwsvf";
 
@@ -297,7 +227,6 @@ Deno.serve(async (req: Request) => {
       brainworx: { sent: false, error: null as string | null }
     };
 
-    // Send customer email
     try {
       await transporter.sendMail({
         from: `BrainWorx <${GMAIL_USER}>`,
@@ -313,7 +242,6 @@ Deno.serve(async (req: Request) => {
       console.error('✗ Error sending customer email:', error);
     }
 
-    // Send franchise owner email
     if (franchiseOwnerEmail) {
       try {
         await transporter.sendMail({
@@ -331,13 +259,12 @@ Deno.serve(async (req: Request) => {
       }
     }
 
-    // Send BrainWorx admin email
     try {
       await transporter.sendMail({
         from: `BrainWorx <${GMAIL_USER}>`,
         to: BRAINWORX_EMAIL,
-        subject: "New Assessment Completed - System Notification",
-        html: brainworxEmailBody,
+        subject: "New Prospect Assessment Completed",
+        html: franchiseEmailBody,
       });
 
       emailResults.brainworx.sent = true;
@@ -347,10 +274,24 @@ Deno.serve(async (req: Request) => {
       console.error('✗ Error sending admin email:', error);
     }
 
+    try {
+      await transporter.sendMail({
+        from: `BrainWorx <${GMAIL_USER}>`,
+        to: 'kobus@brainworx.co.za',
+        subject: "New Prospect Assessment Completed",
+        html: franchiseEmailBody,
+      });
+
+      console.log('✓ Kobus email sent to: kobus@brainworx.co.za');
+    } catch (error) {
+      console.error('✗ Error sending Kobus email:', error);
+    }
+
     console.log('=== Email Delivery Summary ===');
     console.log('Customer:', emailResults.customer.sent ? '✓ Sent' : '✗ Failed');
     console.log('Franchise Owner:', franchiseOwnerEmail ? (emailResults.franchiseOwner.sent ? '✓ Sent' : '✗ Failed') : 'N/A');
-    console.log('Admin:', emailResults.brainworx.sent ? '✓ Sent' : '✗ Failed');
+    console.log('Admin (info@brainworx.co.za):', emailResults.brainworx.sent ? '✓ Sent' : '✗ Failed');
+    console.log('Kobus (kobus@brainworx.co.za): ✓ Sent');
     console.log('Results URL:', resultsUrl);
     console.log('Booking URL:', bookingUrl);
     console.log('==============================');

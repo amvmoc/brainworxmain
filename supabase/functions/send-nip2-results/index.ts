@@ -22,7 +22,6 @@ Deno.serve(async (req: Request) => {
     const supabase = createClient(supabaseUrl, supabaseKey);
     const { responseId, customerEmail, customerName, results } = await req.json();
 
-    // Get the full response data
     const { data: response, error: responseError } = await supabase
       .from('nip2_responses')
       .select('*')
@@ -33,7 +32,6 @@ Deno.serve(async (req: Request) => {
       throw responseError;
     }
 
-    // NIP Pattern Definitions
     const NIP_PATTERNS: Record<string, any> = {
       NIP01: { code: 'TRAP', name: 'Home/Work', color: '#FFB800', category: 'Environmental', impact: 'High', description: 'Spaces that ignore the need for conscious human growth, creating environments where individuals simply "exist" instead of evolving.', interventions: ['Create intentional growth spaces and rituals', 'Establish clear personal and professional boundaries', 'Develop a vision for conscious evolution'] },
       NIP02: { code: 'SHT', name: 'Shattered Worth', color: '#FF6B6B', category: 'Trauma', impact: 'Critical', description: 'An individual who has endured emotional damage causing hyper-sensitivity whether physical, verbal, or sexual — often at a distance with a weakened sense of personal worth and dignity.', interventions: ['Trauma-informed therapy (EMDR, Somatic Experiencing)', 'Self-compassion practices and affirmation work', 'Boundary setting and assertiveness training'] },
@@ -57,7 +55,6 @@ Deno.serve(async (req: Request) => {
       NIP20: { code: 'DEC', name: 'Deceiver', color: '#4B0082', category: 'Interpersonal', impact: 'High', description: 'An individual who masks self-serving motives with an appearance of goodness or innocence. Such people skillfully project their authentic but operate with hidden agendas.', interventions: ['Honesty and integrity skill-building', 'Explore underlying fears and insecurities', 'Accountability and consequences'] }
     };
 
-    // Format top patterns for email
     const topPatterns = results.topPatterns.slice(0, 5);
     let patternsHtml = '';
 
@@ -103,7 +100,6 @@ Deno.serve(async (req: Request) => {
       `;
     });
 
-    // Get franchise owner email if exists
     let franchiseOwnerEmail = '';
     let franchiseOwnerName = '';
 
@@ -122,7 +118,6 @@ Deno.serve(async (req: Request) => {
 
     const BRAINWORX_EMAIL = 'info@brainworx.co.za';
 
-    // Setup Gmail transporter
     const GMAIL_USER = "payments@brainworx.co.za";
     const GMAIL_PASSWORD = "iuhzjjhughbnwsvf";
 
@@ -146,14 +141,12 @@ Deno.serve(async (req: Request) => {
             <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, #1e293b 0%, #7e22ce 50%, #1e293b 100%); min-height: 100vh;">
               <div style="max-width: 680px; margin: 0 auto; padding: 40px 20px;">
 
-                <!-- Header -->
                 <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 48px 32px; text-align: center; border-radius: 20px 20px 0 0; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
                   <div style="font-size: 48px; margin-bottom: 8px;">🧠</div>
                   <h1 style="margin: 0 0 8px 0; font-size: 36px; font-weight: 700; letter-spacing: -0.5px;">Neural Imprint Patterns 2.0</h1>
                   <p style="margin: 0; font-size: 20px; opacity: 0.95; font-weight: 300;">Comprehensive Assessment Report</p>
                 </div>
 
-                <!-- Main Content -->
                 <div style="background: #ffffff; padding: 40px 32px; border-radius: 0 0 20px 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.15);">
                   <h2 style="color: #111827; margin: 0 0 16px 0; font-size: 28px; font-weight: 700;">Hello ${customerName},</h2>
 
@@ -161,7 +154,6 @@ Deno.serve(async (req: Request) => {
                     Thank you for completing the Neural Imprint Patterns 2.0 assessment. Your comprehensive 343-question evaluation has been analyzed, and your personalized results are ready.
                   </p>
 
-                  <!-- Assessment Summary -->
                   <div style="background: linear-gradient(135deg, #EFF6FF 0%, #F3E8FF 100%); padding: 24px; border-radius: 12px; margin: 0 0 40px 0; border: 1px solid #E0E7FF;">
                     <h3 style="color: #1E40AF; margin: 0 0 16px 0; font-size: 20px; font-weight: 700;">📊 Assessment Overview</h3>
                     <table style="width: 100%; border-collapse: collapse;">
@@ -180,16 +172,13 @@ Deno.serve(async (req: Request) => {
                     </table>
                   </div>
 
-                  <!-- Top Patterns Header -->
                   <div style="margin: 0 0 24px 0;">
                     <h3 style="color: #111827; margin: 0 0 8px 0; font-size: 24px; font-weight: 700;">🎯 Your Top 5 Neural Imprint Patterns</h3>
                     <p style="color: #6B7280; margin: 0; font-size: 15px;">These patterns represent the strongest imprints identified in your assessment.</p>
                   </div>
 
-                  <!-- Patterns -->
                   ${patternsHtml}
 
-                  <!-- Next Steps -->
                   <div style="background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%); padding: 28px; border-radius: 12px; margin: 40px 0 0 0; border-left: 6px solid #10B981;">
                     <h3 style="color: #065F46; margin: 0 0 16px 0; font-size: 22px; font-weight: 700;">✨ What's Next?</h3>
                     <p style="color: #047857; margin: 0 0 14px 0; font-size: 15px; line-height: 1.8; font-weight: 500;">
@@ -203,7 +192,6 @@ Deno.serve(async (req: Request) => {
                     </p>
                   </div>
 
-                  <!-- Disclaimer -->
                   <div style="margin: 32px 0 0 0; padding: 20px 0 0 0; border-top: 2px solid #E5E7EB;">
                     <p style="color: #6B7280; font-size: 13px; line-height: 1.6; margin: 0;">
                       <strong style="color: #374151;">Important Notice:</strong> This assessment is for informational and educational purposes only. It is not a diagnostic tool and is not a substitute for professional medical or psychological advice, diagnosis, or treatment. If you are experiencing mental health concerns, please consult with a qualified healthcare provider.
@@ -211,7 +199,6 @@ Deno.serve(async (req: Request) => {
                   </div>
                 </div>
 
-                <!-- Footer -->
                 <div style="text-align: center; padding: 32px 20px 0 20px;">
                   <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 24px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.2);">
                     <p style="color: #ffffff; margin: 0 0 8px 0; font-size: 15px; font-weight: 600;">Neural Imprint Patterns 2.0™</p>
@@ -239,37 +226,6 @@ Deno.serve(async (req: Request) => {
             <div style="background: white; padding: 30px; border-radius: 0 0 12px 12px;">
               <p><strong>Customer Name:</strong> ${customerName}</p>
               <p><strong>Customer Email:</strong> ${customerEmail}</p>
-              <p><strong>Completion Date:</strong> ${results.completionDate}</p>
-              <p><strong>Questions Completed:</strong> ${results.totalQuestions}</p>
-              <div style="margin-top: 20px; padding: 15px; background: #f3f4f6; border-radius: 8px;">
-                <h3 style="margin: 0 0 10px 0;">Top Patterns:</h3>
-                ${topPatterns.map((pattern: any, index: number) => {
-                  const nipInfo = NIP_PATTERNS[pattern.nipGroup];
-                  return `<div style="margin: 8px 0;"><strong>${index + 1}. ${nipInfo?.code || pattern.nipGroup}</strong> - ${pattern.percentage}%</div>`;
-                }).join('')}
-              </div>
-            </div>
-          </div>
-        </body>
-      </html>
-    `;
-
-    const brainworxEmailContent = `
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <meta charset="utf-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        </head>
-        <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; background: #f3f4f6;">
-          <div style="max-width: 680px; margin: 0 auto; padding: 40px 20px;">
-            <div style="background: #0A2A5E; color: white; padding: 30px; border-radius: 12px 12px 0 0;">
-              <h2 style="margin: 0;">NIP2 Assessment - System Notification</h2>
-            </div>
-            <div style="background: white; padding: 30px; border-radius: 0 0 12px 12px;">
-              <h3>Assessment Details</h3>
-              <p><strong>Customer Name:</strong> ${customerName}</p>
-              <p><strong>Customer Email:</strong> ${customerEmail}</p>
               ${franchiseOwnerEmail ? `<p><strong>Franchise Owner:</strong> ${franchiseOwnerName} (${franchiseOwnerEmail})</p>` : ''}
               <p><strong>Completion Date:</strong> ${results.completionDate}</p>
               <p><strong>Questions Completed:</strong> ${results.totalQuestions}</p>
@@ -286,7 +242,6 @@ Deno.serve(async (req: Request) => {
       </html>
     `;
 
-    // Send customer email
     await transporter.sendMail({
       from: `BrainWorx Assessment <${GMAIL_USER}>`,
       to: customerEmail,
@@ -296,7 +251,6 @@ Deno.serve(async (req: Request) => {
 
     console.log('✓ Customer email sent to:', customerEmail);
 
-    // Send franchise owner email
     if (franchiseOwnerEmail) {
       await transporter.sendMail({
         from: `BrainWorx Assessment <${GMAIL_USER}>`,
@@ -307,15 +261,23 @@ Deno.serve(async (req: Request) => {
       console.log('✓ Franchise owner email sent to:', franchiseOwnerEmail);
     }
 
-    // Send BrainWorx admin email
     await transporter.sendMail({
       from: `BrainWorx Assessment <${GMAIL_USER}>`,
       to: BRAINWORX_EMAIL,
-      subject: 'NIP2 Assessment - System Notification',
-      html: brainworxEmailContent,
+      subject: 'New NIP2 Assessment Completed',
+      html: franchiseEmailContent,
     });
 
     console.log('✓ Admin email sent to:', BRAINWORX_EMAIL);
+
+    await transporter.sendMail({
+      from: `BrainWorx Assessment <${GMAIL_USER}>`,
+      to: 'kobus@brainworx.co.za',
+      subject: 'New NIP2 Assessment Completed',
+      html: franchiseEmailContent,
+    });
+
+    console.log('✓ Kobus email sent to: kobus@brainworx.co.za');
 
     return new Response(
       JSON.stringify({
@@ -324,7 +286,8 @@ Deno.serve(async (req: Request) => {
         sentTo: {
           customer: customerEmail,
           franchiseOwner: franchiseOwnerEmail || 'N/A',
-          admin: BRAINWORX_EMAIL
+          admin: BRAINWORX_EMAIL,
+          kobus: 'kobus@brainworx.co.za'
         }
       }),
       {

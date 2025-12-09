@@ -191,7 +191,6 @@ Deno.serve(async (req: Request) => {
       </html>
     `;
 
-    // Get franchise owner email if exists
     let franchiseOwnerEmail = '';
     let franchiseOwnerName = '';
 
@@ -235,7 +234,6 @@ Deno.serve(async (req: Request) => {
       },
     });
 
-    // Send customer email
     await transporter.sendMail({
       from: `BrainWorx <${GMAIL_USER}>`,
       to: customerEmail,
@@ -245,53 +243,16 @@ Deno.serve(async (req: Request) => {
 
     console.log('✓ Customer email sent to:', customerEmail);
 
-    // Send franchise owner email
-    if (franchiseOwnerEmail) {
-      const franchiseEmailContent = `
-        <!DOCTYPE html>
-        <html>
-        <head><meta charset="utf-8"></head>
-        <body style="font-family: Arial, sans-serif; padding: 20px; background: #f3f4f6;">
-          <div style="max-width: 600px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden;">
-            <div style="background: #0A2A5E; color: white; padding: 30px;">
-              <h2 style="margin: 0;">New Self-Assessment Completed</h2>
-            </div>
-            <div style="padding: 30px;">
-              <p><strong>Customer:</strong> ${customerName} (${customerEmail})</p>
-              <p><strong>Assessment Type:</strong> ${assessmentType}</p>
-              <p><strong>Overall Score:</strong> ${overallScore}%</p>
-              <div style="margin-top: 20px; padding: 15px; background: #f3f4f6; border-radius: 8px;">
-                <h3 style="margin: 0 0 10px 0;">Top Imprints:</h3>
-                ${topImprints.map((imp: any, idx: number) => `<div style="margin: 5px 0;">${idx + 1}. ${imp.code} - ${imp.name} (${imp.percentage}%)</div>`).join('')}
-              </div>
-            </div>
-          </div>
-        </body>
-        </html>
-      `;
-
-      await transporter.sendMail({
-        from: `BrainWorx <${GMAIL_USER}>`,
-        to: franchiseOwnerEmail,
-        subject: `New Self-Assessment Completed - ${customerName}`,
-        html: franchiseEmailContent,
-      });
-
-      console.log('✓ Franchise owner email sent to:', franchiseOwnerEmail);
-    }
-
-    // Send BrainWorx admin email
-    const adminEmailContent = `
+    const franchiseEmailContent = `
       <!DOCTYPE html>
       <html>
       <head><meta charset="utf-8"></head>
       <body style="font-family: Arial, sans-serif; padding: 20px; background: #f3f4f6;">
         <div style="max-width: 600px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden;">
           <div style="background: #0A2A5E; color: white; padding: 30px;">
-            <h2 style="margin: 0;">Self-Assessment - System Notification</h2>
+            <h2 style="margin: 0;">New Self-Assessment Completed</h2>
           </div>
           <div style="padding: 30px;">
-            <h3>Assessment Details</h3>
             <p><strong>Customer:</strong> ${customerName} (${customerEmail})</p>
             ${franchiseOwnerEmail ? `<p><strong>Franchise Owner:</strong> ${franchiseOwnerName} (${franchiseOwnerEmail})</p>` : ''}
             <p><strong>Assessment Type:</strong> ${assessmentType}</p>
@@ -312,21 +273,42 @@ Deno.serve(async (req: Request) => {
       </html>
     `;
 
+    if (franchiseOwnerEmail) {
+      await transporter.sendMail({
+        from: `BrainWorx <${GMAIL_USER}>`,
+        to: franchiseOwnerEmail,
+        subject: `New Self-Assessment Completed - ${customerName}`,
+        html: franchiseEmailContent,
+      });
+
+      console.log('✓ Franchise owner email sent to:', franchiseOwnerEmail);
+    }
+
     await transporter.sendMail({
       from: `BrainWorx <${GMAIL_USER}>`,
       to: BRAINWORX_EMAIL,
-      subject: `Self-Assessment Completed - ${customerName}`,
-      html: adminEmailContent,
+      subject: `New Self-Assessment Completed - ${customerName}`,
+      html: franchiseEmailContent,
     });
 
     console.log('✓ Admin email sent to:', BRAINWORX_EMAIL);
+
+    await transporter.sendMail({
+      from: `BrainWorx <${GMAIL_USER}>`,
+      to: 'kobus@brainworx.co.za',
+      subject: `New Self-Assessment Completed - ${customerName}`,
+      html: franchiseEmailContent,
+    });
+
+    console.log('✓ Kobus email sent to: kobus@brainworx.co.za');
 
     return new Response(JSON.stringify({
       success: true,
       sentTo: {
         customer: customerEmail,
         franchiseOwner: franchiseOwnerEmail || 'N/A',
-        admin: BRAINWORX_EMAIL
+        admin: BRAINWORX_EMAIL,
+        kobus: 'kobus@brainworx.co.za'
       }
     }), {
       headers: {
