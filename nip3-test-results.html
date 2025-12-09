@@ -1,0 +1,646 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NIP3 Assessment Results - Test Simulation</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; color: #1f2937; background: #f9fafb; padding: 20px; }
+    .container { max-width: 1200px; margin: 0 auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .header { text-align: center; margin-bottom: 40px; padding-bottom: 30px; border-bottom: 3px solid #3b82f6; }
+    .header h1 { font-size: 32px; color: #1f2937; margin-bottom: 10px; }
+    .header p { color: #6b7280; font-size: 16px; }
+    .test-notice { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 15px; margin-bottom: 30px; border-radius: 6px; }
+    .test-notice strong { color: #92400e; }
+    .summary { background: #eff6ff; padding: 25px; border-radius: 8px; margin-bottom: 30px; }
+    .summary h2 { color: #1e40af; margin-bottom: 15px; font-size: 24px; }
+    .stat { display: inline-block; margin-right: 30px; margin-bottom: 15px; }
+    .stat-label { font-size: 14px; color: #6b7280; display: block; }
+    .stat-value { font-size: 28px; font-weight: bold; color: #1e40af; }
+    .priority-section { margin-bottom: 40px; }
+    .priority-section h2 { color: #dc2626; font-size: 24px; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #fee2e2; }
+    .pattern-card { background: white; border: 2px solid #fee2e2; border-radius: 8px; padding: 20px; margin-bottom: 15px; }
+    .pattern-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .pattern-name { font-size: 18px; font-weight: bold; color: #991b1b; }
+    .pattern-percentage { font-size: 24px; font-weight: bold; color: #dc2626; }
+    .pattern-level { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-top: 5px; }
+    .level-strongly { background: #fee2e2; color: #991b1b; }
+    .level-moderately { background: #fef3c7; color: #92400e; }
+    .level-mild { background: #dbeafe; color: #1e40af; }
+    .level-minimal { background: #f3f4f6; color: #4b5563; }
+    .results-table { width: 100%; border-collapse: collapse; margin-top: 30px; }
+    .results-table th { background: #3b82f6; color: white; padding: 12px; text-align: left; font-weight: 600; }
+    .results-table td { padding: 12px; border-bottom: 1px solid #e5e7eb; }
+    .results-table tr:hover { background: #f9fafb; }
+    .progress-bar { background: #e5e7eb; height: 24px; border-radius: 12px; overflow: hidden; margin-top: 8px; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, #3b82f6, #2563eb); display: flex; align-items: center; justify-content: flex-end; padding-right: 10px; color: white; font-size: 12px; font-weight: 600; transition: width 0.3s; }
+    .footer { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Neural Imprint Patterns Assessment</h1>
+      <p>Complete Analysis Report - 343 Questions, 20 Patterns</p>
+      <p style="margin-top: 10px;"><strong>Completed:</strong> December 9, 2025 at 01:01 PM</p>
+    </div>
+
+    <div class="test-notice">
+      <strong>⚠️ TEST SIMULATION:</strong> This report was generated using randomly selected answers for demonstration purposes.
+    </div>
+
+    <div class="summary">
+      <h2>📊 Executive Summary</h2>
+      <div class="stat">
+        <span class="stat-label">Total Questions</span>
+        <span class="stat-value">343</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Patterns Analyzed</span>
+        <span class="stat-value">20</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Overall Score</span>
+        <span class="stat-value">51.01%</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Priority Patterns</span>
+        <span class="stat-value">15</span>
+      </div>
+    </div>
+
+    
+    <div class="priority-section">
+      <h2>🎯 Priority Patterns (≥50%)</h2>
+      <p style="color: #6b7280; margin-bottom: 20px;">These patterns show moderate to strong presence and should receive focused attention:</p>
+      
+        <div class="pattern-card">
+          <div class="pattern-header">
+            <div>
+              <div class="pattern-name">HYP - High Gear (Hyperarousal)</div>
+              <span class="pattern-level level-stronglypresent">Strongly Present</span>
+            </div>
+            <div class="pattern-percentage">77.78%</div>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 77.78%">77.78%</div>
+          </div>
+          <p style="color: #6b7280; font-size: 14px; margin-top: 10px;">
+            Score: 14 / 18 (6 questions)
+          </p>
+        </div>
+      
+        <div class="pattern-card">
+          <div class="pattern-header">
+            <div>
+              <div class="pattern-name">NUH - Numb Heart</div>
+              <span class="pattern-level level-moderatelypresent">Moderately Present</span>
+            </div>
+            <div class="pattern-percentage">69.7%</div>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 69.7%">69.7%</div>
+          </div>
+          <p style="color: #6b7280; font-size: 14px; margin-top: 10px;">
+            Score: 46 / 66 (22 questions)
+          </p>
+        </div>
+      
+        <div class="pattern-card">
+          <div class="pattern-header">
+            <div>
+              <div class="pattern-name">IMP - Impulse Rush</div>
+              <span class="pattern-level level-moderatelypresent">Moderately Present</span>
+            </div>
+            <div class="pattern-percentage">66.67%</div>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 66.67%">66.67%</div>
+          </div>
+          <p style="color: #6b7280; font-size: 14px; margin-top: 10px;">
+            Score: 24 / 36 (12 questions)
+          </p>
+        </div>
+      
+        <div class="pattern-card">
+          <div class="pattern-header">
+            <div>
+              <div class="pattern-name">SHT - Shattered Worth</div>
+              <span class="pattern-level level-moderatelypresent">Moderately Present</span>
+            </div>
+            <div class="pattern-percentage">60%</div>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 60%">60%</div>
+          </div>
+          <p style="color: #6b7280; font-size: 14px; margin-top: 10px;">
+            Score: 45 / 75 (25 questions)
+          </p>
+        </div>
+      
+        <div class="pattern-card">
+          <div class="pattern-header">
+            <div>
+              <div class="pattern-name">INWF - Inward Focus (Narcissism)</div>
+              <span class="pattern-level level-moderatelypresent">Moderately Present</span>
+            </div>
+            <div class="pattern-percentage">57.89%</div>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 57.89%">57.89%</div>
+          </div>
+          <p style="color: #6b7280; font-size: 14px; margin-top: 10px;">
+            Score: 33 / 57 (19 questions)
+          </p>
+        </div>
+      
+        <div class="pattern-card">
+          <div class="pattern-header">
+            <div>
+              <div class="pattern-name">NEGP - Unmet Needs (Parenting)</div>
+              <span class="pattern-level level-moderatelypresent">Moderately Present</span>
+            </div>
+            <div class="pattern-percentage">57.14%</div>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 57.14%">57.14%</div>
+          </div>
+          <p style="color: #6b7280; font-size: 14px; margin-top: 10px;">
+            Score: 36 / 63 (21 questions)
+          </p>
+        </div>
+      
+        <div class="pattern-card">
+          <div class="pattern-header">
+            <div>
+              <div class="pattern-name">DIS - Mind In Distress</div>
+              <span class="pattern-level level-moderatelypresent">Moderately Present</span>
+            </div>
+            <div class="pattern-percentage">56.25%</div>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 56.25%">56.25%</div>
+          </div>
+          <p style="color: #6b7280; font-size: 14px; margin-top: 10px;">
+            Score: 27 / 48 (16 questions)
+          </p>
+        </div>
+      
+        <div class="pattern-card">
+          <div class="pattern-header">
+            <div>
+              <div class="pattern-name">ANG - Anchored Anger</div>
+              <span class="pattern-level level-moderatelypresent">Moderately Present</span>
+            </div>
+            <div class="pattern-percentage">55.56%</div>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 55.56%">55.56%</div>
+          </div>
+          <p style="color: #6b7280; font-size: 14px; margin-top: 10px;">
+            Score: 25 / 45 (15 questions)
+          </p>
+        </div>
+      
+        <div class="pattern-card">
+          <div class="pattern-header">
+            <div>
+              <div class="pattern-name">RES - Attitude (Resistance)</div>
+              <span class="pattern-level level-moderatelypresent">Moderately Present</span>
+            </div>
+            <div class="pattern-percentage">53.33%</div>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 53.33%">53.33%</div>
+          </div>
+          <p style="color: #6b7280; font-size: 14px; margin-top: 10px;">
+            Score: 24 / 45 (15 questions)
+          </p>
+        </div>
+      
+        <div class="pattern-card">
+          <div class="pattern-header">
+            <div>
+              <div class="pattern-name">CPL - Addictive Loops</div>
+              <span class="pattern-level level-moderatelypresent">Moderately Present</span>
+            </div>
+            <div class="pattern-percentage">51.52%</div>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 51.52%">51.52%</div>
+          </div>
+          <p style="color: #6b7280; font-size: 14px; margin-top: 10px;">
+            Score: 17 / 33 (11 questions)
+          </p>
+        </div>
+      
+        <div class="pattern-card">
+          <div class="pattern-header">
+            <div>
+              <div class="pattern-name">DEC - Deceiver</div>
+              <span class="pattern-level level-moderatelypresent">Moderately Present</span>
+            </div>
+            <div class="pattern-percentage">51.28%</div>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 51.28%">51.28%</div>
+          </div>
+          <p style="color: #6b7280; font-size: 14px; margin-top: 10px;">
+            Score: 40 / 78 (26 questions)
+          </p>
+        </div>
+      
+        <div class="pattern-card">
+          <div class="pattern-header">
+            <div>
+              <div class="pattern-name">DIM - Left/Right Brain</div>
+              <span class="pattern-level level-moderatelypresent">Moderately Present</span>
+            </div>
+            <div class="pattern-percentage">51.28%</div>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 51.28%">51.28%</div>
+          </div>
+          <p style="color: #6b7280; font-size: 14px; margin-top: 10px;">
+            Score: 20 / 39 (13 questions)
+          </p>
+        </div>
+      
+        <div class="pattern-card">
+          <div class="pattern-header">
+            <div>
+              <div class="pattern-name">TRAP - Home/Work Environment</div>
+              <span class="pattern-level level-moderatelypresent">Moderately Present</span>
+            </div>
+            <div class="pattern-percentage">50.62%</div>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 50.62%">50.62%</div>
+          </div>
+          <p style="color: #6b7280; font-size: 14px; margin-top: 10px;">
+            Score: 41 / 81 (27 questions)
+          </p>
+        </div>
+      
+        <div class="pattern-card">
+          <div class="pattern-header">
+            <div>
+              <div class="pattern-name">DOG - Dogmatic Chains</div>
+              <span class="pattern-level level-moderatelypresent">Moderately Present</span>
+            </div>
+            <div class="pattern-percentage">50.43%</div>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 50.43%">50.43%</div>
+          </div>
+          <p style="color: #6b7280; font-size: 14px; margin-top: 10px;">
+            Score: 59 / 117 (39 questions)
+          </p>
+        </div>
+      
+        <div class="pattern-card">
+          <div class="pattern-header">
+            <div>
+              <div class="pattern-name">LACK - Lack State</div>
+              <span class="pattern-level level-moderatelypresent">Moderately Present</span>
+            </div>
+            <div class="pattern-percentage">50%</div>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 50%">50%</div>
+          </div>
+          <p style="color: #6b7280; font-size: 14px; margin-top: 10px;">
+            Score: 30 / 60 (20 questions)
+          </p>
+        </div>
+      
+    </div>
+    
+
+    <h2 style="color: #1f2937; font-size: 24px; margin-bottom: 20px; margin-top: 40px;">📋 Complete NIP Analysis</h2>
+    <table class="results-table">
+      <thead>
+        <tr>
+          <th>NIP Code</th>
+          <th>Pattern Name</th>
+          <th>Questions</th>
+          <th>Score</th>
+          <th>Percentage</th>
+          <th>Level</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+          <tr>
+            <td><strong>NIP05</strong></td>
+            <td>HYP - High Gear (Hyperarousal)</td>
+            <td>6</td>
+            <td>14 / 18</td>
+            <td>
+              <div class="progress-bar" style="margin: 0;">
+                <div class="progress-fill" style="width: 77.78%">77.78%</div>
+              </div>
+            </td>
+            <td>
+              <span class="pattern-level level-stronglypresent">Strongly Present</span>
+            </td>
+          </tr>
+        
+          <tr>
+            <td><strong>NIP08</strong></td>
+            <td>NUH - Numb Heart</td>
+            <td>22</td>
+            <td>46 / 66</td>
+            <td>
+              <div class="progress-bar" style="margin: 0;">
+                <div class="progress-fill" style="width: 69.7%">69.7%</div>
+              </div>
+            </td>
+            <td>
+              <span class="pattern-level level-moderatelypresent">Moderately Present</span>
+            </td>
+          </tr>
+        
+          <tr>
+            <td><strong>NIP07</strong></td>
+            <td>IMP - Impulse Rush</td>
+            <td>12</td>
+            <td>24 / 36</td>
+            <td>
+              <div class="progress-bar" style="margin: 0;">
+                <div class="progress-fill" style="width: 66.67%">66.67%</div>
+              </div>
+            </td>
+            <td>
+              <span class="pattern-level level-moderatelypresent">Moderately Present</span>
+            </td>
+          </tr>
+        
+          <tr>
+            <td><strong>NIP02</strong></td>
+            <td>SHT - Shattered Worth</td>
+            <td>25</td>
+            <td>45 / 75</td>
+            <td>
+              <div class="progress-bar" style="margin: 0;">
+                <div class="progress-fill" style="width: 60%">60%</div>
+              </div>
+            </td>
+            <td>
+              <span class="pattern-level level-moderatelypresent">Moderately Present</span>
+            </td>
+          </tr>
+        
+          <tr>
+            <td><strong>NIP17</strong></td>
+            <td>INWF - Inward Focus (Narcissism)</td>
+            <td>19</td>
+            <td>33 / 57</td>
+            <td>
+              <div class="progress-bar" style="margin: 0;">
+                <div class="progress-fill" style="width: 57.89%">57.89%</div>
+              </div>
+            </td>
+            <td>
+              <span class="pattern-level level-moderatelypresent">Moderately Present</span>
+            </td>
+          </tr>
+        
+          <tr>
+            <td><strong>NIP04</strong></td>
+            <td>NEGP - Unmet Needs (Parenting)</td>
+            <td>21</td>
+            <td>36 / 63</td>
+            <td>
+              <div class="progress-bar" style="margin: 0;">
+                <div class="progress-fill" style="width: 57.14%">57.14%</div>
+              </div>
+            </td>
+            <td>
+              <span class="pattern-level level-moderatelypresent">Moderately Present</span>
+            </td>
+          </tr>
+        
+          <tr>
+            <td><strong>NIP09</strong></td>
+            <td>DIS - Mind In Distress</td>
+            <td>16</td>
+            <td>27 / 48</td>
+            <td>
+              <div class="progress-bar" style="margin: 0;">
+                <div class="progress-fill" style="width: 56.25%">56.25%</div>
+              </div>
+            </td>
+            <td>
+              <span class="pattern-level level-moderatelypresent">Moderately Present</span>
+            </td>
+          </tr>
+        
+          <tr>
+            <td><strong>NIP10</strong></td>
+            <td>ANG - Anchored Anger</td>
+            <td>15</td>
+            <td>25 / 45</td>
+            <td>
+              <div class="progress-bar" style="margin: 0;">
+                <div class="progress-fill" style="width: 55.56%">55.56%</div>
+              </div>
+            </td>
+            <td>
+              <span class="pattern-level level-moderatelypresent">Moderately Present</span>
+            </td>
+          </tr>
+        
+          <tr>
+            <td><strong>NIP16</strong></td>
+            <td>RES - Attitude (Resistance)</td>
+            <td>15</td>
+            <td>24 / 45</td>
+            <td>
+              <div class="progress-bar" style="margin: 0;">
+                <div class="progress-fill" style="width: 53.33%">53.33%</div>
+              </div>
+            </td>
+            <td>
+              <span class="pattern-level level-moderatelypresent">Moderately Present</span>
+            </td>
+          </tr>
+        
+          <tr>
+            <td><strong>NIP18</strong></td>
+            <td>CPL - Addictive Loops</td>
+            <td>11</td>
+            <td>17 / 33</td>
+            <td>
+              <div class="progress-bar" style="margin: 0;">
+                <div class="progress-fill" style="width: 51.52%">51.52%</div>
+              </div>
+            </td>
+            <td>
+              <span class="pattern-level level-moderatelypresent">Moderately Present</span>
+            </td>
+          </tr>
+        
+          <tr>
+            <td><strong>NIP20</strong></td>
+            <td>DEC - Deceiver</td>
+            <td>26</td>
+            <td>40 / 78</td>
+            <td>
+              <div class="progress-bar" style="margin: 0;">
+                <div class="progress-fill" style="width: 51.28%">51.28%</div>
+              </div>
+            </td>
+            <td>
+              <span class="pattern-level level-moderatelypresent">Moderately Present</span>
+            </td>
+          </tr>
+        
+          <tr>
+            <td><strong>NIP14</strong></td>
+            <td>DIM - Left/Right Brain</td>
+            <td>13</td>
+            <td>20 / 39</td>
+            <td>
+              <div class="progress-bar" style="margin: 0;">
+                <div class="progress-fill" style="width: 51.28%">51.28%</div>
+              </div>
+            </td>
+            <td>
+              <span class="pattern-level level-moderatelypresent">Moderately Present</span>
+            </td>
+          </tr>
+        
+          <tr>
+            <td><strong>NIP01</strong></td>
+            <td>TRAP - Home/Work Environment</td>
+            <td>27</td>
+            <td>41 / 81</td>
+            <td>
+              <div class="progress-bar" style="margin: 0;">
+                <div class="progress-fill" style="width: 50.62%">50.62%</div>
+              </div>
+            </td>
+            <td>
+              <span class="pattern-level level-moderatelypresent">Moderately Present</span>
+            </td>
+          </tr>
+        
+          <tr>
+            <td><strong>NIP06</strong></td>
+            <td>DOG - Dogmatic Chains</td>
+            <td>39</td>
+            <td>59 / 117</td>
+            <td>
+              <div class="progress-bar" style="margin: 0;">
+                <div class="progress-fill" style="width: 50.43%">50.43%</div>
+              </div>
+            </td>
+            <td>
+              <span class="pattern-level level-moderatelypresent">Moderately Present</span>
+            </td>
+          </tr>
+        
+          <tr>
+            <td><strong>NIP13</strong></td>
+            <td>LACK - Lack State</td>
+            <td>20</td>
+            <td>30 / 60</td>
+            <td>
+              <div class="progress-bar" style="margin: 0;">
+                <div class="progress-fill" style="width: 50%">50%</div>
+              </div>
+            </td>
+            <td>
+              <span class="pattern-level level-moderatelypresent">Moderately Present</span>
+            </td>
+          </tr>
+        
+          <tr>
+            <td><strong>NIP12</strong></td>
+            <td>BULLY - Victim Loops</td>
+            <td>17</td>
+            <td>21 / 51</td>
+            <td>
+              <div class="progress-bar" style="margin: 0;">
+                <div class="progress-fill" style="width: 41.18%">41.18%</div>
+              </div>
+            </td>
+            <td>
+              <span class="pattern-level level-mildpattern">Mild Pattern</span>
+            </td>
+          </tr>
+        
+          <tr>
+            <td><strong>NIP11</strong></td>
+            <td>INFL - Inside Out (Locus of Control)</td>
+            <td>18</td>
+            <td>19 / 54</td>
+            <td>
+              <div class="progress-bar" style="margin: 0;">
+                <div class="progress-fill" style="width: 35.19%">35.19%</div>
+              </div>
+            </td>
+            <td>
+              <span class="pattern-level level-mildpattern">Mild Pattern</span>
+            </td>
+          </tr>
+        
+          <tr>
+            <td><strong>NIP15</strong></td>
+            <td>FOC - Scatter Focus</td>
+            <td>5</td>
+            <td>5 / 15</td>
+            <td>
+              <div class="progress-bar" style="margin: 0;">
+                <div class="progress-fill" style="width: 33.33%">33.33%</div>
+              </div>
+            </td>
+            <td>
+              <span class="pattern-level level-mildpattern">Mild Pattern</span>
+            </td>
+          </tr>
+        
+          <tr>
+            <td><strong>NIP19</strong></td>
+            <td>BURN - Burned Out</td>
+            <td>6</td>
+            <td>5 / 18</td>
+            <td>
+              <div class="progress-bar" style="margin: 0;">
+                <div class="progress-fill" style="width: 27.78%">27.78%</div>
+              </div>
+            </td>
+            <td>
+              <span class="pattern-level level-minimalpattern">Minimal Pattern</span>
+            </td>
+          </tr>
+        
+          <tr>
+            <td><strong>NIP03</strong></td>
+            <td>ORG - Time & Order</td>
+            <td>10</td>
+            <td>7 / 30</td>
+            <td>
+              <div class="progress-bar" style="margin: 0;">
+                <div class="progress-fill" style="width: 23.33%">23.33%</div>
+              </div>
+            </td>
+            <td>
+              <span class="pattern-level level-minimalpattern">Minimal Pattern</span>
+            </td>
+          </tr>
+        
+      </tbody>
+    </table>
+
+    <div class="footer">
+      <p>&copy; 2025 Neural Imprint Patterns Assessment. All rights reserved.</p>
+      <p style="margin-top: 5px;">This is a test simulation with randomly generated responses.</p>
+    </div>
+  </div>
+</body>
+</html>
+  

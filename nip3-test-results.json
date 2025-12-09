@@ -1,0 +1,1924 @@
+{
+  "answers": [
+    {
+      "questionId": 1,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 2,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 3,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 4,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 5,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 6,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 7,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 8,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 9,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 10,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 11,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 12,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 13,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 14,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 15,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 16,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 17,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 18,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 19,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 20,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 21,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 22,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 23,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 24,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 25,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 26,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 27,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 28,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 29,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 30,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 31,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 32,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 33,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 34,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 35,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 36,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 37,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 38,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 39,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 40,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 41,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 42,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 43,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 44,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 45,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 46,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 47,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 48,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 49,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 50,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 51,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 52,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 53,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 54,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 55,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 56,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 57,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 58,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 59,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 60,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 61,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 62,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 63,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 64,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 65,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 66,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 67,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 68,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 69,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 70,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 71,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 72,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 73,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 74,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 75,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 76,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 77,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 78,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 79,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 80,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 81,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 82,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 83,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 84,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 85,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 86,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 87,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 88,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 89,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 90,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 91,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 92,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 93,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 94,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 95,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 96,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 97,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 98,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 99,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 100,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 101,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 102,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 103,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 104,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 105,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 106,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 107,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 108,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 109,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 110,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 111,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 112,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 113,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 114,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 115,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 116,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 117,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 118,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 119,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 120,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 121,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 122,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 123,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 124,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 125,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 126,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 127,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 128,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 129,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 130,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 131,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 132,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 133,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 134,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 135,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 136,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 137,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 138,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 139,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 140,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 141,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 142,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 143,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 144,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 145,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 146,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 147,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 148,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 149,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 150,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 151,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 152,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 153,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 154,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 155,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 156,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 157,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 158,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 159,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 160,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 161,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 162,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 163,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 164,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 165,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 166,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 167,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 168,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 169,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 170,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 171,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 172,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 173,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 174,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 175,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 176,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 177,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 178,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 179,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 180,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 181,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 182,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 183,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 184,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 185,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 186,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 187,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 188,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 189,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 190,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 191,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 192,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 193,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 194,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 195,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 196,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 197,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 198,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 199,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 200,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 201,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 202,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 203,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 204,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 205,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 206,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 207,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 208,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 209,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 210,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 211,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 212,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 213,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 214,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 215,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 216,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 217,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 218,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 219,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 220,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 221,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 222,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 223,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 224,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 225,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 226,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 227,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 228,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 229,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 230,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 231,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 232,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 233,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 234,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 235,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 236,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 237,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 238,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 239,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 240,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 241,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 242,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 243,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 244,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 245,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 246,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 247,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 248,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 249,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 250,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 251,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 252,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 253,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 254,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 255,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 256,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 257,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 258,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 259,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 260,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 261,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 262,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 263,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 264,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 265,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 266,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 267,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 268,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 269,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 270,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 271,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 272,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 273,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 274,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 275,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 276,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 277,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 278,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 279,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 280,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 281,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 282,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 283,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 284,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 285,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 286,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 287,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 288,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 289,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 290,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 291,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 292,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 293,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 294,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 295,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 296,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 297,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 298,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 299,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 300,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 301,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 302,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 303,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 304,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 305,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 306,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 307,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 308,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 309,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 310,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 311,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 312,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 313,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 314,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 315,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 316,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 317,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 318,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 319,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 320,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 321,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 322,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 323,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 324,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 325,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 326,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 327,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 328,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 329,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 330,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 331,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 332,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 333,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 334,
+      "value": 1,
+      "option": "A little true of me"
+    },
+    {
+      "questionId": 335,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 336,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 337,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 338,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 339,
+      "value": 0,
+      "option": "Not at all true of me"
+    },
+    {
+      "questionId": 340,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 341,
+      "value": 2,
+      "option": "Often true of me"
+    },
+    {
+      "questionId": 342,
+      "value": 3,
+      "option": "Completely true of me"
+    },
+    {
+      "questionId": 343,
+      "value": 3,
+      "option": "Completely true of me"
+    }
+  ],
+  "results": [
+    {
+      "code": "NIP05",
+      "name": "HYP - High Gear (Hyperarousal)",
+      "shortName": "High Gear",
+      "totalQuestions": 6,
+      "actualScore": 14,
+      "maxScore": 18,
+      "percentage": 77.78,
+      "level": "Strongly Present"
+    },
+    {
+      "code": "NIP08",
+      "name": "NUH - Numb Heart",
+      "shortName": "Numb Heart",
+      "totalQuestions": 22,
+      "actualScore": 46,
+      "maxScore": 66,
+      "percentage": 69.7,
+      "level": "Moderately Present"
+    },
+    {
+      "code": "NIP07",
+      "name": "IMP - Impulse Rush",
+      "shortName": "Impulse",
+      "totalQuestions": 12,
+      "actualScore": 24,
+      "maxScore": 36,
+      "percentage": 66.67,
+      "level": "Moderately Present"
+    },
+    {
+      "code": "NIP02",
+      "name": "SHT - Shattered Worth",
+      "shortName": "Shattered Worth",
+      "totalQuestions": 25,
+      "actualScore": 45,
+      "maxScore": 75,
+      "percentage": 60,
+      "level": "Moderately Present"
+    },
+    {
+      "code": "NIP17",
+      "name": "INWF - Inward Focus (Narcissism)",
+      "shortName": "Narcissism",
+      "totalQuestions": 19,
+      "actualScore": 33,
+      "maxScore": 57,
+      "percentage": 57.89,
+      "level": "Moderately Present"
+    },
+    {
+      "code": "NIP04",
+      "name": "NEGP - Unmet Needs (Parenting)",
+      "shortName": "Unmet Needs",
+      "totalQuestions": 21,
+      "actualScore": 36,
+      "maxScore": 63,
+      "percentage": 57.14,
+      "level": "Moderately Present"
+    },
+    {
+      "code": "NIP09",
+      "name": "DIS - Mind In Distress",
+      "shortName": "Distress",
+      "totalQuestions": 16,
+      "actualScore": 27,
+      "maxScore": 48,
+      "percentage": 56.25,
+      "level": "Moderately Present"
+    },
+    {
+      "code": "NIP10",
+      "name": "ANG - Anchored Anger",
+      "shortName": "Anger",
+      "totalQuestions": 15,
+      "actualScore": 25,
+      "maxScore": 45,
+      "percentage": 55.56,
+      "level": "Moderately Present"
+    },
+    {
+      "code": "NIP16",
+      "name": "RES - Attitude (Resistance)",
+      "shortName": "Resistance",
+      "totalQuestions": 15,
+      "actualScore": 24,
+      "maxScore": 45,
+      "percentage": 53.33,
+      "level": "Moderately Present"
+    },
+    {
+      "code": "NIP18",
+      "name": "CPL - Addictive Loops",
+      "shortName": "Addiction",
+      "totalQuestions": 11,
+      "actualScore": 17,
+      "maxScore": 33,
+      "percentage": 51.52,
+      "level": "Moderately Present"
+    },
+    {
+      "code": "NIP20",
+      "name": "DEC - Deceiver",
+      "shortName": "Deception",
+      "totalQuestions": 26,
+      "actualScore": 40,
+      "maxScore": 78,
+      "percentage": 51.28,
+      "level": "Moderately Present"
+    },
+    {
+      "code": "NIP14",
+      "name": "DIM - Left/Right Brain",
+      "shortName": "Thinking Style",
+      "totalQuestions": 13,
+      "actualScore": 20,
+      "maxScore": 39,
+      "percentage": 51.28,
+      "level": "Moderately Present"
+    },
+    {
+      "code": "NIP01",
+      "name": "TRAP - Home/Work Environment",
+      "shortName": "Home/Work",
+      "totalQuestions": 27,
+      "actualScore": 41,
+      "maxScore": 81,
+      "percentage": 50.62,
+      "level": "Moderately Present"
+    },
+    {
+      "code": "NIP06",
+      "name": "DOG - Dogmatic Chains",
+      "shortName": "Dogmatic",
+      "totalQuestions": 39,
+      "actualScore": 59,
+      "maxScore": 117,
+      "percentage": 50.43,
+      "level": "Moderately Present"
+    },
+    {
+      "code": "NIP13",
+      "name": "LACK - Lack State",
+      "shortName": "Lack",
+      "totalQuestions": 20,
+      "actualScore": 30,
+      "maxScore": 60,
+      "percentage": 50,
+      "level": "Moderately Present"
+    },
+    {
+      "code": "NIP12",
+      "name": "BULLY - Victim Loops",
+      "shortName": "Victim",
+      "totalQuestions": 17,
+      "actualScore": 21,
+      "maxScore": 51,
+      "percentage": 41.18,
+      "level": "Mild Pattern"
+    },
+    {
+      "code": "NIP11",
+      "name": "INFL - Inside Out (Locus of Control)",
+      "shortName": "Locus Control",
+      "totalQuestions": 18,
+      "actualScore": 19,
+      "maxScore": 54,
+      "percentage": 35.19,
+      "level": "Mild Pattern"
+    },
+    {
+      "code": "NIP15",
+      "name": "FOC - Scatter Focus",
+      "shortName": "Scatter Focus",
+      "totalQuestions": 5,
+      "actualScore": 5,
+      "maxScore": 15,
+      "percentage": 33.33,
+      "level": "Mild Pattern"
+    },
+    {
+      "code": "NIP19",
+      "name": "BURN - Burned Out",
+      "shortName": "Burnout",
+      "totalQuestions": 6,
+      "actualScore": 5,
+      "maxScore": 18,
+      "percentage": 27.78,
+      "level": "Minimal Pattern"
+    },
+    {
+      "code": "NIP03",
+      "name": "ORG - Time & Order",
+      "shortName": "Time & Order",
+      "totalQuestions": 10,
+      "actualScore": 7,
+      "maxScore": 30,
+      "percentage": 23.33,
+      "level": "Minimal Pattern"
+    }
+  ],
+  "completedAt": "December 9, 2025 at 01:01 PM",
+  "overallPercentage": "51.01",
+  "htmlReport": "\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>NIP3 Assessment Results - Test Simulation</title>\n  <style>\n    * { margin: 0; padding: 0; box-sizing: border-box; }\n    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; color: #1f2937; background: #f9fafb; padding: 20px; }\n    .container { max-width: 1200px; margin: 0 auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }\n    .header { text-align: center; margin-bottom: 40px; padding-bottom: 30px; border-bottom: 3px solid #3b82f6; }\n    .header h1 { font-size: 32px; color: #1f2937; margin-bottom: 10px; }\n    .header p { color: #6b7280; font-size: 16px; }\n    .test-notice { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 15px; margin-bottom: 30px; border-radius: 6px; }\n    .test-notice strong { color: #92400e; }\n    .summary { background: #eff6ff; padding: 25px; border-radius: 8px; margin-bottom: 30px; }\n    .summary h2 { color: #1e40af; margin-bottom: 15px; font-size: 24px; }\n    .stat { display: inline-block; margin-right: 30px; margin-bottom: 15px; }\n    .stat-label { font-size: 14px; color: #6b7280; display: block; }\n    .stat-value { font-size: 28px; font-weight: bold; color: #1e40af; }\n    .priority-section { margin-bottom: 40px; }\n    .priority-section h2 { color: #dc2626; font-size: 24px; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #fee2e2; }\n    .pattern-card { background: white; border: 2px solid #fee2e2; border-radius: 8px; padding: 20px; margin-bottom: 15px; }\n    .pattern-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }\n    .pattern-name { font-size: 18px; font-weight: bold; color: #991b1b; }\n    .pattern-percentage { font-size: 24px; font-weight: bold; color: #dc2626; }\n    .pattern-level { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-top: 5px; }\n    .level-strongly { background: #fee2e2; color: #991b1b; }\n    .level-moderately { background: #fef3c7; color: #92400e; }\n    .level-mild { background: #dbeafe; color: #1e40af; }\n    .level-minimal { background: #f3f4f6; color: #4b5563; }\n    .results-table { width: 100%; border-collapse: collapse; margin-top: 30px; }\n    .results-table th { background: #3b82f6; color: white; padding: 12px; text-align: left; font-weight: 600; }\n    .results-table td { padding: 12px; border-bottom: 1px solid #e5e7eb; }\n    .results-table tr:hover { background: #f9fafb; }\n    .progress-bar { background: #e5e7eb; height: 24px; border-radius: 12px; overflow: hidden; margin-top: 8px; }\n    .progress-fill { height: 100%; background: linear-gradient(90deg, #3b82f6, #2563eb); display: flex; align-items: center; justify-content: flex-end; padding-right: 10px; color: white; font-size: 12px; font-weight: 600; transition: width 0.3s; }\n    .footer { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 14px; }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <div class=\"header\">\n      <h1>Neural Imprint Patterns Assessment</h1>\n      <p>Complete Analysis Report - 343 Questions, 20 Patterns</p>\n      <p style=\"margin-top: 10px;\"><strong>Completed:</strong> December 9, 2025 at 01:01 PM</p>\n    </div>\n\n    <div class=\"test-notice\">\n      <strong>⚠️ TEST SIMULATION:</strong> This report was generated using randomly selected answers for demonstration purposes.\n    </div>\n\n    <div class=\"summary\">\n      <h2>📊 Executive Summary</h2>\n      <div class=\"stat\">\n        <span class=\"stat-label\">Total Questions</span>\n        <span class=\"stat-value\">343</span>\n      </div>\n      <div class=\"stat\">\n        <span class=\"stat-label\">Patterns Analyzed</span>\n        <span class=\"stat-value\">20</span>\n      </div>\n      <div class=\"stat\">\n        <span class=\"stat-label\">Overall Score</span>\n        <span class=\"stat-value\">51.01%</span>\n      </div>\n      <div class=\"stat\">\n        <span class=\"stat-label\">Priority Patterns</span>\n        <span class=\"stat-value\">15</span>\n      </div>\n    </div>\n\n    \n    <div class=\"priority-section\">\n      <h2>🎯 Priority Patterns (≥50%)</h2>\n      <p style=\"color: #6b7280; margin-bottom: 20px;\">These patterns show moderate to strong presence and should receive focused attention:</p>\n      \n        <div class=\"pattern-card\">\n          <div class=\"pattern-header\">\n            <div>\n              <div class=\"pattern-name\">HYP - High Gear (Hyperarousal)</div>\n              <span class=\"pattern-level level-stronglypresent\">Strongly Present</span>\n            </div>\n            <div class=\"pattern-percentage\">77.78%</div>\n          </div>\n          <div class=\"progress-bar\">\n            <div class=\"progress-fill\" style=\"width: 77.78%\">77.78%</div>\n          </div>\n          <p style=\"color: #6b7280; font-size: 14px; margin-top: 10px;\">\n            Score: 14 / 18 (6 questions)\n          </p>\n        </div>\n      \n        <div class=\"pattern-card\">\n          <div class=\"pattern-header\">\n            <div>\n              <div class=\"pattern-name\">NUH - Numb Heart</div>\n              <span class=\"pattern-level level-moderatelypresent\">Moderately Present</span>\n            </div>\n            <div class=\"pattern-percentage\">69.7%</div>\n          </div>\n          <div class=\"progress-bar\">\n            <div class=\"progress-fill\" style=\"width: 69.7%\">69.7%</div>\n          </div>\n          <p style=\"color: #6b7280; font-size: 14px; margin-top: 10px;\">\n            Score: 46 / 66 (22 questions)\n          </p>\n        </div>\n      \n        <div class=\"pattern-card\">\n          <div class=\"pattern-header\">\n            <div>\n              <div class=\"pattern-name\">IMP - Impulse Rush</div>\n              <span class=\"pattern-level level-moderatelypresent\">Moderately Present</span>\n            </div>\n            <div class=\"pattern-percentage\">66.67%</div>\n          </div>\n          <div class=\"progress-bar\">\n            <div class=\"progress-fill\" style=\"width: 66.67%\">66.67%</div>\n          </div>\n          <p style=\"color: #6b7280; font-size: 14px; margin-top: 10px;\">\n            Score: 24 / 36 (12 questions)\n          </p>\n        </div>\n      \n        <div class=\"pattern-card\">\n          <div class=\"pattern-header\">\n            <div>\n              <div class=\"pattern-name\">SHT - Shattered Worth</div>\n              <span class=\"pattern-level level-moderatelypresent\">Moderately Present</span>\n            </div>\n            <div class=\"pattern-percentage\">60%</div>\n          </div>\n          <div class=\"progress-bar\">\n            <div class=\"progress-fill\" style=\"width: 60%\">60%</div>\n          </div>\n          <p style=\"color: #6b7280; font-size: 14px; margin-top: 10px;\">\n            Score: 45 / 75 (25 questions)\n          </p>\n        </div>\n      \n        <div class=\"pattern-card\">\n          <div class=\"pattern-header\">\n            <div>\n              <div class=\"pattern-name\">INWF - Inward Focus (Narcissism)</div>\n              <span class=\"pattern-level level-moderatelypresent\">Moderately Present</span>\n            </div>\n            <div class=\"pattern-percentage\">57.89%</div>\n          </div>\n          <div class=\"progress-bar\">\n            <div class=\"progress-fill\" style=\"width: 57.89%\">57.89%</div>\n          </div>\n          <p style=\"color: #6b7280; font-size: 14px; margin-top: 10px;\">\n            Score: 33 / 57 (19 questions)\n          </p>\n        </div>\n      \n        <div class=\"pattern-card\">\n          <div class=\"pattern-header\">\n            <div>\n              <div class=\"pattern-name\">NEGP - Unmet Needs (Parenting)</div>\n              <span class=\"pattern-level level-moderatelypresent\">Moderately Present</span>\n            </div>\n            <div class=\"pattern-percentage\">57.14%</div>\n          </div>\n          <div class=\"progress-bar\">\n            <div class=\"progress-fill\" style=\"width: 57.14%\">57.14%</div>\n          </div>\n          <p style=\"color: #6b7280; font-size: 14px; margin-top: 10px;\">\n            Score: 36 / 63 (21 questions)\n          </p>\n        </div>\n      \n        <div class=\"pattern-card\">\n          <div class=\"pattern-header\">\n            <div>\n              <div class=\"pattern-name\">DIS - Mind In Distress</div>\n              <span class=\"pattern-level level-moderatelypresent\">Moderately Present</span>\n            </div>\n            <div class=\"pattern-percentage\">56.25%</div>\n          </div>\n          <div class=\"progress-bar\">\n            <div class=\"progress-fill\" style=\"width: 56.25%\">56.25%</div>\n          </div>\n          <p style=\"color: #6b7280; font-size: 14px; margin-top: 10px;\">\n            Score: 27 / 48 (16 questions)\n          </p>\n        </div>\n      \n        <div class=\"pattern-card\">\n          <div class=\"pattern-header\">\n            <div>\n              <div class=\"pattern-name\">ANG - Anchored Anger</div>\n              <span class=\"pattern-level level-moderatelypresent\">Moderately Present</span>\n            </div>\n            <div class=\"pattern-percentage\">55.56%</div>\n          </div>\n          <div class=\"progress-bar\">\n            <div class=\"progress-fill\" style=\"width: 55.56%\">55.56%</div>\n          </div>\n          <p style=\"color: #6b7280; font-size: 14px; margin-top: 10px;\">\n            Score: 25 / 45 (15 questions)\n          </p>\n        </div>\n      \n        <div class=\"pattern-card\">\n          <div class=\"pattern-header\">\n            <div>\n              <div class=\"pattern-name\">RES - Attitude (Resistance)</div>\n              <span class=\"pattern-level level-moderatelypresent\">Moderately Present</span>\n            </div>\n            <div class=\"pattern-percentage\">53.33%</div>\n          </div>\n          <div class=\"progress-bar\">\n            <div class=\"progress-fill\" style=\"width: 53.33%\">53.33%</div>\n          </div>\n          <p style=\"color: #6b7280; font-size: 14px; margin-top: 10px;\">\n            Score: 24 / 45 (15 questions)\n          </p>\n        </div>\n      \n        <div class=\"pattern-card\">\n          <div class=\"pattern-header\">\n            <div>\n              <div class=\"pattern-name\">CPL - Addictive Loops</div>\n              <span class=\"pattern-level level-moderatelypresent\">Moderately Present</span>\n            </div>\n            <div class=\"pattern-percentage\">51.52%</div>\n          </div>\n          <div class=\"progress-bar\">\n            <div class=\"progress-fill\" style=\"width: 51.52%\">51.52%</div>\n          </div>\n          <p style=\"color: #6b7280; font-size: 14px; margin-top: 10px;\">\n            Score: 17 / 33 (11 questions)\n          </p>\n        </div>\n      \n        <div class=\"pattern-card\">\n          <div class=\"pattern-header\">\n            <div>\n              <div class=\"pattern-name\">DEC - Deceiver</div>\n              <span class=\"pattern-level level-moderatelypresent\">Moderately Present</span>\n            </div>\n            <div class=\"pattern-percentage\">51.28%</div>\n          </div>\n          <div class=\"progress-bar\">\n            <div class=\"progress-fill\" style=\"width: 51.28%\">51.28%</div>\n          </div>\n          <p style=\"color: #6b7280; font-size: 14px; margin-top: 10px;\">\n            Score: 40 / 78 (26 questions)\n          </p>\n        </div>\n      \n        <div class=\"pattern-card\">\n          <div class=\"pattern-header\">\n            <div>\n              <div class=\"pattern-name\">DIM - Left/Right Brain</div>\n              <span class=\"pattern-level level-moderatelypresent\">Moderately Present</span>\n            </div>\n            <div class=\"pattern-percentage\">51.28%</div>\n          </div>\n          <div class=\"progress-bar\">\n            <div class=\"progress-fill\" style=\"width: 51.28%\">51.28%</div>\n          </div>\n          <p style=\"color: #6b7280; font-size: 14px; margin-top: 10px;\">\n            Score: 20 / 39 (13 questions)\n          </p>\n        </div>\n      \n        <div class=\"pattern-card\">\n          <div class=\"pattern-header\">\n            <div>\n              <div class=\"pattern-name\">TRAP - Home/Work Environment</div>\n              <span class=\"pattern-level level-moderatelypresent\">Moderately Present</span>\n            </div>\n            <div class=\"pattern-percentage\">50.62%</div>\n          </div>\n          <div class=\"progress-bar\">\n            <div class=\"progress-fill\" style=\"width: 50.62%\">50.62%</div>\n          </div>\n          <p style=\"color: #6b7280; font-size: 14px; margin-top: 10px;\">\n            Score: 41 / 81 (27 questions)\n          </p>\n        </div>\n      \n        <div class=\"pattern-card\">\n          <div class=\"pattern-header\">\n            <div>\n              <div class=\"pattern-name\">DOG - Dogmatic Chains</div>\n              <span class=\"pattern-level level-moderatelypresent\">Moderately Present</span>\n            </div>\n            <div class=\"pattern-percentage\">50.43%</div>\n          </div>\n          <div class=\"progress-bar\">\n            <div class=\"progress-fill\" style=\"width: 50.43%\">50.43%</div>\n          </div>\n          <p style=\"color: #6b7280; font-size: 14px; margin-top: 10px;\">\n            Score: 59 / 117 (39 questions)\n          </p>\n        </div>\n      \n        <div class=\"pattern-card\">\n          <div class=\"pattern-header\">\n            <div>\n              <div class=\"pattern-name\">LACK - Lack State</div>\n              <span class=\"pattern-level level-moderatelypresent\">Moderately Present</span>\n            </div>\n            <div class=\"pattern-percentage\">50%</div>\n          </div>\n          <div class=\"progress-bar\">\n            <div class=\"progress-fill\" style=\"width: 50%\">50%</div>\n          </div>\n          <p style=\"color: #6b7280; font-size: 14px; margin-top: 10px;\">\n            Score: 30 / 60 (20 questions)\n          </p>\n        </div>\n      \n    </div>\n    \n\n    <h2 style=\"color: #1f2937; font-size: 24px; margin-bottom: 20px; margin-top: 40px;\">📋 Complete NIP Analysis</h2>\n    <table class=\"results-table\">\n      <thead>\n        <tr>\n          <th>NIP Code</th>\n          <th>Pattern Name</th>\n          <th>Questions</th>\n          <th>Score</th>\n          <th>Percentage</th>\n          <th>Level</th>\n        </tr>\n      </thead>\n      <tbody>\n        \n          <tr>\n            <td><strong>NIP05</strong></td>\n            <td>HYP - High Gear (Hyperarousal)</td>\n            <td>6</td>\n            <td>14 / 18</td>\n            <td>\n              <div class=\"progress-bar\" style=\"margin: 0;\">\n                <div class=\"progress-fill\" style=\"width: 77.78%\">77.78%</div>\n              </div>\n            </td>\n            <td>\n              <span class=\"pattern-level level-stronglypresent\">Strongly Present</span>\n            </td>\n          </tr>\n        \n          <tr>\n            <td><strong>NIP08</strong></td>\n            <td>NUH - Numb Heart</td>\n            <td>22</td>\n            <td>46 / 66</td>\n            <td>\n              <div class=\"progress-bar\" style=\"margin: 0;\">\n                <div class=\"progress-fill\" style=\"width: 69.7%\">69.7%</div>\n              </div>\n            </td>\n            <td>\n              <span class=\"pattern-level level-moderatelypresent\">Moderately Present</span>\n            </td>\n          </tr>\n        \n          <tr>\n            <td><strong>NIP07</strong></td>\n            <td>IMP - Impulse Rush</td>\n            <td>12</td>\n            <td>24 / 36</td>\n            <td>\n              <div class=\"progress-bar\" style=\"margin: 0;\">\n                <div class=\"progress-fill\" style=\"width: 66.67%\">66.67%</div>\n              </div>\n            </td>\n            <td>\n              <span class=\"pattern-level level-moderatelypresent\">Moderately Present</span>\n            </td>\n          </tr>\n        \n          <tr>\n            <td><strong>NIP02</strong></td>\n            <td>SHT - Shattered Worth</td>\n            <td>25</td>\n            <td>45 / 75</td>\n            <td>\n              <div class=\"progress-bar\" style=\"margin: 0;\">\n                <div class=\"progress-fill\" style=\"width: 60%\">60%</div>\n              </div>\n            </td>\n            <td>\n              <span class=\"pattern-level level-moderatelypresent\">Moderately Present</span>\n            </td>\n          </tr>\n        \n          <tr>\n            <td><strong>NIP17</strong></td>\n            <td>INWF - Inward Focus (Narcissism)</td>\n            <td>19</td>\n            <td>33 / 57</td>\n            <td>\n              <div class=\"progress-bar\" style=\"margin: 0;\">\n                <div class=\"progress-fill\" style=\"width: 57.89%\">57.89%</div>\n              </div>\n            </td>\n            <td>\n              <span class=\"pattern-level level-moderatelypresent\">Moderately Present</span>\n            </td>\n          </tr>\n        \n          <tr>\n            <td><strong>NIP04</strong></td>\n            <td>NEGP - Unmet Needs (Parenting)</td>\n            <td>21</td>\n            <td>36 / 63</td>\n            <td>\n              <div class=\"progress-bar\" style=\"margin: 0;\">\n                <div class=\"progress-fill\" style=\"width: 57.14%\">57.14%</div>\n              </div>\n            </td>\n            <td>\n              <span class=\"pattern-level level-moderatelypresent\">Moderately Present</span>\n            </td>\n          </tr>\n        \n          <tr>\n            <td><strong>NIP09</strong></td>\n            <td>DIS - Mind In Distress</td>\n            <td>16</td>\n            <td>27 / 48</td>\n            <td>\n              <div class=\"progress-bar\" style=\"margin: 0;\">\n                <div class=\"progress-fill\" style=\"width: 56.25%\">56.25%</div>\n              </div>\n            </td>\n            <td>\n              <span class=\"pattern-level level-moderatelypresent\">Moderately Present</span>\n            </td>\n          </tr>\n        \n          <tr>\n            <td><strong>NIP10</strong></td>\n            <td>ANG - Anchored Anger</td>\n            <td>15</td>\n            <td>25 / 45</td>\n            <td>\n              <div class=\"progress-bar\" style=\"margin: 0;\">\n                <div class=\"progress-fill\" style=\"width: 55.56%\">55.56%</div>\n              </div>\n            </td>\n            <td>\n              <span class=\"pattern-level level-moderatelypresent\">Moderately Present</span>\n            </td>\n          </tr>\n        \n          <tr>\n            <td><strong>NIP16</strong></td>\n            <td>RES - Attitude (Resistance)</td>\n            <td>15</td>\n            <td>24 / 45</td>\n            <td>\n              <div class=\"progress-bar\" style=\"margin: 0;\">\n                <div class=\"progress-fill\" style=\"width: 53.33%\">53.33%</div>\n              </div>\n            </td>\n            <td>\n              <span class=\"pattern-level level-moderatelypresent\">Moderately Present</span>\n            </td>\n          </tr>\n        \n          <tr>\n            <td><strong>NIP18</strong></td>\n            <td>CPL - Addictive Loops</td>\n            <td>11</td>\n            <td>17 / 33</td>\n            <td>\n              <div class=\"progress-bar\" style=\"margin: 0;\">\n                <div class=\"progress-fill\" style=\"width: 51.52%\">51.52%</div>\n              </div>\n            </td>\n            <td>\n              <span class=\"pattern-level level-moderatelypresent\">Moderately Present</span>\n            </td>\n          </tr>\n        \n          <tr>\n            <td><strong>NIP20</strong></td>\n            <td>DEC - Deceiver</td>\n            <td>26</td>\n            <td>40 / 78</td>\n            <td>\n              <div class=\"progress-bar\" style=\"margin: 0;\">\n                <div class=\"progress-fill\" style=\"width: 51.28%\">51.28%</div>\n              </div>\n            </td>\n            <td>\n              <span class=\"pattern-level level-moderatelypresent\">Moderately Present</span>\n            </td>\n          </tr>\n        \n          <tr>\n            <td><strong>NIP14</strong></td>\n            <td>DIM - Left/Right Brain</td>\n            <td>13</td>\n            <td>20 / 39</td>\n            <td>\n              <div class=\"progress-bar\" style=\"margin: 0;\">\n                <div class=\"progress-fill\" style=\"width: 51.28%\">51.28%</div>\n              </div>\n            </td>\n            <td>\n              <span class=\"pattern-level level-moderatelypresent\">Moderately Present</span>\n            </td>\n          </tr>\n        \n          <tr>\n            <td><strong>NIP01</strong></td>\n            <td>TRAP - Home/Work Environment</td>\n            <td>27</td>\n            <td>41 / 81</td>\n            <td>\n              <div class=\"progress-bar\" style=\"margin: 0;\">\n                <div class=\"progress-fill\" style=\"width: 50.62%\">50.62%</div>\n              </div>\n            </td>\n            <td>\n              <span class=\"pattern-level level-moderatelypresent\">Moderately Present</span>\n            </td>\n          </tr>\n        \n          <tr>\n            <td><strong>NIP06</strong></td>\n            <td>DOG - Dogmatic Chains</td>\n            <td>39</td>\n            <td>59 / 117</td>\n            <td>\n              <div class=\"progress-bar\" style=\"margin: 0;\">\n                <div class=\"progress-fill\" style=\"width: 50.43%\">50.43%</div>\n              </div>\n            </td>\n            <td>\n              <span class=\"pattern-level level-moderatelypresent\">Moderately Present</span>\n            </td>\n          </tr>\n        \n          <tr>\n            <td><strong>NIP13</strong></td>\n            <td>LACK - Lack State</td>\n            <td>20</td>\n            <td>30 / 60</td>\n            <td>\n              <div class=\"progress-bar\" style=\"margin: 0;\">\n                <div class=\"progress-fill\" style=\"width: 50%\">50%</div>\n              </div>\n            </td>\n            <td>\n              <span class=\"pattern-level level-moderatelypresent\">Moderately Present</span>\n            </td>\n          </tr>\n        \n          <tr>\n            <td><strong>NIP12</strong></td>\n            <td>BULLY - Victim Loops</td>\n            <td>17</td>\n            <td>21 / 51</td>\n            <td>\n              <div class=\"progress-bar\" style=\"margin: 0;\">\n                <div class=\"progress-fill\" style=\"width: 41.18%\">41.18%</div>\n              </div>\n            </td>\n            <td>\n              <span class=\"pattern-level level-mildpattern\">Mild Pattern</span>\n            </td>\n          </tr>\n        \n          <tr>\n            <td><strong>NIP11</strong></td>\n            <td>INFL - Inside Out (Locus of Control)</td>\n            <td>18</td>\n            <td>19 / 54</td>\n            <td>\n              <div class=\"progress-bar\" style=\"margin: 0;\">\n                <div class=\"progress-fill\" style=\"width: 35.19%\">35.19%</div>\n              </div>\n            </td>\n            <td>\n              <span class=\"pattern-level level-mildpattern\">Mild Pattern</span>\n            </td>\n          </tr>\n        \n          <tr>\n            <td><strong>NIP15</strong></td>\n            <td>FOC - Scatter Focus</td>\n            <td>5</td>\n            <td>5 / 15</td>\n            <td>\n              <div class=\"progress-bar\" style=\"margin: 0;\">\n                <div class=\"progress-fill\" style=\"width: 33.33%\">33.33%</div>\n              </div>\n            </td>\n            <td>\n              <span class=\"pattern-level level-mildpattern\">Mild Pattern</span>\n            </td>\n          </tr>\n        \n          <tr>\n            <td><strong>NIP19</strong></td>\n            <td>BURN - Burned Out</td>\n            <td>6</td>\n            <td>5 / 18</td>\n            <td>\n              <div class=\"progress-bar\" style=\"margin: 0;\">\n                <div class=\"progress-fill\" style=\"width: 27.78%\">27.78%</div>\n              </div>\n            </td>\n            <td>\n              <span class=\"pattern-level level-minimalpattern\">Minimal Pattern</span>\n            </td>\n          </tr>\n        \n          <tr>\n            <td><strong>NIP03</strong></td>\n            <td>ORG - Time & Order</td>\n            <td>10</td>\n            <td>7 / 30</td>\n            <td>\n              <div class=\"progress-bar\" style=\"margin: 0;\">\n                <div class=\"progress-fill\" style=\"width: 23.33%\">23.33%</div>\n              </div>\n            </td>\n            <td>\n              <span class=\"pattern-level level-minimalpattern\">Minimal Pattern</span>\n            </td>\n          </tr>\n        \n      </tbody>\n    </table>\n\n    <div class=\"footer\">\n      <p>&copy; 2025 Neural Imprint Patterns Assessment. All rights reserved.</p>\n      <p style=\"margin-top: 5px;\">This is a test simulation with randomly generated responses.</p>\n    </div>\n  </div>\n</body>\n</html>\n  "
+}
