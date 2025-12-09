@@ -31,11 +31,53 @@ Deno.serve(async (req: Request) => {
   }
 
   try {
-    const { customerName, customerEmail, franchiseOwnerEmail, franchiseOwnerName, responseId, analysis }: EmailRequest = await req.json();
+    const body = await req.json();
+    let customerName: string, customerEmail: string, franchiseOwnerEmail: string | undefined, franchiseOwnerName: string | undefined, responseId: string, analysis: any;
+
+    // If only responseId is provided, fetch the data from the database
+    if (body.responseId && !body.analysis) {
+      const { createClient } = await import('npm:@supabase/supabase-js@2.39.0');
+      const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+      const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+      const supabase = createClient(supabaseUrl, supabaseKey);
+
+      const { data: response, error } = await supabase
+        .from('responses')
+        .select('customer_name, customer_email, analysis_results, franchise_owner_id')
+        .eq('id', body.responseId)
+        .single();
+
+      if (error || !response) {
+        throw new Error('Response not found');
+      }
+
+      customerName = response.customer_name;
+      customerEmail = response.customer_email;
+      responseId = body.responseId;
+      analysis = response.analysis_results;
+
+      // Fetch franchise owner info if exists
+      if (response.franchise_owner_id) {
+        const { data: franchiseOwner } = await supabase
+          .from('franchise_owners')
+          .select('email, name')
+          .eq('id', response.franchise_owner_id)
+          .single();
+
+        if (franchiseOwner) {
+          franchiseOwnerEmail = franchiseOwner.email;
+          franchiseOwnerName = franchiseOwner.name;
+        }
+      }
+    } else {
+      // Use provided data
+      ({ customerName, customerEmail, franchiseOwnerEmail, franchiseOwnerName, responseId, analysis } = body);
+    }
 
     const BRAINWORX_EMAIL = 'info@brainworx.co.za';
     const SITE_URL = Deno.env.get('SITE_URL') || 'https://brainworx.co.za';
 
+    // Create or reuse Supabase client
     const { createClient } = await import('npm:@supabase/supabase-js@2.39.0');
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
