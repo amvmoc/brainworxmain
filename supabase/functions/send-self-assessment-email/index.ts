@@ -191,6 +191,37 @@ Deno.serve(async (req: Request) => {
       </html>
     `;
 
+    // Get franchise owner email if exists
+    let franchiseOwnerEmail = '';
+    let franchiseOwnerName = '';
+
+    if (responseId) {
+      const { createClient } = await import('npm:@supabase/supabase-js@2.39.0');
+      const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+      const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+      const supabase = createClient(supabaseUrl, supabaseKey);
+
+      const { data: response } = await supabase
+        .from('self_assessment_responses')
+        .select('franchise_owner_id')
+        .eq('id', responseId)
+        .maybeSingle();
+
+      if (response?.franchise_owner_id) {
+        const { data: franchiseOwner } = await supabase
+          .from('franchise_owners')
+          .select('email, name')
+          .eq('id', response.franchise_owner_id)
+          .maybeSingle();
+
+        if (franchiseOwner) {
+          franchiseOwnerEmail = franchiseOwner.email;
+          franchiseOwnerName = franchiseOwner.name;
+        }
+      }
+    }
+
+    const BRAINWORX_EMAIL = 'info@brainworx.co.za';
     const GMAIL_USER = "payments@brainworx.co.za";
     const GMAIL_PASSWORD = "iuhzjjhughbnwsvf";
 
@@ -204,6 +235,7 @@ Deno.serve(async (req: Request) => {
       },
     });
 
+    // Send customer email
     await transporter.sendMail({
       from: `BrainWorx <${GMAIL_USER}>`,
       to: customerEmail,
@@ -211,7 +243,92 @@ Deno.serve(async (req: Request) => {
       html: htmlContent,
     });
 
-    return new Response(JSON.stringify({ success: true }), {
+    console.log('✓ Customer email sent to:', customerEmail);
+
+    // Send franchise owner email
+    if (franchiseOwnerEmail) {
+      const franchiseEmailContent = `
+        <!DOCTYPE html>
+        <html>
+        <head><meta charset="utf-8"></head>
+        <body style="font-family: Arial, sans-serif; padding: 20px; background: #f3f4f6;">
+          <div style="max-width: 600px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden;">
+            <div style="background: #0A2A5E; color: white; padding: 30px;">
+              <h2 style="margin: 0;">New Self-Assessment Completed</h2>
+            </div>
+            <div style="padding: 30px;">
+              <p><strong>Customer:</strong> ${customerName} (${customerEmail})</p>
+              <p><strong>Assessment Type:</strong> ${assessmentType}</p>
+              <p><strong>Overall Score:</strong> ${overallScore}%</p>
+              <div style="margin-top: 20px; padding: 15px; background: #f3f4f6; border-radius: 8px;">
+                <h3 style="margin: 0 0 10px 0;">Top Imprints:</h3>
+                ${topImprints.map((imp: any, idx: number) => `<div style="margin: 5px 0;">${idx + 1}. ${imp.code} - ${imp.name} (${imp.percentage}%)</div>`).join('')}
+              </div>
+            </div>
+          </div>
+        </body>
+        </html>
+      `;
+
+      await transporter.sendMail({
+        from: `BrainWorx <${GMAIL_USER}>`,
+        to: franchiseOwnerEmail,
+        subject: `New Self-Assessment Completed - ${customerName}`,
+        html: franchiseEmailContent,
+      });
+
+      console.log('✓ Franchise owner email sent to:', franchiseOwnerEmail);
+    }
+
+    // Send BrainWorx admin email
+    const adminEmailContent = `
+      <!DOCTYPE html>
+      <html>
+      <head><meta charset="utf-8"></head>
+      <body style="font-family: Arial, sans-serif; padding: 20px; background: #f3f4f6;">
+        <div style="max-width: 600px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden;">
+          <div style="background: #0A2A5E; color: white; padding: 30px;">
+            <h2 style="margin: 0;">Self-Assessment - System Notification</h2>
+          </div>
+          <div style="padding: 30px;">
+            <h3>Assessment Details</h3>
+            <p><strong>Customer:</strong> ${customerName} (${customerEmail})</p>
+            ${franchiseOwnerEmail ? `<p><strong>Franchise Owner:</strong> ${franchiseOwnerName} (${franchiseOwnerEmail})</p>` : ''}
+            <p><strong>Assessment Type:</strong> ${assessmentType}</p>
+            <p><strong>Overall Score:</strong> ${overallScore}%</p>
+            <div style="margin-top: 20px; padding: 15px; background: #f3f4f6; border-radius: 8px;">
+              <h3 style="margin: 0 0 10px 0;">Top Imprints:</h3>
+              ${topImprints.map((imp: any, idx: number) => `<div style="margin: 5px 0;">${idx + 1}. <strong>${imp.code} - ${imp.name}</strong> (${imp.percentage}% - ${imp.severity})</div>`).join('')}
+            </div>
+            <div style="margin-top: 20px; padding: 15px; background: #fef3c7; border-radius: 8px;">
+              <h3 style="margin: 0 0 10px 0;">Recommendations:</h3>
+              <ol style="margin: 0; padding-left: 20px;">
+                ${recommendations.map((rec: string) => `<li style="margin: 5px 0;">${rec}</li>`).join('')}
+              </ol>
+            </div>
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+
+    await transporter.sendMail({
+      from: `BrainWorx <${GMAIL_USER}>`,
+      to: BRAINWORX_EMAIL,
+      subject: `Self-Assessment Completed - ${customerName}`,
+      html: adminEmailContent,
+    });
+
+    console.log('✓ Admin email sent to:', BRAINWORX_EMAIL);
+
+    return new Response(JSON.stringify({
+      success: true,
+      sentTo: {
+        customer: customerEmail,
+        franchiseOwner: franchiseOwnerEmail || 'N/A',
+        admin: BRAINWORX_EMAIL
+      }
+    }), {
       headers: {
         ...corsHeaders,
         "Content-Type": "application/json",

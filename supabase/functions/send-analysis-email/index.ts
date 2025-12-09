@@ -33,7 +33,7 @@ Deno.serve(async (req: Request) => {
   try {
     const { customerName, customerEmail, franchiseOwnerEmail, franchiseOwnerName, responseId, analysis }: EmailRequest = await req.json();
 
-    const BRAINWORX_EMAIL = 'admin@brainworx.com';
+    const BRAINWORX_EMAIL = 'info@brainworx.co.za';
     const SITE_URL = Deno.env.get('SITE_URL') || 'https://brainworx.co.za';
 
     // Fetch share token and franchise code from database

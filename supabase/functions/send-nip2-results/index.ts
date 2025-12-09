@@ -103,6 +103,25 @@ Deno.serve(async (req: Request) => {
       `;
     });
 
+    // Get franchise owner email if exists
+    let franchiseOwnerEmail = '';
+    let franchiseOwnerName = '';
+
+    if (response.franchise_owner_id) {
+      const { data: franchiseOwner } = await supabase
+        .from('franchise_owners')
+        .select('email, name')
+        .eq('id', response.franchise_owner_id)
+        .single();
+
+      if (franchiseOwner) {
+        franchiseOwnerEmail = franchiseOwner.email;
+        franchiseOwnerName = franchiseOwner.name;
+      }
+    }
+
+    const BRAINWORX_EMAIL = 'info@brainworx.co.za';
+
     // Setup Gmail transporter
     const GMAIL_USER = "payments@brainworx.co.za";
     const GMAIL_PASSWORD = "iuhzjjhughbnwsvf";
@@ -117,12 +136,7 @@ Deno.serve(async (req: Request) => {
       },
     });
 
-    // Send email via Gmail
-    await transporter.sendMail({
-      from: `BrainWorx Assessment <${GMAIL_USER}>`,
-      to: customerEmail,
-      subject: 'Your Neural Imprint Patterns 2.0 Assessment Results',
-      html: `
+    const customerEmailContent = `
           <!DOCTYPE html>
           <html>
             <head>
@@ -208,13 +222,111 @@ Deno.serve(async (req: Request) => {
               </div>
             </body>
           </html>
-        `,
+        `;
+
+    const franchiseEmailContent = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        </head>
+        <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; background: #f3f4f6;">
+          <div style="max-width: 680px; margin: 0 auto; padding: 40px 20px;">
+            <div style="background: #0A2A5E; color: white; padding: 30px; border-radius: 12px 12px 0 0;">
+              <h2 style="margin: 0;">New NIP2 Assessment Completed</h2>
+            </div>
+            <div style="background: white; padding: 30px; border-radius: 0 0 12px 12px;">
+              <p><strong>Customer Name:</strong> ${customerName}</p>
+              <p><strong>Customer Email:</strong> ${customerEmail}</p>
+              <p><strong>Completion Date:</strong> ${results.completionDate}</p>
+              <p><strong>Questions Completed:</strong> ${results.totalQuestions}</p>
+              <div style="margin-top: 20px; padding: 15px; background: #f3f4f6; border-radius: 8px;">
+                <h3 style="margin: 0 0 10px 0;">Top Patterns:</h3>
+                ${topPatterns.map((pattern: any, index: number) => {
+                  const nipInfo = NIP_PATTERNS[pattern.nipGroup];
+                  return `<div style="margin: 8px 0;"><strong>${index + 1}. ${nipInfo?.code || pattern.nipGroup}</strong> - ${pattern.percentage}%</div>`;
+                }).join('')}
+              </div>
+            </div>
+          </div>
+        </body>
+      </html>
+    `;
+
+    const brainworxEmailContent = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        </head>
+        <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; background: #f3f4f6;">
+          <div style="max-width: 680px; margin: 0 auto; padding: 40px 20px;">
+            <div style="background: #0A2A5E; color: white; padding: 30px; border-radius: 12px 12px 0 0;">
+              <h2 style="margin: 0;">NIP2 Assessment - System Notification</h2>
+            </div>
+            <div style="background: white; padding: 30px; border-radius: 0 0 12px 12px;">
+              <h3>Assessment Details</h3>
+              <p><strong>Customer Name:</strong> ${customerName}</p>
+              <p><strong>Customer Email:</strong> ${customerEmail}</p>
+              ${franchiseOwnerEmail ? `<p><strong>Franchise Owner:</strong> ${franchiseOwnerName} (${franchiseOwnerEmail})</p>` : ''}
+              <p><strong>Completion Date:</strong> ${results.completionDate}</p>
+              <p><strong>Questions Completed:</strong> ${results.totalQuestions}</p>
+              <div style="margin-top: 20px; padding: 15px; background: #f3f4f6; border-radius: 8px;">
+                <h3 style="margin: 0 0 10px 0;">Top 5 Patterns:</h3>
+                ${topPatterns.map((pattern: any, index: number) => {
+                  const nipInfo = NIP_PATTERNS[pattern.nipGroup];
+                  return `<div style="margin: 8px 0;"><strong>${index + 1}. ${nipInfo?.code || pattern.nipGroup} - ${nipInfo?.name || 'Unknown'}</strong> - ${pattern.percentage}% (${nipInfo?.impact || 'Unknown'} Impact)</div>`;
+                }).join('')}
+              </div>
+            </div>
+          </div>
+        </body>
+      </html>
+    `;
+
+    // Send customer email
+    await transporter.sendMail({
+      from: `BrainWorx Assessment <${GMAIL_USER}>`,
+      to: customerEmail,
+      subject: 'Your Neural Imprint Patterns 2.0 Assessment Results',
+      html: customerEmailContent,
     });
 
-    console.log('✓ Email sent successfully to:', customerEmail);
+    console.log('✓ Customer email sent to:', customerEmail);
+
+    // Send franchise owner email
+    if (franchiseOwnerEmail) {
+      await transporter.sendMail({
+        from: `BrainWorx Assessment <${GMAIL_USER}>`,
+        to: franchiseOwnerEmail,
+        subject: 'New NIP2 Assessment Completed',
+        html: franchiseEmailContent,
+      });
+      console.log('✓ Franchise owner email sent to:', franchiseOwnerEmail);
+    }
+
+    // Send BrainWorx admin email
+    await transporter.sendMail({
+      from: `BrainWorx Assessment <${GMAIL_USER}>`,
+      to: BRAINWORX_EMAIL,
+      subject: 'NIP2 Assessment - System Notification',
+      html: brainworxEmailContent,
+    });
+
+    console.log('✓ Admin email sent to:', BRAINWORX_EMAIL);
 
     return new Response(
-      JSON.stringify({ success: true, message: 'Email sent successfully' }),
+      JSON.stringify({
+        success: true,
+        message: 'Emails sent successfully',
+        sentTo: {
+          customer: customerEmail,
+          franchiseOwner: franchiseOwnerEmail || 'N/A',
+          admin: BRAINWORX_EMAIL
+        }
+      }),
       {
         headers: {
           ...corsHeaders,
