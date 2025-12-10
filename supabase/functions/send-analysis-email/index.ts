@@ -1,6 +1,7 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createTransport } from "npm:nodemailer@6.9.7";
 import { generateComprehensiveCoachReport } from "./comprehensive-coach-report.ts";
+import { generateClientReport } from "./client-report.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -104,82 +105,15 @@ Deno.serve(async (req: Request) => {
     const resultsUrl = `${SITE_URL}/results/${response?.share_token}`;
     const bookingUrl = franchiseCode ? `${SITE_URL}/book/${franchiseCode}` : `${SITE_URL}`;
 
-    const customerEmailBody = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <style>
-          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: linear-gradient(135deg, #3DB3E3, #1FAFA3); color: white; padding: 30px; text-align: center; border-radius: 10px; }
-          .content { background: #f9f9f9; padding: 30px; margin-top: 20px; border-radius: 10px; }
-          .score { font-size: 48px; font-weight: bold; color: #3DB3E3; text-align: center; margin: 20px 0; }
-          .section { margin: 20px 0; }
-          .section h3 { color: #0A2A5E; border-bottom: 2px solid #3DB3E3; padding-bottom: 10px; }
-          ul { list-style: none; padding: 0; }
-          li { padding: 8px 0; border-bottom: 1px solid #ddd; }
-          .footer { text-align: center; margin-top: 30px; color: #666; font-size: 12px; }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <div class="header">
-            <h1>BrainWorx Assessment Results</h1>
-            <p>Your Comprehensive Analysis Report</p>
-          </div>
-          
-          <div class="content">
-            <p>Dear ${customerName},</p>
-            <p>Thank you for completing the BrainWorx Comprehensive Assessment. Your results have been analyzed and are ready for review.</p>
-            
-            <div class="score">${analysis.overallScore}%</div>
-            <p style="text-align: center; color: #666;">Overall Performance Score</p>
-            
-            <div class="section">
-              <h3>Your Top Strengths</h3>
-              <ul>
-                ${analysis.strengths.map(s => `<li>✓ ${s}</li>`).join('')}
-              </ul>
-            </div>
-            
-            <div class="section">
-              <h3>Growth Opportunities</h3>
-              <ul>
-                ${analysis.areasForGrowth.map(a => `<li>→ ${a}</li>`).join('')}
-              </ul>
-            </div>
-            
-            <div class="section">
-              <h3>Personalized Recommendations</h3>
-              <ul>
-                ${analysis.recommendations.map(r => `<li>• ${r}</li>`).join('')}
-              </ul>
-            </div>
-            
-            <p style="margin-top: 30px; padding: 20px; background: #E6E9EF; border-radius: 10px;">
-              <strong>Next Steps:</strong> Review your full results and book a consultation to discuss personalized program options.
-            </p>
-
-            <div style="text-align: center; margin: 30px 0;">
-              <a href="${resultsUrl}" style="display: inline-block; padding: 15px 30px; background: linear-gradient(135deg, #3DB3E3, #1FAFA3); color: white; text-decoration: none; border-radius: 8px; font-weight: bold; margin: 10px;">
-                View Full Results
-              </a>
-              ${bookingUrl !== SITE_URL ? `
-              <a href="${bookingUrl}" style="display: inline-block; padding: 15px 30px; background: #0A2A5E; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; margin: 10px;">
-                Book Consultation
-              </a>
-              ` : ''}
-            </div>
-          </div>
-          
-          <div class="footer">
-            <p>© 2024 BrainWorx. All rights reserved.</p>
-            <p>Transform Your Mind, Reach The World</p>
-          </div>
-        </div>
-      </body>
-      </html>
-    `;
+    const customerEmailBody = generateClientReport(
+      customerName,
+      customerEmail,
+      franchiseOwnerEmail,
+      analysis,
+      resultsUrl,
+      bookingUrl,
+      SITE_URL
+    );
 
     const franchiseEmailBody = generateComprehensiveCoachReport(
       customerName,
@@ -207,14 +141,16 @@ Deno.serve(async (req: Request) => {
     const emailResults = {
       customer: { sent: false, error: null as string | null },
       franchiseOwner: { sent: false, error: null as string | null },
-      brainworx: { sent: false, error: null as string | null }
+      brainworxCoach: { sent: false, error: null as string | null },
+      brainworxClient: { sent: false, error: null as string | null }
     };
 
+    // 1. Send client report to customer
     try {
       await transporter.sendMail({
         from: `BrainWorx <${GMAIL_USER}>`,
         to: customerEmail,
-        subject: "Your BrainWorx Assessment Results",
+        subject: "Your BrainWorx Neural Imprint Patterns Assessment Results",
         html: customerEmailBody,
       });
 
@@ -225,6 +161,7 @@ Deno.serve(async (req: Request) => {
       console.error('✗ Error sending customer email:', error);
     }
 
+    // 2. Send coach report to franchise owner
     if (franchiseOwnerEmail) {
       try {
         await transporter.sendMail({
@@ -242,6 +179,7 @@ Deno.serve(async (req: Request) => {
       }
     }
 
+    // 3. Send coach report to info@brainworx.co.za
     try {
       await transporter.sendMail({
         from: `BrainWorx <${GMAIL_USER}>`,
@@ -250,13 +188,30 @@ Deno.serve(async (req: Request) => {
         html: franchiseEmailBody,
       });
 
-      emailResults.brainworx.sent = true;
-      console.log('✓ Admin email sent to:', BRAINWORX_EMAIL);
+      emailResults.brainworxCoach.sent = true;
+      console.log('✓ Admin coach report email sent to:', BRAINWORX_EMAIL);
     } catch (error) {
-      emailResults.brainworx.error = error.message;
-      console.error('✗ Error sending admin email:', error);
+      emailResults.brainworxCoach.error = error.message;
+      console.error('✗ Error sending admin coach report email:', error);
     }
 
+    // 4. Send client report to info@brainworx.co.za
+    try {
+      await transporter.sendMail({
+        from: `BrainWorx <${GMAIL_USER}>`,
+        to: BRAINWORX_EMAIL,
+        subject: `NIP Client Report - ${customerName} - Assessment Results`,
+        html: customerEmailBody,
+      });
+
+      emailResults.brainworxClient.sent = true;
+      console.log('✓ Admin client report email sent to:', BRAINWORX_EMAIL);
+    } catch (error) {
+      emailResults.brainworxClient.error = error.message;
+      console.error('✗ Error sending admin client report email:', error);
+    }
+
+    // 5. Send coach report to kobus@brainworx.co.za
     try {
       await transporter.sendMail({
         from: `BrainWorx <${GMAIL_USER}>`,
@@ -273,7 +228,8 @@ Deno.serve(async (req: Request) => {
     console.log('=== Email Delivery Summary ===');
     console.log('Customer:', emailResults.customer.sent ? '✓ Sent' : '✗ Failed');
     console.log('Franchise Owner:', franchiseOwnerEmail ? (emailResults.franchiseOwner.sent ? '✓ Sent' : '✗ Failed') : 'N/A');
-    console.log('Admin (info@brainworx.co.za):', emailResults.brainworx.sent ? '✓ Sent' : '✗ Failed');
+    console.log('Admin Coach Report (info@brainworx.co.za):', emailResults.brainworxCoach.sent ? '✓ Sent' : '✗ Failed');
+    console.log('Admin Client Report (info@brainworx.co.za):', emailResults.brainworxClient.sent ? '✓ Sent' : '✗ Failed');
     console.log('Kobus (kobus@brainworx.co.za): ✓ Sent');
     console.log('Results URL:', resultsUrl);
     console.log('Booking URL:', bookingUrl);
