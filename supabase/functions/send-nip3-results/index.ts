@@ -1,4 +1,5 @@
 import { createTransport } from "npm:nodemailer@6.9.7";
+import { jsPDF } from "npm:jspdf@2.5.2";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -79,7 +80,102 @@ Deno.serve(async (req: Request) => {
       },
     });
 
+    // CRITICAL: Generate PDF report - this MUST always be included in customer emails
+    console.log('Generating NIP3 PDF report');
+    const doc = new jsPDF({
+      orientation: 'portrait',
+      unit: 'mm',
+      format: 'a4'
+    });
+
+    let yPos = 20;
+
+    // Header
+    doc.setFillColor(102, 126, 234);
+    doc.rect(0, 0, 210, 45, 'F');
+
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(28);
+    doc.text('BrainWorx', 20, 20);
+
+    doc.setFontSize(16);
+    doc.text('Neural Imprint Patterns 3.0', 20, 30);
+    doc.setFontSize(12);
+    doc.text('Assessment Results', 20, 38);
+
+    yPos = 60;
+    doc.setTextColor(0, 0, 0);
+
+    // Assessment Info
+    doc.setFontSize(14);
+    doc.setFont(undefined, 'bold');
+    doc.text('Assessment Summary', 20, yPos);
+    yPos += 10;
+
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(11);
+    doc.text(`Completion Date: ${completedAt || new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`, 20, yPos);
+    yPos += 7;
+    doc.text(`Overall Score: ${overallPercentage}%`, 20, yPos);
+    yPos += 7;
+    doc.text(`Patterns Analyzed: ${results.length}`, 20, yPos);
+    yPos += 15;
+
+    // Top Patterns
+    doc.setFontSize(16);
+    doc.setFont(undefined, 'bold');
+    doc.text('Top 5 Patterns', 20, yPos);
+    yPos += 10;
+
+    top5.forEach((pattern: any, index: number) => {
+      if (yPos > 260) {
+        doc.addPage();
+        yPos = 20;
+      }
+
+      doc.setFontSize(12);
+      doc.setFont(undefined, 'bold');
+      const title = `${index + 1}. ${pattern.code} - ${pattern.shortName}`;
+      doc.text(title, 25, yPos);
+      yPos += 7;
+
+      doc.setFontSize(10);
+      doc.setFont(undefined, 'normal');
+      doc.text(`Score: ${pattern.percentage}% | Level: ${pattern.level}`, 25, yPos);
+      yPos += 7;
+      doc.text(`Questions: ${pattern.totalQuestions} | Score: ${pattern.actualScore}/${pattern.maxScore}`, 25, yPos);
+      yPos += 10;
+    });
+
+    // Disclaimer
+    if (yPos > 240) {
+      doc.addPage();
+      yPos = 20;
+    }
+    yPos += 10;
+    doc.setFillColor(255, 243, 205);
+    doc.rect(15, yPos - 5, 180, 35, 'F');
+    doc.setFontSize(9);
+    doc.setFont(undefined, 'bold');
+    doc.text('Important Disclaimer:', 20, yPos);
+    yPos += 5;
+    doc.setFont(undefined, 'normal');
+    const disclaimerText = 'This assessment is a self-evaluation tool for personal insight and is NOT a psychological evaluation or medical diagnosis. Results should be reviewed with a qualified professional. If experiencing mental health concerns, please consult a healthcare provider.';
+    const disclaimerLines = doc.splitTextToSize(disclaimerText, 165);
+    doc.text(disclaimerLines, 20, yPos);
+
+    const pdfBuffer = new Uint8Array(doc.output('arraybuffer'));
+
+    if (!pdfBuffer || pdfBuffer.length === 0) {
+      throw new Error('NIP3 PDF generation failed - buffer is empty');
+    }
+
+    console.log('✓ NIP3 PDF generated successfully. Size:', pdfBuffer.length, 'bytes');
+
+    const pdfFilename = `BrainWorx_NIP3_Report.pdf`;
+
     const emailPromises = recipients.map((email: string) => {
+      console.log('Sending NIP3 email with PDF attachment to:', email);
       return transporter.sendMail({
         from: `BrainWorx Assessment <${GMAIL_USER}>`,
         to: email,
@@ -177,6 +273,13 @@ Deno.serve(async (req: Request) => {
             </body>
           </html>
         `,
+        attachments: [
+          {
+            filename: pdfFilename,
+            content: pdfBuffer,
+            contentType: 'application/pdf'
+          }
+        ]
       });
     });
 

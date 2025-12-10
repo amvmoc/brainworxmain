@@ -1,5 +1,6 @@
 import { createClient } from 'npm:@supabase/supabase-js@2.57.4';
 import { createTransport } from "npm:nodemailer@6.9.7";
+import { jsPDF } from "npm:jspdf@2.5.2";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -242,12 +243,134 @@ Deno.serve(async (req: Request) => {
       </html>
     `;
 
+    // CRITICAL: Generate PDF report - this MUST always be included in the customer email
+    console.log('Generating NIP2 PDF report for:', customerName);
+    const doc = new jsPDF({
+      orientation: 'portrait',
+      unit: 'mm',
+      format: 'a4'
+    });
+
+    let yPos = 20;
+
+    // Header
+    doc.setFillColor(102, 126, 234);
+    doc.rect(0, 0, 210, 45, 'F');
+
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(28);
+    doc.text('BrainWorx', 20, 20);
+
+    doc.setFontSize(16);
+    doc.text('Neural Imprint Patterns 2.0', 20, 30);
+    doc.setFontSize(12);
+    doc.text('Comprehensive Assessment Report', 20, 38);
+
+    yPos = 60;
+    doc.setTextColor(0, 0, 0);
+
+    // Client Info
+    doc.setFontSize(14);
+    doc.setFont(undefined, 'bold');
+    doc.text(`Report for: ${customerName}`, 20, yPos);
+    yPos += 10;
+
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(11);
+    doc.text(`Assessment Date: ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`, 20, yPos);
+    yPos += 15;
+
+    // Top Patterns Section
+    doc.setFontSize(16);
+    doc.setFont(undefined, 'bold');
+    doc.text('Top 5 Neural Imprint Patterns', 20, yPos);
+    yPos += 10;
+
+    topPatterns.forEach((pattern: any, index: number) => {
+      const nipInfo = NIP_PATTERNS[pattern.nipGroup];
+      if (!nipInfo) return;
+
+      if (yPos > 250) {
+        doc.addPage();
+        yPos = 20;
+      }
+
+      doc.setFontSize(12);
+      doc.setFont(undefined, 'bold');
+      const title = `${index + 1}. ${nipInfo.code} - ${nipInfo.name}`;
+      doc.text(title, 25, yPos);
+      yPos += 7;
+
+      doc.setFontSize(10);
+      doc.setFont(undefined, 'normal');
+      doc.text(`Score: ${pattern.percentage}% | Impact: ${nipInfo.impact} | Category: ${nipInfo.category}`, 25, yPos);
+      yPos += 7;
+
+      const descLines = doc.splitTextToSize(nipInfo.description, 160);
+      doc.text(descLines, 25, yPos);
+      yPos += descLines.length * 5 + 5;
+
+      doc.setFont(undefined, 'bold');
+      doc.text('Key Interventions:', 25, yPos);
+      yPos += 6;
+      doc.setFont(undefined, 'normal');
+
+      nipInfo.interventions.forEach((intervention: string) => {
+        if (yPos > 270) {
+          doc.addPage();
+          yPos = 20;
+        }
+        const intLines = doc.splitTextToSize(`• ${intervention}`, 155);
+        doc.text(intLines, 30, yPos);
+        yPos += intLines.length * 5 + 2;
+      });
+
+      yPos += 5;
+    });
+
+    // Disclaimer
+    if (yPos > 240) {
+      doc.addPage();
+      yPos = 20;
+    }
+    yPos += 10;
+    doc.setFillColor(255, 243, 205);
+    doc.rect(15, yPos - 5, 180, 35, 'F');
+    doc.setFontSize(9);
+    doc.setFont(undefined, 'bold');
+    doc.text('Important Disclaimer:', 20, yPos);
+    yPos += 5;
+    doc.setFont(undefined, 'normal');
+    const disclaimerText = 'This assessment is a self-evaluation tool for personal insight and is NOT a psychological evaluation or medical diagnosis. Results should be reviewed with a qualified professional. If experiencing mental health concerns, please consult a healthcare provider.';
+    const disclaimerLines = doc.splitTextToSize(disclaimerText, 165);
+    doc.text(disclaimerLines, 20, yPos);
+
+    const pdfBuffer = new Uint8Array(doc.output('arraybuffer'));
+
+    if (!pdfBuffer || pdfBuffer.length === 0) {
+      throw new Error('NIP2 PDF generation failed - buffer is empty');
+    }
+
+    console.log('✓ NIP2 PDF generated successfully. Size:', pdfBuffer.length, 'bytes');
+
+    const pdfFilename = `BrainWorx_NIP2_Report_${customerName.replace(/\s+/g, '_')}.pdf`;
+    console.log('Sending customer email with PDF attachment:', pdfFilename);
+
     await transporter.sendMail({
       from: `BrainWorx Assessment <${GMAIL_USER}>`,
       to: customerEmail,
       subject: 'Your Neural Imprint Patterns 2.0 Assessment Results',
       html: customerEmailContent,
+      attachments: [
+        {
+          filename: pdfFilename,
+          content: pdfBuffer,
+          contentType: 'application/pdf'
+        }
+      ]
     });
+
+    console.log('✓ PDF attachment included:', pdfFilename);
 
     console.log('✓ Customer email sent to:', customerEmail);
 

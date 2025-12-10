@@ -156,29 +156,13 @@ export function FranchiseDashboard({
     setEmailSent(false);
 
     try {
-      const reportData = generateClientReportData(
-        response.customer_name,
-        response.answers,
-        new Date(response.completed_at),
-        Object.keys(response.answers).length
-      );
-
-      const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-client-report`;
-
-      await fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          customerName: response.customer_name,
-          customerEmail: response.customer_email,
-          assessmentDate: reportData.client.date,
-          totalQuestions: reportData.client.totalQuestions,
-          patterns: reportData.patterns
-        })
+      const { error } = await supabase.functions.invoke('send-analysis-email', {
+        body: {
+          responseId: response.id
+        }
       });
+
+      if (error) throw error;
 
       setEmailSent(true);
       setTimeout(() => setEmailSent(false), 3000);
