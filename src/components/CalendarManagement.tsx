@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Calendar, Clock, Plus, Trash2, Save, X, Copy, Check, Link as LinkIcon } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import { EnhancedCalendar } from './EnhancedCalendar';
+import { AvailabilityManager72Hours } from './AvailabilityManager72Hours';
 
 interface AvailabilitySlot {
   id?: string;
@@ -20,6 +22,7 @@ interface CalendarManagementProps {
 const DAYS_OF_WEEK = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 export function CalendarManagement({ franchiseOwnerId, franchiseOwnerCode }: CalendarManagementProps) {
+  const [activeTab, setActiveTab] = useState<'calendar' | 'recurring' | '72hours'>('calendar');
   const [copiedBookingLink, setCopiedBookingLink] = useState(false);
   const [availabilitySlots, setAvailabilitySlots] = useState<AvailabilitySlot[]>([]);
   const [loading, setLoading] = useState(true);
@@ -201,17 +204,19 @@ export function CalendarManagement({ franchiseOwnerId, franchiseOwnerCode }: Cal
             <Calendar className="text-white" size={24} />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-[#0A2A5E]">Availability Management</h2>
-            <p className="text-gray-600">Set your weekly availability for customer bookings</p>
+            <h2 className="text-2xl font-bold text-[#0A2A5E]">Calendar & Availability Management</h2>
+            <p className="text-gray-600">Manage your availability and view bookings</p>
           </div>
         </div>
-        <button
-          onClick={() => setShowAddForm(true)}
-          className="flex items-center gap-2 bg-[#0A2A5E] text-white px-4 py-2 rounded-lg hover:bg-[#3DB3E3] transition-all"
-        >
-          <Plus size={20} />
-          Add Time Slot
-        </button>
+        {activeTab === 'recurring' && (
+          <button
+            onClick={() => setShowAddForm(true)}
+            className="flex items-center gap-2 bg-[#0A2A5E] text-white px-4 py-2 rounded-lg hover:bg-[#3DB3E3] transition-all"
+          >
+            <Plus size={20} />
+            Add Time Slot
+          </button>
+        )}
       </div>
 
       {bookingLink && (
@@ -250,7 +255,48 @@ export function CalendarManagement({ franchiseOwnerId, franchiseOwnerCode }: Cal
         </div>
       )}
 
-      {showAddForm && (
+      <div className="flex border-b border-gray-200 mb-6">
+        <button
+          onClick={() => setActiveTab('calendar')}
+          className={`px-6 py-3 font-medium border-b-2 transition-colors ${
+            activeTab === 'calendar'
+              ? 'border-[#3DB3E3] text-[#3DB3E3]'
+              : 'border-transparent text-gray-600 hover:text-[#3DB3E3]'
+          }`}
+        >
+          Calendar View
+        </button>
+        <button
+          onClick={() => setActiveTab('72hours')}
+          className={`px-6 py-3 font-medium border-b-2 transition-colors ${
+            activeTab === '72hours'
+              ? 'border-[#3DB3E3] text-[#3DB3E3]'
+              : 'border-transparent text-gray-600 hover:text-[#3DB3E3]'
+          }`}
+        >
+          72-Hour Availability
+        </button>
+        <button
+          onClick={() => setActiveTab('recurring')}
+          className={`px-6 py-3 font-medium border-b-2 transition-colors ${
+            activeTab === 'recurring'
+              ? 'border-[#3DB3E3] text-[#3DB3E3]'
+              : 'border-transparent text-gray-600 hover:text-[#3DB3E3]'
+          }`}
+        >
+          Recurring Availability
+        </button>
+      </div>
+
+      {activeTab === 'calendar' && (
+        <EnhancedCalendar franchiseOwnerId={franchiseOwnerId} mode="manage" />
+      )}
+
+      {activeTab === '72hours' && (
+        <AvailabilityManager72Hours franchiseOwnerId={franchiseOwnerId} />
+      )}
+
+      {activeTab === 'recurring' && showAddForm && (
         <div className="bg-[#E6E9EF] rounded-lg p-6 mb-6">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-bold text-[#0A2A5E]">Add Availability Slot</h3>
@@ -319,8 +365,10 @@ export function CalendarManagement({ franchiseOwnerId, franchiseOwnerCode }: Cal
         </div>
       )}
 
-      <div className="space-y-4">
-        {DAYS_OF_WEEK.map((dayName, dayIndex) => {
+      {activeTab === 'recurring' && (
+        <>
+          <div className="space-y-4">
+            {DAYS_OF_WEEK.map((dayName, dayIndex) => {
           const daySlots = groupedSlots[dayIndex] || [];
           return (
             <div key={dayIndex} className="border border-gray-200 rounded-lg p-4">
@@ -375,11 +423,13 @@ export function CalendarManagement({ franchiseOwnerId, franchiseOwnerCode }: Cal
         })}
       </div>
 
-      <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <p className="text-sm text-blue-800">
-          <strong>Tip:</strong> Set your recurring weekly availability here. Customers will be able to book appointments during these times. You can activate/deactivate slots as needed.
-        </p>
-      </div>
+          <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <p className="text-sm text-blue-800">
+              <strong>Tip:</strong> Set your recurring weekly availability here. Customers will be able to book appointments during these times. You can activate/deactivate slots as needed.
+            </p>
+          </div>
+        </>
+      )}
     </div>
   );
 }
