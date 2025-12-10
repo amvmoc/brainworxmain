@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { LogOut, Users, TrendingUp, FileText, DollarSign, LayoutDashboard, Eye, Search, UserPlus, Mail, Shield, Edit2, Loader, RefreshCw, Ticket, Trash2, Key, Calendar } from 'lucide-react';
+import { LogOut, Users, TrendingUp, FileText, DollarSign, LayoutDashboard, Eye, Search, UserPlus, Mail, Shield, Edit2, Loader, RefreshCw, Ticket, Trash2, Key, Calendar, Share2, Send } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { InvoicesPage } from './InvoicesPage';
 import { LibraryManagement } from './LibraryManagement';
@@ -801,7 +801,7 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
               </div>
             ) : (
               <>
-                {[...responses.filter(r => r.status === 'analyzed' || r.status === 'sent'), ...selfAssessments.filter(s => s.status === 'completed' || s.status === 'analyzed')].length === 0 ? (
+                {[...responses.filter(r => r.status === 'completed' || r.status === 'analyzed' || r.status === 'sent'), ...selfAssessments.filter(s => s.status === 'completed' || s.status === 'analyzed')].length === 0 ? (
                   <div className="text-center py-8">
                     <Users className="mx-auto text-gray-300 mb-2" size={48} />
                     <p className="text-gray-600">No completed tests yet</p>
@@ -822,7 +822,7 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
                       </thead>
                       <tbody>
                         {[
-                          ...responses.filter(r => r.status === 'analyzed' || r.status === 'sent').map(r => ({ ...r, type: 'nipa' })),
+                          ...responses.filter(r => r.status === 'completed' || r.status === 'analyzed' || r.status === 'sent').map(r => ({ ...r, type: 'nipa' })),
                           ...selfAssessments.filter(s => s.status === 'completed' || s.status === 'analyzed').map(s => ({ ...s, type: 'self' }))
                         ]
                           .sort((a, b) => new Date(b.completed_at).getTime() - new Date(a.completed_at).getTime())
@@ -831,7 +831,7 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
                               <td className="px-6 py-4 font-medium text-[#0A2A5E]">{test.customer_name}</td>
                               <td className="px-6 py-4 text-gray-600">{test.customer_email}</td>
                               <td className="px-6 py-4 text-gray-600">
-                                {franchiseUsers.find(f => f.id === test.franchise_owner_id)?.name || 'Unknown'}
+                                {franchiseUsers.find(f => f.id === test.franchise_owner_id)?.name || 'Super Admin'}
                               </td>
                               <td className="px-6 py-4">
                                 <span className={`px-3 py-1 rounded-full text-xs font-bold ${
@@ -851,12 +851,34 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
                                 {new Date(test.completed_at).toLocaleDateString()}
                               </td>
                               <td className="px-6 py-4">
-                                <button
-                                  onClick={() => setViewingTestReport(test)}
-                                  className="bg-[#3DB3E3] text-white px-4 py-2 rounded-lg hover:bg-[#1FAFA3] transition-colors font-medium"
-                                >
-                                  View Report
-                                </button>
+                                <div className="flex gap-2">
+                                  <button
+                                    onClick={() => setViewingTestReport(test)}
+                                    className="bg-[#3DB3E3] text-white px-4 py-2 rounded-lg hover:bg-[#1FAFA3] transition-colors font-medium"
+                                  >
+                                    View Report
+                                  </button>
+                                  <button
+                                    onClick={async () => {
+                                      if (confirm(`Send report to ${test.customer_email}?`)) {
+                                        try {
+                                          const { error } = await supabase.functions.invoke('send-analysis-email', {
+                                            body: { responseId: test.id }
+                                          });
+                                          if (error) throw error;
+                                          alert('Report sent successfully!');
+                                        } catch (error: any) {
+                                          alert('Failed to send report: ' + error.message);
+                                        }
+                                      }
+                                    }}
+                                    className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors font-medium flex items-center gap-2"
+                                    title="Share report via email"
+                                  >
+                                    <Send size={16} />
+                                    Share
+                                  </button>
+                                </div>
                               </td>
                             </tr>
                           ))}
