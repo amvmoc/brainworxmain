@@ -36,15 +36,9 @@ export function CalendarManagement({ franchiseOwnerId, franchiseOwnerCode }: Cal
     is_active: true
   });
 
-  const isSuperAdmin = franchiseOwnerId === 'super_admin_all';
-
   useEffect(() => {
-    if (!isSuperAdmin) {
-      loadAvailability();
-    } else {
-      setLoading(false);
-    }
-  }, [franchiseOwnerId, isSuperAdmin]);
+    loadAvailability();
+  }, [franchiseOwnerId]);
 
   const loadAvailability = async () => {
     setLoading(true);
@@ -156,32 +150,6 @@ export function CalendarManagement({ franchiseOwnerId, franchiseOwnerCode }: Cal
     return (
       <div className="flex items-center justify-center py-12">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0A2A5E]"></div>
-      </div>
-    );
-  }
-
-  if (isSuperAdmin) {
-    return (
-      <div className="bg-white rounded-lg shadow-lg p-6">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="bg-[#3DB3E3] p-3 rounded-full">
-            <Calendar className="text-white" size={24} />
-          </div>
-          <div>
-            <h2 className="text-2xl font-bold text-[#0A2A5E]">Availability Management</h2>
-            <p className="text-gray-600">Manage calendar availability</p>
-          </div>
-        </div>
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-8 text-center">
-          <Calendar className="mx-auto mb-4 text-blue-600" size={48} />
-          <h3 className="text-lg font-bold text-[#0A2A5E] mb-2">
-            Availability Management Not Available for Super Admins
-          </h3>
-          <p className="text-gray-600">
-            Calendar availability management is only available for franchise owners who take bookings.
-            As a super admin, you can view all bookings in the "View Bookings" tab.
-          </p>
-        </div>
       </div>
     );
   }

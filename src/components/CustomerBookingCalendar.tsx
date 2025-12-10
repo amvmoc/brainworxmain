@@ -187,6 +187,32 @@ export function CustomerBookingCalendar({ franchiseOwnerId, franchiseOwnerName, 
 
       if (error) throw error;
 
+      const { data: franchiseOwnerData } = await supabase
+        .from('franchise_owners')
+        .select('email, name')
+        .eq('id', franchiseOwnerId)
+        .single();
+
+      if (franchiseOwnerData) {
+        try {
+          await supabase.functions.invoke('send-booking-reminder', {
+            body: {
+              franchiseOwnerEmail: franchiseOwnerData.email,
+              franchiseOwnerName: franchiseOwnerData.name,
+              customerName: formData.customer_name,
+              customerEmail: formData.customer_email,
+              customerPhone: formData.customer_phone,
+              bookingDate: dateStr,
+              startTime: startTime,
+              endTime: endTime,
+              notes: formData.notes
+            }
+          });
+        } catch (emailError) {
+          console.error('Failed to send email notification:', emailError);
+        }
+      }
+
       setBookingComplete(true);
       if (onBookingComplete) {
         onBookingComplete();

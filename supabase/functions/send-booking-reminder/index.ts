@@ -49,7 +49,7 @@ serve(async (req: Request) => {
     });
 
     const emailToFranchiseOwner = {
-      from: "BrainWorx <payments@brainworx.co.za>",
+      from: "BrainWorx <info@brainworx.co.za>",
       to: franchiseOwnerEmail,
       subject: `New Booking Confirmed: ${customerName} on ${formattedDate}`,
       html: `
@@ -123,7 +123,7 @@ serve(async (req: Request) => {
     };
 
     const emailToCustomer = {
-      from: "BrainWorx <payments@brainworx.co.za>",
+      from: "BrainWorx <info@brainworx.co.za>",
       to: customerEmail,
       subject: `Booking Confirmation: ${formattedDate} at ${startTime}`,
       html: `
