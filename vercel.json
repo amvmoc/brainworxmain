@@ -3,11 +3,22 @@
   "outputDirectory": "dist",
   "framework": "vite",
   "installCommand": "npm install",
-  "cleanUrls": true,
-  "rewrites": [
+  "routes": [
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "src": "/results/[^/]+",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/book/[^/]+",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/nip3/?",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
     }
   ]
 }
