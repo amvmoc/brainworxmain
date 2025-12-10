@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Calendar, ChevronLeft, ChevronRight, Plus, X, Clock, User, Mail, Phone, Bell, Save } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { isPublicHoliday } from '../utils/holidays';
+import { CustomerProfileModal } from './CustomerProfileModal';
 
 interface Booking {
   id: string;
@@ -41,6 +42,7 @@ export function FranchiseBookingCalendar({
   const [showAddModal, setShowAddModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [saving, setSaving] = useState(false);
+  const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const [newBooking, setNewBooking] = useState<NewBooking>({
     customer_name: '',
     customer_email: '',
@@ -236,14 +238,18 @@ export function FranchiseBookingCalendar({
             {dateBookings.slice(0, 3).map((booking, idx) => (
               <div
                 key={idx}
-                className={`text-xs px-2 py-1 rounded ${
+                className={`text-xs px-2 py-1 rounded cursor-pointer transition-all hover:shadow-md ${
                   booking.status === 'confirmed'
-                    ? 'bg-green-100 text-green-800'
+                    ? 'bg-green-100 text-green-800 hover:bg-green-200'
                     : booking.status === 'pending'
-                    ? 'bg-yellow-100 text-yellow-800'
-                    : 'bg-gray-100 text-gray-800'
+                    ? 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200'
+                    : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
                 }`}
-                onClick={(e) => e.stopPropagation()}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedBooking(booking);
+                }}
+                title="Click to view customer profile"
               >
                 <div className="font-medium">{booking.start_time}</div>
                 <div className="truncate">{booking.customer_name}</div>
@@ -494,6 +500,16 @@ export function FranchiseBookingCalendar({
             </div>
           </div>
         </div>
+      )}
+
+      {selectedBooking && (
+        <CustomerProfileModal
+          customerEmail={selectedBooking.customer_email}
+          customerName={selectedBooking.customer_name}
+          bookingDate={selectedBooking.booking_date}
+          franchiseOwnerId={franchiseOwnerId}
+          onClose={() => setSelectedBooking(null)}
+        />
       )}
     </div>
   );
