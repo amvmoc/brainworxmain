@@ -336,7 +336,6 @@ export function generateClientReport(
             </div>
 
             <div class="content">
-                <!-- User Information -->
                 <div class="user-info-box">
                     <h3>📋 Assessment Report</h3>
                     <p><strong>Name:</strong> ${customerName}</p>
@@ -344,7 +343,17 @@ export function generateClientReport(
                     <p class="report-date">Report Date: ${completionDate}</p>
                 </div>
 
-                <!-- Results Summary -->
+                ${resultsUrl ? `
+                <div style="text-align: center; margin: 30px 0; padding: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px;">
+                    <h2 style="color: white; margin-bottom: 15px; font-size: 1.8em;">🎉 Your Results Are Ready!</h2>
+                    <p style="color: white; font-size: 1.1em; margin-bottom: 25px;">Click below to view your complete interactive report online</p>
+                    <a href="${resultsUrl}" style="display: inline-block; background: white; color: #667eea; padding: 18px 50px; font-size: 1.3em; border-radius: 50px; text-decoration: none; font-weight: 700; box-shadow: 0 8px 20px rgba(0,0,0,0.3); transition: transform 0.2s;">
+                        📊 VIEW YOUR FULL REPORT
+                    </a>
+                    <p style="color: white; font-size: 0.9em; margin-top: 20px; opacity: 0.9;">Access your results anytime, anywhere</p>
+                </div>
+                ` : ''}
+
                 <div class="results-summary">
                     <h2>🎯 Your Neural Imprint Profile</h2>
                     <p>
@@ -376,14 +385,12 @@ export function generateClientReport(
                     </div>
                 </div>
 
-                <!-- Scoring Chart -->
                 <div class="chart-container">
                     <h3 class="chart-title">Neural Imprint Patterns - Scoring Overview</h3>
                     <div class="bar-chart">
                         ${generateBarChart()}
                     </div>
 
-                    <!-- Legend -->
                     <div class="legend">
                         <div class="legend-item">
                             <div class="legend-color high"></div>
@@ -399,14 +406,6 @@ export function generateClientReport(
                         </div>
                     </div>
                 </div>
-
-                ${resultsUrl ? `
-                <div style="text-align: center; margin: 30px 0;">
-                    <a href="${resultsUrl}" class="cta-button">
-                        📊 View Full Results Online
-                    </a>
-                </div>
-                ` : ''}
 
                 <div style="background: #f8f9fa; border-top: 2px solid #e0e0e0; padding: 20px; margin-top: 30px; border-radius: 10px;">
                     <p style="font-size: 0.9em; color: #666; text-align: center; line-height: 1.7; font-style: italic;">

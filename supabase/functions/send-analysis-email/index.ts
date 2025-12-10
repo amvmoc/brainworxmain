@@ -36,7 +36,6 @@ Deno.serve(async (req: Request) => {
     const body = await req.json();
     let customerName: string, customerEmail: string, franchiseOwnerEmail: string | undefined, franchiseOwnerName: string | undefined, responseId: string, analysis: any;
 
-    // If only responseId is provided, fetch the data from the database
     if (body.responseId && !body.analysis) {
       const { createClient } = await import('npm:@supabase/supabase-js@2.39.0');
       const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
@@ -58,7 +57,6 @@ Deno.serve(async (req: Request) => {
       responseId = body.responseId;
       analysis = response.analysis_results;
 
-      // Fetch franchise owner info if exists
       if (response.franchise_owner_id) {
         const { data: franchiseOwner } = await supabase
           .from('franchise_owners')
@@ -72,14 +70,12 @@ Deno.serve(async (req: Request) => {
         }
       }
     } else {
-      // Use provided data
       ({ customerName, customerEmail, franchiseOwnerEmail, franchiseOwnerName, responseId, analysis } = body);
     }
 
     const BRAINWORX_EMAIL = 'info@brainworx.co.za';
     const SITE_URL = Deno.env.get('SITE_URL') || 'https://brainworx.co.za';
 
-    // Create or reuse Supabase client
     const { createClient } = await import('npm:@supabase/supabase-js@2.39.0');
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -145,7 +141,6 @@ Deno.serve(async (req: Request) => {
       brainworxClient: { sent: false, error: null as string | null }
     };
 
-    // 1. Send client report to customer
     try {
       await transporter.sendMail({
         from: `BrainWorx <${GMAIL_USER}>`,
@@ -161,7 +156,6 @@ Deno.serve(async (req: Request) => {
       console.error('✗ Error sending customer email:', error);
     }
 
-    // 2. Send coach report to franchise owner
     if (franchiseOwnerEmail) {
       try {
         await transporter.sendMail({
@@ -179,7 +173,6 @@ Deno.serve(async (req: Request) => {
       }
     }
 
-    // 3. Send coach report to info@brainworx.co.za
     try {
       await transporter.sendMail({
         from: `BrainWorx <${GMAIL_USER}>`,
@@ -195,7 +188,6 @@ Deno.serve(async (req: Request) => {
       console.error('✗ Error sending admin coach report email:', error);
     }
 
-    // 4. Send client report to info@brainworx.co.za
     try {
       await transporter.sendMail({
         from: `BrainWorx <${GMAIL_USER}>`,
@@ -211,7 +203,6 @@ Deno.serve(async (req: Request) => {
       console.error('✗ Error sending admin client report email:', error);
     }
 
-    // 5. Send coach report to kobus@brainworx.co.za
     try {
       await transporter.sendMail({
         from: `BrainWorx <${GMAIL_USER}>`,
