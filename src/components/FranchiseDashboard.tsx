@@ -34,6 +34,22 @@ interface FranchiseDashboardProps {
   onLogout: () => void;
 }
 
+/**
+ * FranchiseDashboard Component
+ *
+ * STRUCTURE OVERVIEW:
+ * ===================
+ * 1. Navigation tabs (Dashboard, Tests, Invoices, Calendar)
+ * 2. Conditional view rendering based on currentView state
+ * 3. GLOBAL MODALS section (MUST be outside view conditionals)
+ *
+ * IMPORTANT ARCHITECTURAL RULES:
+ * ================================
+ * - ALL modals MUST be placed AFTER the view conditionals (not inside them)
+ * - This ensures modals work regardless of which tab the user is viewing
+ * - Follow the documented z-index hierarchy to prevent overlap issues
+ * - Never nest modals inside the currentView conditionals
+ */
 export function FranchiseDashboard({
   franchiseOwnerId,
   franchiseOwnerCode,
@@ -488,6 +504,25 @@ export function FranchiseDashboard({
           </>
         )}
 
+      {/* =================================================================
+          GLOBAL MODALS SECTION - DO NOT MOVE INSIDE VIEW CONDITIONALS
+          =================================================================
+
+          CRITICAL: All modals below MUST remain OUTSIDE the view conditionals
+          (dashboard, tests, calendar, invoices). They need to be accessible
+          from ANY view/tab to function properly.
+
+          Z-INDEX HIERARCHY (to prevent overlap issues):
+          - Base dashboard content: z-0 to z-40
+          - Standard modals (selectedResponse, showClientReport): z-50
+          - Test report modals (viewingTestReport): z-100 to z-110
+          - Customer profile modal (CustomerProfileModal): z-200
+
+          If you need to add a new modal, place it here and assign an
+          appropriate z-index based on the hierarchy above.
+          ================================================================= */}
+
+      {/* Modal: Customer Details Preview (from dashboard prospect list) */}
       {selectedResponse && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full p-8 relative max-h-[90vh] overflow-y-auto">
@@ -614,6 +649,7 @@ export function FranchiseDashboard({
         </div>
       )}
 
+      {/* Modal: Full Client Report (NIPA assessments) */}
       {showClientReport && clientReportData && (
         <div className="fixed inset-0 bg-black/80 z-50 overflow-y-auto">
           <div className="relative">
@@ -631,6 +667,8 @@ export function FranchiseDashboard({
         </div>
       )}
 
+      {/* Modal: View Full Test Report (from Tests tab - Coach Report or Self Assessment)
+          Higher z-index (z-100, z-110) to ensure it displays above other modals */}
       {viewingTestReport && (
         <>
           {viewingTestReport.response_type === 'nipa' ? (
@@ -665,6 +703,9 @@ export function FranchiseDashboard({
           )}
         </>
       )}
+
+      {/* END OF GLOBAL MODALS SECTION */}
+
       </div>
     </div>
   );

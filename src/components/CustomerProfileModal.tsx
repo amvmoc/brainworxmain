@@ -149,6 +149,10 @@ export function CustomerProfileModal({
   };
 
   return (
+    /* CRITICAL Z-INDEX: This modal uses z-[200] to ensure it displays ABOVE all other
+       modals in the FranchiseDashboard (which use z-50 to z-110). This is necessary
+       because it can be opened from within the Calendar view which itself may contain
+       other overlays. DO NOT reduce this z-index value or the modal may be hidden. */
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[200] p-4">
       <div className="bg-white rounded-lg shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
         <div className="bg-gradient-to-r from-[#0A2A5E] to-[#3DB3E3] p-6 flex items-center justify-between">
