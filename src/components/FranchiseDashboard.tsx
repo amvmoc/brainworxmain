@@ -7,6 +7,7 @@ import { SelfAssessmentReport } from './SelfAssessmentReport';
 import CoachReport from './coach-report/CoachReport';
 import { CalendarManagement } from './CalendarManagement';
 import { BookingManagement } from './BookingManagement';
+import { FranchiseBookingCalendar } from './FranchiseBookingCalendar';
 import { generateClientReportData } from '../utils/clientReportScoring';
 import { generateCoachReportData } from '../utils/coachReportGenerator';
 import { selfAssessmentTypes } from '../data/selfAssessmentQuestions';
@@ -28,6 +29,7 @@ interface FranchiseDashboardProps {
   franchiseOwnerId: string;
   franchiseOwnerCode: string;
   franchiseOwnerName: string;
+  franchiseOwnerEmail: string;
   isSuperAdmin: boolean;
   onLogout: () => void;
 }
@@ -36,6 +38,7 @@ export function FranchiseDashboard({
   franchiseOwnerId,
   franchiseOwnerCode,
   franchiseOwnerName,
+  franchiseOwnerEmail,
   isSuperAdmin,
   onLogout
 }: FranchiseDashboardProps) {
@@ -273,7 +276,11 @@ export function FranchiseDashboard({
               </button>
             </div>
             {calendarTab === 'bookings' ? (
-              <BookingManagement franchiseOwnerId={franchiseOwnerId} />
+              <FranchiseBookingCalendar
+                franchiseOwnerId={franchiseOwnerId}
+                franchiseOwnerEmail={franchiseOwnerEmail}
+                franchiseOwnerName={franchiseOwnerName}
+              />
             ) : (
               <CalendarManagement
                 franchiseOwnerId={franchiseOwnerId}

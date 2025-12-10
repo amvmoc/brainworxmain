@@ -183,6 +183,7 @@ function App() {
         franchiseOwnerId={currentUser.id}
         franchiseOwnerCode={franchiseData.unique_link_code}
         franchiseOwnerName={franchiseData.name}
+        franchiseOwnerEmail={franchiseData.email}
         isSuperAdmin={franchiseData.is_super_admin}
         onLogout={() => {
           supabase.auth.signOut();
