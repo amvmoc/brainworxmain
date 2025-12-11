@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Mail, CheckCircle, XCircle, Loader } from 'lucide-react';
 import { supabase } from '../lib/supabase';
-import { Questionnaire } from './Questionnaire';
+import NIP3Assessment from './NIP3Assessment';
 
 interface EmailVerificationProps {
   token: string;
@@ -79,7 +79,7 @@ export function EmailVerification({ token }: EmailVerificationProps) {
   };
 
   if (showQuestionnaire && responseId) {
-    return <Questionnaire onClose={() => window.location.href = '/'} />;
+    return <NIP3Assessment onClose={() => window.location.href = '/'} />;
   }
 
   return (
@@ -122,7 +122,7 @@ export function EmailVerification({ token }: EmailVerificationProps) {
               <div className="bg-[#E6E9EF] p-4 rounded-lg">
                 <h3 className="font-semibold text-[#0A2A5E] mb-2">What's Next?</h3>
                 <ul className="text-sm text-gray-700 space-y-1">
-                  <li>• Complete 350-question assessment</li>
+                  <li>• Complete 343-question assessment</li>
                   <li>• Receive comprehensive brain analysis</li>
                   <li>• Get personalized recommendations</li>
                   <li>• Booking link for consultation</li>

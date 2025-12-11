@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Briefcase, Users, Brain, Heart, ArrowRight, X, CheckCircle, Clock, Ticket, RotateCcw } from 'lucide-react';
 import { selfAssessmentTypes } from '../data/selfAssessmentQuestions';
 import { SelfAssessmentQuestionnaire } from './SelfAssessmentQuestionnaire';
-import { Questionnaire } from './Questionnaire';
+import NIP3Assessment from './NIP3Assessment';
 import { CouponRedemption } from './CouponRedemption';
 import { supabase } from '../lib/supabase';
 
@@ -223,12 +223,8 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
   // Show NIPA questionnaire when resuming
   if (startNIPAQuestionnaire && nipaQuestionnaireData) {
     return (
-      <Questionnaire
+      <NIP3Assessment
         onClose={onClose}
-        coachLink=""
-        email={nipaQuestionnaireData.email}
-        franchiseOwnerId={nipaQuestionnaireData.franchiseOwnerId}
-        resumeResponseId={nipaQuestionnaireData.responseId}
       />
     );
   }

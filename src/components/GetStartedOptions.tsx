@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ArrowLeft, Mail, Link2, RotateCcw, Briefcase, Users, Brain, Baby, UserCheck, Ticket } from 'lucide-react';
-import { Questionnaire } from './Questionnaire';
+import NIP3Assessment from './NIP3Assessment';
 import { NeuralImprintPatternsInfo } from './NeuralImprintPatternsInfo';
 import { SelfAssessmentQuestionnaire } from './SelfAssessmentQuestionnaire';
 import { CareerAssessment } from './CareerAssessment';
@@ -116,8 +116,8 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
     setPreviousStep('email');
 
     const assessmentTypeMap: Record<string, string> = {
-      'Full Assessment (343 Questions)': 'nipa',
-      'Full ADHD Assessment (128 Questions)': 'nipa',
+      'Full Assessment (343 Questions)': 'nip3',
+      'Full ADHD Assessment (128 Questions)': 'nip3',
       'Teen Career & Future Direction': 'teen-career',
       'Teen ADHD Screener (48 Questions)': 'teen-adhd',
       'Parent ADHD Screener (48 Questions)': 'parent-adhd'
@@ -125,8 +125,8 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
 
     const mappedType = assessmentTypeMap[assessmentType] || assessmentType;
 
-    if (mappedType === 'nipa') {
-      setStep('patterns_info');
+    if (mappedType === 'nip3') {
+      setStep('questionnaire');
     } else if (mappedType === 'teen-career') {
       setStep('career_assessment');
     } else {
@@ -149,13 +149,8 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
 
   if (step === 'questionnaire') {
     return (
-      <Questionnaire
+      <NIP3Assessment
         onClose={onClose}
-        coachLink={coachLink}
-        email={email}
-        franchiseOwnerId={franchiseOwnerId}
-        customerName={customerName}
-        couponId={couponId}
       />
     );
   }
@@ -237,7 +232,7 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
                   <Brain className="text-[#3DB3E3] group-hover:scale-110 transition-transform" size={24} />
                   <div className="flex-1">
                     <h3 className="font-bold text-[#0A2A5E]">NIPA - Full Assessment</h3>
-                    <p className="text-sm text-gray-600">344 questions • Comprehensive neural imprint profile</p>
+                    <p className="text-sm text-gray-600">343 questions • Comprehensive neural imprint profile</p>
                   </div>
                   <div className="text-right">
                     <p className="text-lg font-bold text-[#3DB3E3]">R950</p>
