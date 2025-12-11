@@ -35,7 +35,7 @@ export function CouponManagement() {
     code: '',
     name: '',
     email: '',
-    assessmentType: 'Full ADHD Assessment (128 Questions)',
+    assessmentType: 'Full Assessment (343 Questions)',
     maxUses: 1
   });
 
