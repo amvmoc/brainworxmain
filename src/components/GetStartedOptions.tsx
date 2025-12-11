@@ -176,13 +176,15 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
       couponId
     });
     return (
-      <NIP3Assessment
-        onClose={onClose}
-        email={email}
-        customerName={customerName}
-        franchiseOwnerId={franchiseOwnerId}
-        couponId={couponId}
-      />
+      <div className="fixed inset-0 bg-white z-50 overflow-y-auto">
+        <NIP3Assessment
+          onClose={onClose}
+          email={email}
+          customerName={customerName}
+          franchiseOwnerId={franchiseOwnerId}
+          couponId={couponId}
+        />
+      </div>
     );
   }
 
@@ -201,13 +203,15 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
 
   if (step === 'career_assessment') {
     return (
-      <CareerAssessment
-        onClose={onClose}
-        email={email}
-        customerName={customerName}
-        franchiseOwnerId={franchiseOwnerId}
-        couponId={couponId}
-      />
+      <div className="fixed inset-0 bg-white z-50 overflow-y-auto">
+        <CareerAssessment
+          onClose={onClose}
+          email={email}
+          customerName={customerName}
+          franchiseOwnerId={franchiseOwnerId}
+          couponId={couponId}
+        />
+      </div>
     );
   }
 
