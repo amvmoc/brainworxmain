@@ -9,6 +9,19 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => {
   return (
     <div className="welcome-screen">
       <div className="welcome-content">
+        <div className="version-badge" style={{
+          display: 'inline-block',
+          backgroundColor: '#3DB3E3',
+          color: 'white',
+          padding: '6px 16px',
+          borderRadius: '20px',
+          fontSize: '14px',
+          fontWeight: 'bold',
+          marginBottom: '16px',
+          letterSpacing: '1px'
+        }}>
+          NIP3 - VERSION 3.0
+        </div>
         <h2>Welcome to the Neural Imprint Patterns Assessment</h2>
         
         <div className="intro-section">
