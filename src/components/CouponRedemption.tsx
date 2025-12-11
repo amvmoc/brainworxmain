@@ -23,6 +23,8 @@ export function CouponRedemption({ onRedemptionSuccess, onCancel, initialCouponC
     setLoading(true);
 
     try {
+      console.log('Validating coupon:', formData.code);
+
       const { data, error: rpcError } = await supabase
         .rpc('validate_and_use_coupon', {
           p_code: formData.code,
@@ -30,16 +32,30 @@ export function CouponRedemption({ onRedemptionSuccess, onCancel, initialCouponC
           p_user_email: formData.email
         });
 
-      if (rpcError) throw rpcError;
+      if (rpcError) {
+        console.error('RPC error:', rpcError);
+        throw rpcError;
+      }
 
+      console.log('Coupon validation result:', data);
       const result = data as any;
 
-      if (!result.success) {
-        setError(result.error);
+      if (!result || !result.success) {
+        const errorMsg = result?.error || 'Invalid coupon response';
+        console.error('Coupon validation failed:', errorMsg);
+        setError(errorMsg);
         setLoading(false);
         return;
       }
 
+      if (!result.assessment_type || !result.coupon_id || !result.created_by) {
+        console.error('Missing required fields in coupon response:', result);
+        setError('Invalid coupon data received. Please contact support.');
+        setLoading(false);
+        return;
+      }
+
+      console.log('Coupon valid, triggering success callback');
       setLoading(false);
       onRedemptionSuccess(
         result.assessment_type,
@@ -49,6 +65,7 @@ export function CouponRedemption({ onRedemptionSuccess, onCancel, initialCouponC
         formData.email
       );
     } catch (err: any) {
+      console.error('Coupon redemption error:', err);
       setError(err.message || 'Failed to redeem coupon. Please try again.');
       setLoading(false);
     }

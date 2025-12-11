@@ -108,11 +108,12 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
     userName: string,
     userEmail: string
   ) => {
+    console.log('Coupon redeemed:', { assessmentType, userName, userEmail });
+
     setEmail(userEmail);
     setCustomerName(userName);
     setFranchiseOwnerId(couponFranchiseOwnerId);
     setCouponId(redemptionCouponId);
-    setShowCouponModal(false);
     setPreviousStep('email');
 
     const assessmentTypeMap: Record<string, string> = {
@@ -124,16 +125,29 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
     };
 
     const mappedType = assessmentTypeMap[assessmentType] || assessmentType;
+    console.log('Mapped assessment type:', mappedType);
 
     if (mappedType === 'nip3') {
+      console.log('Navigating to Full Assessment (NIP3)');
+      setShowCouponModal(false);
       setStep('questionnaire');
     } else if (mappedType === 'teen-career') {
+      console.log('Navigating to Teen Career Assessment');
+      setShowCouponModal(false);
       setStep('career_assessment');
     } else {
       const selectedAssessment = selfAssessmentTypes.find(type => type.id === mappedType);
+      console.log('Found self-assessment:', selectedAssessment);
+
       if (selectedAssessment) {
         setSelectedAssessmentType(selectedAssessment);
+        setShowCouponModal(false);
         setStep('self_assessment');
+      } else {
+        console.error('Unknown assessment type:', assessmentType, 'mapped to:', mappedType);
+        alert(`Error: Unknown assessment type "${assessmentType}". Please contact support.`);
+        setShowCouponModal(false);
+        setStep('options');
       }
     }
   };
