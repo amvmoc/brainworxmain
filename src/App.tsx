@@ -176,7 +176,10 @@ function App() {
     return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
   }
 
-  if (currentUser && franchiseData) {
+  // CRITICAL: Don't show admin dashboards if user is in public flow (coupon, get started, assessments)
+  const isInPublicFlow = showGetStarted || showSelfAssessments || showNeuralPatterns || showBooking || showNIP3 || couponCode;
+
+  if (currentUser && franchiseData && !isInPublicFlow) {
     if (franchiseData.is_super_admin) {
       return (
         <SuperAdminDashboard
@@ -207,7 +210,7 @@ function App() {
     );
   }
 
-  if (currentUser && !franchiseData) {
+  if (currentUser && !franchiseData && !isInPublicFlow) {
     return <FranchiseLogin
       onLoginSuccess={() => window.location.reload()}
       onClose={async () => {
