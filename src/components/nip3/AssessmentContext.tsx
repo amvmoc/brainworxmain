@@ -60,12 +60,14 @@ export const AssessmentProvider: React.FC<AssessmentProviderProps> = ({
   const [responseId, setResponseId] = useState<string | null>(null);
   const [existingResponseData, setExistingResponseData] = useState<any>(null);
   const [showResumePrompt, setShowResumePrompt] = useState(false);
+  const [hasInitialized, setHasInitialized] = useState(false);
 
   // Initialize database record if we have user information
   useEffect(() => {
     const initializeResponse = async () => {
-      if (email && customerName) {
+      if (email && customerName && !hasInitialized) {
         console.log('Initializing assessment for:', email);
+        setHasInitialized(true);
 
         try {
           const { data: existingResponse, error: fetchError } = await supabase
@@ -202,54 +204,91 @@ export const AssessmentProvider: React.FC<AssessmentProviderProps> = ({
     }
   };
 
-  const handleResumeExisting = async () => {
-    if (existingResponseData) {
-      console.log('Resuming assessment from question:', existingResponseData.current_question);
-      setResponseId(existingResponseData.id);
-      setCurrentQuestionIndex(existingResponseData.current_question || 0);
+  const handleResumeExisting = () => {
+    try {
+      if (!existingResponseData) {
+        console.error('handleResumeExisting called but no existingResponseData!');
+        return;
+      }
 
+      console.log('Starting resume process...');
+      console.log('Existing response data:', {
+        id: existingResponseData.id,
+        current_question: existingResponseData.current_question,
+        answers_count: Object.keys(existingResponseData.answers || {}).length
+      });
+
+      const responseIdToSet = existingResponseData.id;
+      const questionIndex = existingResponseData.current_question || 0;
       const savedAnswers = existingResponseData.answers || {};
+
+      console.log('Setting responseId to:', responseIdToSet);
+      setResponseId(responseIdToSet);
+
+      console.log('Setting current question index to:', questionIndex);
+      setCurrentQuestionIndex(questionIndex);
+
       const answersMap = new Map<number, Answer>();
       Object.entries(savedAnswers).forEach(([key, value]: [string, any]) => {
         answersMap.set(parseInt(key), value);
       });
+
+      console.log('Setting answers map with', answersMap.size, 'answers');
       setAnswers(answersMap);
+
+      console.log('Closing resume prompt modal');
       setShowResumePrompt(false);
       setExistingResponseData(null);
-      console.log('Resume complete, loaded', answersMap.size, 'answers');
+
+      console.log('Resume complete!');
+    } catch (error) {
+      console.error('Error in handleResumeExisting:', error);
+      alert('Failed to resume assessment. Please try again or start fresh.');
+      setShowResumePrompt(false);
+      setExistingResponseData(null);
     }
   };
 
   const handleStartFresh = async () => {
-    console.log('User declined to resume, creating new assessment');
-    setShowResumePrompt(false);
-    setExistingResponseData(null);
+    try {
+      console.log('User chose to start fresh assessment');
+      console.log('Closing resume prompt modal');
+      setShowResumePrompt(false);
+      setExistingResponseData(null);
 
-    if (email && customerName) {
-      console.log('Creating new assessment response');
-      const { data, error } = await supabase
-        .from('responses')
-        .insert({
-          customer_name: customerName,
-          customer_email: email,
-          status: 'in_progress',
-          entry_type: franchiseOwnerId ? 'coach_link' : 'random_visitor',
-          email_verified: !!franchiseOwnerId,
-          franchise_owner_id: franchiseOwnerId || null,
-          coupon_id: couponId || null,
-          current_question: 0,
-          last_activity_at: new Date().toISOString()
-        })
-        .select()
-        .single();
+      if (email && customerName) {
+        console.log('Creating new assessment response for:', email);
 
-      if (error) {
-        console.error('Error creating response:', error);
-        alert('Failed to initialize assessment. Please try again.');
-      } else if (data) {
-        console.log('New assessment created:', data.id);
-        setResponseId(data.id);
+        const { data, error } = await supabase
+          .from('responses')
+          .insert({
+            customer_name: customerName,
+            customer_email: email,
+            status: 'in_progress',
+            entry_type: franchiseOwnerId ? 'coach_link' : 'random_visitor',
+            email_verified: !!franchiseOwnerId,
+            franchise_owner_id: franchiseOwnerId || null,
+            coupon_id: couponId || null,
+            current_question: 0,
+            last_activity_at: new Date().toISOString()
+          })
+          .select()
+          .single();
+
+        if (error) {
+          console.error('Error creating response:', error);
+          alert('Failed to initialize new assessment. Please try again.');
+        } else if (data) {
+          console.log('New assessment created successfully:', data.id);
+          setResponseId(data.id);
+          console.log('Start fresh complete!');
+        }
+      } else {
+        console.error('Cannot create assessment - email or customerName missing');
       }
+    } catch (error) {
+      console.error('Error in handleStartFresh:', error);
+      alert('An error occurred while starting new assessment. Please try again.');
     }
   };
 

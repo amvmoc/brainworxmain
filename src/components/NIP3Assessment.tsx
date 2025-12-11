@@ -24,7 +24,10 @@ export default function NIP3Assessment({
   franchiseOwnerId,
   couponId
 }: NIP3AssessmentProps) {
-  const [currentScreen, setCurrentScreen] = useState<AppScreen>('welcome');
+  // Start directly at assessment if user has email/name (from coupon or coach link)
+  const [currentScreen, setCurrentScreen] = useState<AppScreen>(
+    email && customerName ? 'assessment' : 'welcome'
+  );
   const [showAdmin, setShowAdmin] = useState(false);
 
   const handleStart = () => {
