@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { LogOut, Users, TrendingUp, FileText, DollarSign, LayoutDashboard, Eye, Search, UserPlus, Mail, Shield, Edit2, Loader, RefreshCw, Ticket, Trash2, Key, Calendar, Share2, Send } from 'lucide-react';
+import { LogOut, Users, TrendingUp, FileText, DollarSign, LayoutDashboard, Eye, Search, UserPlus, Mail, Shield, Edit2, Loader, RefreshCw, Ticket, Trash2, Key, Calendar, Share2, Send, Download } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { InvoicesPage } from './InvoicesPage';
 import { LibraryManagement } from './LibraryManagement';
@@ -106,14 +106,41 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
 
     setShareLoading(true);
     try {
-      const { error } = await supabase.functions.invoke('send-analysis-email', {
-        body: {
-          responseId: shareTest.id,
-          recipientEmail: shareEmail
-        }
-      });
+      // Check if this is a NIP3 assessment (343 questions)
+      const isNIP3 = shareTest.analysis_results?.totalQuestions === 343;
 
-      if (error) throw error;
+      if (isNIP3) {
+        // Use NIP3 email function
+        const results = shareTest.analysis_results.neuralImprintPatternScores.map((nip: any) => ({
+          code: nip.code,
+          shortName: nip.name,
+          percentage: nip.score,
+          actualScore: nip.actualScore,
+          maxScore: nip.maxScore,
+          totalQuestions: nip.totalQuestions,
+          level: nip.score >= 70 ? 'Strongly Present' : nip.score >= 50 ? 'Moderately Present' : nip.score >= 30 ? 'Mild Pattern' : 'Minimal Pattern'
+        }));
+
+        const { error } = await supabase.functions.invoke('send-nip3-results', {
+          body: {
+            recipients: [shareEmail],
+            results: results,
+            completedAt: shareTest.completed_at
+          }
+        });
+
+        if (error) throw error;
+      } else {
+        // Use original email function for NIPA assessments
+        const { error } = await supabase.functions.invoke('send-analysis-email', {
+          body: {
+            responseId: shareTest.id,
+            recipientEmail: shareEmail
+          }
+        });
+
+        if (error) throw error;
+      }
 
       alert(`Report sent successfully to ${shareEmail}!`);
       setShowShareModal(false);
@@ -822,6 +849,107 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
           <CouponManagement />
         )}
 
+        {currentView === 'responses' && (
+          <div className="bg-white rounded-xl p-6 shadow-lg">
+            <h2 className="text-2xl font-bold text-[#0A2A5E] mb-6">Full NIP3 Assessments (343 Questions)</h2>
+
+            {loading ? (
+              <div className="text-center py-8">
+                <p className="text-gray-600">Loading assessments...</p>
+              </div>
+            ) : (
+              <>
+                {responses.filter(r =>
+                  (r.status === 'completed' || r.status === 'analyzed' || r.status === 'sent') &&
+                  r.analysis_results?.totalQuestions === 343
+                ).length === 0 ? (
+                  <div className="text-center py-8">
+                    <Users className="mx-auto text-gray-300 mb-2" size={48} />
+                    <p className="text-gray-600">No completed full NIP3 assessments yet</p>
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead className="bg-[#E6E9EF] border-b-2 border-[#0A2A5E]">
+                        <tr>
+                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Client Name</th>
+                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Email</th>
+                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Franchise Holder</th>
+                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Score</th>
+                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Completed</th>
+                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {responses
+                          .filter(r =>
+                            (r.status === 'completed' || r.status === 'analyzed' || r.status === 'sent') &&
+                            r.analysis_results?.totalQuestions === 343
+                          )
+                          .sort((a, b) => new Date(b.completed_at).getTime() - new Date(a.completed_at).getTime())
+                          .map((response) => {
+                            const franchiseOwner = franchiseUsers.find(f => f.id === response.franchise_owner_id);
+                            return (
+                              <tr key={response.id} className="border-b hover:bg-gray-50">
+                                <td className="px-6 py-4 font-medium text-[#0A2A5E]">{response.customer_name}</td>
+                                <td className="px-6 py-4 text-gray-600">{response.customer_email}</td>
+                                <td className="px-6 py-4 text-gray-600">
+                                  {franchiseOwner?.name || 'Super Admin'}
+                                </td>
+                                <td className="px-6 py-4">
+                                  <span className="font-bold text-[#3DB3E3]">
+                                    {response.analysis_results?.overallScore || 'N/A'}%
+                                  </span>
+                                </td>
+                                <td className="px-6 py-4 text-sm text-gray-600">
+                                  {new Date(response.completed_at).toLocaleDateString()}
+                                </td>
+                                <td className="px-6 py-4">
+                                  <div className="flex gap-2">
+                                    <button
+                                      onClick={() => setViewingTestReport({ ...response, type: 'nip3' })}
+                                      className="bg-[#3DB3E3] text-white px-4 py-2 rounded-lg hover:bg-[#1FAFA3] transition-colors font-medium flex items-center gap-2"
+                                    >
+                                      <Eye size={16} />
+                                      View
+                                    </button>
+                                    <button
+                                      onClick={() => {
+                                        const report = { ...response, type: 'nip3' };
+                                        window.print();
+                                      }}
+                                      className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors font-medium flex items-center gap-2"
+                                      title="Download report"
+                                    >
+                                      <Download size={16} />
+                                      Download
+                                    </button>
+                                    <button
+                                      onClick={() => {
+                                        setShareTest({ ...response, type: 'nip3' });
+                                        setShareEmail(franchiseOwner?.email || response.customer_email);
+                                        setShowShareModal(true);
+                                      }}
+                                      className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors font-medium flex items-center gap-2"
+                                      title="Send report via email"
+                                    >
+                                      <Send size={16} />
+                                      Send Email
+                                    </button>
+                                  </div>
+                                </td>
+                              </tr>
+                            );
+                          })}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        )}
+
         {currentView === 'tests' && (
           <div className="bg-white rounded-xl p-6 shadow-lg">
             <h2 className="text-2xl font-bold text-[#0A2A5E] mb-6">All Completed Test Results</h2>
@@ -832,10 +960,16 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
               </div>
             ) : (
               <>
-                {[...responses.filter(r => r.status === 'completed' || r.status === 'analyzed' || r.status === 'sent'), ...selfAssessments.filter(s => s.status === 'completed' || s.status === 'analyzed')].length === 0 ? (
+                {[
+                  ...responses.filter(r =>
+                    (r.status === 'completed' || r.status === 'analyzed' || r.status === 'sent') &&
+                    r.analysis_results?.totalQuestions !== 343
+                  ),
+                  ...selfAssessments.filter(s => s.status === 'completed' || s.status === 'analyzed')
+                ].length === 0 ? (
                   <div className="text-center py-8">
                     <Users className="mx-auto text-gray-300 mb-2" size={48} />
-                    <p className="text-gray-600">No completed tests yet</p>
+                    <p className="text-gray-600">No completed tests yet (excluding full NIP3 assessments)</p>
                   </div>
                 ) : (
                   <div className="overflow-x-auto">
@@ -853,7 +987,10 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
                       </thead>
                       <tbody>
                         {[
-                          ...responses.filter(r => r.status === 'completed' || r.status === 'analyzed' || r.status === 'sent').map(r => ({ ...r, type: 'nipa' })),
+                          ...responses.filter(r =>
+                            (r.status === 'completed' || r.status === 'analyzed' || r.status === 'sent') &&
+                            r.analysis_results?.totalQuestions !== 343
+                          ).map(r => ({ ...r, type: 'nipa' })),
                           ...selfAssessments.filter(s => s.status === 'completed' || s.status === 'analyzed').map(s => ({ ...s, type: 'self' }))
                         ]
                           .sort((a, b) => new Date(b.completed_at).getTime() - new Date(a.completed_at).getTime())
