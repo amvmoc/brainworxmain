@@ -36,6 +36,7 @@ Deno.serve(async (req: Request) => {
   try {
     const body = await req.json();
     let customerName: string, customerEmail: string, franchiseOwnerEmail: string | undefined, franchiseOwnerName: string | undefined, responseId: string, analysis: any;
+    const recipientEmail = body.recipientEmail; // Custom recipient email for sharing
 
     if (body.responseId && !body.analysis) {
       const { createClient } = await import('npm:@supabase/supabase-js@2.39.0');
@@ -165,11 +166,12 @@ Deno.serve(async (req: Request) => {
     // CRITICAL: Send customer email with PDF attachment
     try {
       const pdfFilename = `BrainWorx_Report_${customerName.replace(/\s+/g, '_')}.pdf`;
-      console.log('Sending customer email with PDF attachment:', pdfFilename);
+      const emailTo = recipientEmail || customerEmail; // Use custom recipient if provided
+      console.log('Sending customer email with PDF attachment:', pdfFilename, 'to:', emailTo);
 
       await transporter.sendMail({
         from: `BrainWorx <${GMAIL_USER}>`,
-        to: customerEmail,
+        to: emailTo,
         subject: "Your BrainWorx Neural Imprint Patterns Assessment Results",
         html: customerEmailBody,
         attachments: [
@@ -182,11 +184,28 @@ Deno.serve(async (req: Request) => {
       });
 
       emailResults.customer.sent = true;
-      console.log('✓ Customer email sent successfully to:', customerEmail);
+      console.log('✓ Customer email sent successfully to:', emailTo);
       console.log('✓ PDF attachment included:', pdfFilename);
     } catch (error) {
       emailResults.customer.error = error.message;
       console.error('✗ Error sending customer email:', error);
+    }
+
+    // If recipientEmail is provided, skip sending to other addresses (franchise owner, admin, etc.)
+    if (recipientEmail) {
+      console.log('Custom recipient email provided, skipping other email sends');
+      return new Response(
+        JSON.stringify({
+          success: emailResults.customer.sent,
+          emailResults
+        }),
+        {
+          headers: {
+            ...corsHeaders,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
     }
 
     if (franchiseOwnerEmail) {

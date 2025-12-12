@@ -69,6 +69,10 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
     uniqueLinkCode: '',
     role: 'franchise_owner' as 'franchise_owner' | 'super_admin'
   });
+  const [showShareModal, setShowShareModal] = useState(false);
+  const [shareTest, setShareTest] = useState<any>(null);
+  const [shareEmail, setShareEmail] = useState('');
+  const [shareLoading, setShareLoading] = useState(false);
 
   useEffect(() => {
     loadAllData();
@@ -95,6 +99,32 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
     return code;
   };
 
+  const handleShareReport = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!shareEmail || !shareTest) return;
+
+    setShareLoading(true);
+    try {
+      const { error } = await supabase.functions.invoke('send-analysis-email', {
+        body: {
+          responseId: shareTest.id,
+          recipientEmail: shareEmail
+        }
+      });
+
+      if (error) throw error;
+
+      alert(`Report sent successfully to ${shareEmail}!`);
+      setShowShareModal(false);
+      setShareTest(null);
+      setShareEmail('');
+    } catch (error: any) {
+      alert('Failed to send report: ' + error.message);
+    } finally {
+      setShareLoading(false);
+    }
+  };
+
   const loadAllData = async () => {
     setLoading(true);
     try {
@@ -109,7 +139,7 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
         supabase
           .from('responses')
           .select('*')
-          .in('status', ['analyzed', 'sent'])
+          .in('status', ['completed', 'analyzed', 'sent'])
           .order('created_at', { ascending: false }),
         supabase
           .from('self_assessment_responses')
@@ -859,18 +889,10 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
                                     View Report
                                   </button>
                                   <button
-                                    onClick={async () => {
-                                      if (confirm(`Send report to ${test.customer_email}?`)) {
-                                        try {
-                                          const { error } = await supabase.functions.invoke('send-analysis-email', {
-                                            body: { responseId: test.id }
-                                          });
-                                          if (error) throw error;
-                                          alert('Report sent successfully!');
-                                        } catch (error: any) {
-                                          alert('Failed to send report: ' + error.message);
-                                        }
-                                      }
+                                    onClick={() => {
+                                      setShareTest(test);
+                                      setShareEmail(test.customer_email);
+                                      setShowShareModal(true);
                                     }}
                                     className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors font-medium flex items-center gap-2"
                                     title="Share report via email"
@@ -1259,6 +1281,89 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
                 )}
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {showShareModal && shareTest && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl max-w-md w-full p-8 shadow-2xl">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-2xl font-bold text-[#0A2A5E]">Share Report</h3>
+              <button
+                onClick={() => {
+                  setShowShareModal(false);
+                  setShareTest(null);
+                  setShareEmail('');
+                }}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <div className="mb-6">
+              <div className="bg-blue-50 rounded-lg p-4 mb-4">
+                <p className="text-sm text-gray-700 mb-2">
+                  <span className="font-semibold">Client:</span> {shareTest.customer_name}
+                </p>
+                <p className="text-sm text-gray-700">
+                  <span className="font-semibold">Assessment Type:</span> {shareTest.type === 'nipa' ? 'Full NIP Assessment (343 Questions)' : shareTest.assessment_type}
+                </p>
+              </div>
+            </div>
+
+            <form onSubmit={handleShareReport}>
+              <div className="mb-6">
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Recipient Email Address
+                </label>
+                <input
+                  type="email"
+                  value={shareEmail}
+                  onChange={(e) => setShareEmail(e.target.value)}
+                  placeholder="Enter email address"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#3DB3E3] focus:border-transparent"
+                  required
+                />
+                <p className="text-xs text-gray-500 mt-2">
+                  The comprehensive report will be sent to this email address
+                </p>
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowShareModal(false);
+                    setShareTest(null);
+                    setShareEmail('');
+                  }}
+                  className="flex-1 px-4 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all font-medium"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={shareLoading || !shareEmail}
+                  className="flex-1 bg-green-500 text-white px-4 py-3 rounded-lg hover:bg-green-600 disabled:opacity-50 transition-all font-medium flex items-center justify-center gap-2"
+                >
+                  {shareLoading ? (
+                    <>
+                      <Loader className="animate-spin" size={20} />
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      <Send size={20} />
+                      Send Report
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
