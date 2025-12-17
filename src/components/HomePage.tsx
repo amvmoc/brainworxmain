@@ -207,15 +207,25 @@ export function HomePage({
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div className="space-y-6">
                 <h2 className="text-5xl md:text-6xl font-bold text-[#0A2A5E] leading-tight">
-                  Optimize Your
+                  We All Have Patterns.
                   <span className="block bg-gradient-to-r from-[#3DB3E3] to-[#1FAFA3] bg-clip-text text-transparent">
-                    Human Potential
+                    Let's Understand Yours.
                   </span>
                 </h2>
-                <p className="text-lg text-[#3DB3E3] leading-relaxed">
-                  Transform your thinking, evolve your leadership, and thrive in an ever-changing world.
-                  BrainWorx combines neuroscience, psychology, and proven methodologies to unlock peak performance.
-                </p>
+                <div className="text-lg text-gray-700 leading-relaxed space-y-4">
+                  <p>
+                    Life can feel overwhelming when you don't understand why you think or behave the way you do. At Brainworx, we've created a space where curiosity meets clarity—a place to explore the questions you've been carrying without judgment.
+                  </p>
+                  <p>
+                    Through Neural Imprint Pattern Assessment (NIPA), we help you identify the invisible threads that shape your thoughts, emotions, relationships, and reactions. We're not therapists or psychologists—we're passionate advocates for self-awareness who believe everyone deserves a place to start. A mirror to see yourself clearly. A language to describe what you've always felt but couldn't name.
+                  </p>
+                  <p>
+                    Our assessments provide tangible insights that open doors to deeper conversations with professionals, loved ones, or yourself. Sometimes the hardest part isn't solving the problem; it's knowing where to start looking.
+                  </p>
+                  <p className="font-semibold text-[#0A2A5E]">
+                    Because understanding is the beginning of transformation.
+                  </p>
+                </div>
                 <div className="flex flex-col sm:flex-row gap-4">
                   {onGetStarted && (
                     <button
