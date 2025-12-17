@@ -37,7 +37,7 @@ interface SalesLog {
 }
 
 export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLogout }: SuperAdminDashboardProps) {
-  const [currentView, setCurrentView] = useState<'overview' | 'sales' | 'responses' | 'invoices' | 'calendar' | 'users' | 'library' | 'coupons' | 'visitor_view' | 'tests'>('overview');
+  const [currentView, setCurrentView] = useState<'overview' | 'sales' | 'responses' | 'invoices' | 'calendar' | 'users' | 'library' | 'coupons' | 'visitor_view'>('overview');
   const [calendarTab, setCalendarTab] = useState<'availability' | 'bookings'>('bookings');
   const [salesLogs, setSalesLogs] = useState<SalesLog[]>([]);
   const [responses, setResponses] = useState<any[]>([]);
@@ -449,18 +449,7 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
               }`}
             >
               <Users size={20} />
-              Full Assessments
-            </button>
-            <button
-              onClick={() => setCurrentView('tests')}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg whitespace-nowrap transition-all ${
-                currentView === 'tests'
-                  ? 'bg-white text-[#0A2A5E] font-semibold'
-                  : 'bg-white/20 text-white hover:bg-white/30'
-              }`}
-            >
-              <Eye size={20} />
-              Tests
+              Assessments
             </button>
             <button
               onClick={() => setCurrentView('calendar')}
@@ -851,7 +840,7 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
 
         {currentView === 'responses' && (
           <div className="bg-white rounded-xl p-6 shadow-lg">
-            <h2 className="text-2xl font-bold text-[#0A2A5E] mb-6">Full NIP3 Assessments (343 Questions)</h2>
+            <h2 className="text-2xl font-bold text-[#0A2A5E] mb-6">All Assessments</h2>
 
             {loading ? (
               <div className="text-center py-8">
@@ -859,117 +848,13 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
               </div>
             ) : (
               <>
-                {responses.filter(r =>
-                  (r.status === 'completed' || r.status === 'analyzed' || r.status === 'sent') &&
-                  r.analysis_results?.totalQuestions === 343
-                ).length === 0 ? (
-                  <div className="text-center py-8">
-                    <Users className="mx-auto text-gray-300 mb-2" size={48} />
-                    <p className="text-gray-600">No completed full NIP3 assessments yet</p>
-                  </div>
-                ) : (
-                  <div className="overflow-x-auto">
-                    <table className="w-full">
-                      <thead className="bg-[#E6E9EF] border-b-2 border-[#0A2A5E]">
-                        <tr>
-                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Client Name</th>
-                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Email</th>
-                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Franchise Holder</th>
-                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Score</th>
-                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Completed</th>
-                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {responses
-                          .filter(r =>
-                            (r.status === 'completed' || r.status === 'analyzed' || r.status === 'sent') &&
-                            r.analysis_results?.totalQuestions === 343
-                          )
-                          .sort((a, b) => new Date(b.completed_at).getTime() - new Date(a.completed_at).getTime())
-                          .map((response) => {
-                            const franchiseOwner = franchiseUsers.find(f => f.id === response.franchise_owner_id);
-                            return (
-                              <tr key={response.id} className="border-b hover:bg-gray-50">
-                                <td className="px-6 py-4 font-medium text-[#0A2A5E]">{response.customer_name}</td>
-                                <td className="px-6 py-4 text-gray-600">{response.customer_email}</td>
-                                <td className="px-6 py-4 text-gray-600">
-                                  {franchiseOwner?.name || 'Super Admin'}
-                                </td>
-                                <td className="px-6 py-4">
-                                  <span className="font-bold text-[#3DB3E3]">
-                                    {response.analysis_results?.overallScore || 'N/A'}%
-                                  </span>
-                                </td>
-                                <td className="px-6 py-4 text-sm text-gray-600">
-                                  {new Date(response.completed_at).toLocaleDateString()}
-                                </td>
-                                <td className="px-6 py-4">
-                                  <div className="flex gap-2">
-                                    <button
-                                      onClick={() => setViewingTestReport({ ...response, type: 'nipa' })}
-                                      className="bg-[#3DB3E3] text-white px-4 py-2 rounded-lg hover:bg-[#1FAFA3] transition-colors font-medium flex items-center gap-2"
-                                    >
-                                      <Eye size={16} />
-                                      View
-                                    </button>
-                                    <button
-                                      onClick={() => {
-                                        setViewingTestReport({ ...response, type: 'nipa' });
-                                        setTimeout(() => window.print(), 500);
-                                      }}
-                                      className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors font-medium flex items-center gap-2"
-                                      title="Download report"
-                                    >
-                                      <Download size={16} />
-                                      Download
-                                    </button>
-                                    <button
-                                      onClick={() => {
-                                        setShareTest({ ...response, type: 'nipa' });
-                                        setShareEmail(franchiseOwner?.email || response.customer_email);
-                                        setShowShareModal(true);
-                                      }}
-                                      className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors font-medium flex items-center gap-2"
-                                      title="Send report via email"
-                                    >
-                                      <Send size={16} />
-                                      Send Email
-                                    </button>
-                                  </div>
-                                </td>
-                              </tr>
-                            );
-                          })}
-                      </tbody>
-                    </table>
-                  </div>
-                )}
-              </>
-            )}
-          </div>
-        )}
-
-        {currentView === 'tests' && (
-          <div className="bg-white rounded-xl p-6 shadow-lg">
-            <h2 className="text-2xl font-bold text-[#0A2A5E] mb-6">All Completed Test Results</h2>
-
-            {loading ? (
-              <div className="text-center py-8">
-                <p className="text-gray-600">Loading test results...</p>
-              </div>
-            ) : (
-              <>
                 {[
-                  ...responses.filter(r =>
-                    (r.status === 'completed' || r.status === 'analyzed' || r.status === 'sent') &&
-                    r.analysis_results?.totalQuestions !== 343
-                  ),
-                  ...selfAssessments.filter(s => s.status === 'completed' || s.status === 'analyzed')
+                  ...responses.filter(r => r.status === 'completed' || r.status === 'analyzed' || r.status === 'sent').map(r => ({ ...r, type: 'nipa' })),
+                  ...selfAssessments.filter(s => s.status === 'completed' || s.status === 'analyzed').map(s => ({ ...s, type: 'self' }))
                 ].length === 0 ? (
                   <div className="text-center py-8">
                     <Users className="mx-auto text-gray-300 mb-2" size={48} />
-                    <p className="text-gray-600">No completed tests yet (excluding full NIP3 assessments)</p>
+                    <p className="text-gray-600">No completed assessments yet</p>
                   </div>
                 ) : (
                   <div className="overflow-x-auto">
@@ -987,61 +872,76 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
                       </thead>
                       <tbody>
                         {[
-                          ...responses.filter(r =>
-                            (r.status === 'completed' || r.status === 'analyzed' || r.status === 'sent') &&
-                            r.analysis_results?.totalQuestions !== 343
-                          ).map(r => ({ ...r, type: 'nipa' })),
+                          ...responses.filter(r => r.status === 'completed' || r.status === 'analyzed' || r.status === 'sent').map(r => ({ ...r, type: 'nipa' })),
                           ...selfAssessments.filter(s => s.status === 'completed' || s.status === 'analyzed').map(s => ({ ...s, type: 'self' }))
                         ]
                           .sort((a, b) => new Date(b.completed_at).getTime() - new Date(a.completed_at).getTime())
-                          .map((test) => (
-                            <tr key={`${test.type}-${test.id}`} className="border-b hover:bg-gray-50">
-                              <td className="px-6 py-4 font-medium text-[#0A2A5E]">{test.customer_name}</td>
-                              <td className="px-6 py-4 text-gray-600">{test.customer_email}</td>
-                              <td className="px-6 py-4 text-gray-600">
-                                {franchiseUsers.find(f => f.id === test.franchise_owner_id)?.name || 'Super Admin'}
-                              </td>
-                              <td className="px-6 py-4">
-                                <span className={`px-3 py-1 rounded-full text-xs font-bold ${
-                                  test.type === 'nipa'
-                                    ? 'bg-purple-100 text-purple-800'
-                                    : 'bg-orange-100 text-orange-800'
-                                }`}>
-                                  {test.type === 'nipa' ? 'NIPA Full' : test.assessment_type || 'Self Assessment'}
-                                </span>
-                              </td>
-                              <td className="px-6 py-4">
-                                <span className="font-bold text-[#3DB3E3]">
-                                  {test.analysis_results?.overallScore || 'N/A'}%
-                                </span>
-                              </td>
-                              <td className="px-6 py-4 text-sm text-gray-600">
-                                {new Date(test.completed_at).toLocaleDateString()}
-                              </td>
-                              <td className="px-6 py-4">
-                                <div className="flex gap-2">
-                                  <button
-                                    onClick={() => setViewingTestReport(test)}
-                                    className="bg-[#3DB3E3] text-white px-4 py-2 rounded-lg hover:bg-[#1FAFA3] transition-colors font-medium"
-                                  >
-                                    View Report
-                                  </button>
-                                  <button
-                                    onClick={() => {
-                                      setShareTest(test);
-                                      setShareEmail(test.customer_email);
-                                      setShowShareModal(true);
-                                    }}
-                                    className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors font-medium flex items-center gap-2"
-                                    title="Share report via email"
-                                  >
-                                    <Send size={16} />
-                                    Share
-                                  </button>
-                                </div>
-                              </td>
-                            </tr>
-                          ))}
+                          .map((test) => {
+                            const franchiseOwner = franchiseUsers.find(f => f.id === test.franchise_owner_id);
+                            const isNIP3 = test.type === 'nipa' && test.analysis_results?.totalQuestions === 343;
+                            return (
+                              <tr key={`${test.type}-${test.id}`} className="border-b hover:bg-gray-50">
+                                <td className="px-6 py-4 font-medium text-[#0A2A5E]">{test.customer_name}</td>
+                                <td className="px-6 py-4 text-gray-600">{test.customer_email}</td>
+                                <td className="px-6 py-4 text-gray-600">
+                                  {franchiseOwner?.name || 'Super Admin'}
+                                </td>
+                                <td className="px-6 py-4">
+                                  <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                                    test.type === 'nipa'
+                                      ? isNIP3 ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800'
+                                      : 'bg-orange-100 text-orange-800'
+                                  }`}>
+                                    {test.type === 'nipa' ? (isNIP3 ? 'NIP3 Full (343Q)' : 'NIPA Full') : test.assessment_type || 'Self Assessment'}
+                                  </span>
+                                </td>
+                                <td className="px-6 py-4">
+                                  <span className="font-bold text-[#3DB3E3]">
+                                    {test.analysis_results?.overallScore || 'N/A'}%
+                                  </span>
+                                </td>
+                                <td className="px-6 py-4 text-sm text-gray-600">
+                                  {new Date(test.completed_at).toLocaleDateString()}
+                                </td>
+                                <td className="px-6 py-4">
+                                  <div className="flex gap-2">
+                                    <button
+                                      onClick={() => setViewingTestReport(test)}
+                                      className="bg-[#3DB3E3] text-white px-4 py-2 rounded-lg hover:bg-[#1FAFA3] transition-colors font-medium flex items-center gap-2"
+                                    >
+                                      <Eye size={16} />
+                                      View
+                                    </button>
+                                    {isNIP3 && (
+                                      <button
+                                        onClick={() => {
+                                          setViewingTestReport(test);
+                                          setTimeout(() => window.print(), 500);
+                                        }}
+                                        className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors font-medium flex items-center gap-2"
+                                        title="Download report"
+                                      >
+                                        <Download size={16} />
+                                        Download
+                                      </button>
+                                    )}
+                                    <button
+                                      onClick={() => {
+                                        setShareTest(test);
+                                        setShareEmail(franchiseOwner?.email || test.customer_email);
+                                        setShowShareModal(true);
+                                      }}
+                                      className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors font-medium flex items-center gap-2"
+                                      title="Send report via email"
+                                    >
+                                      <Send size={16} />
+                                      Send Email
+                                    </button>
+                                  </div>
+                                </td>
+                              </tr>
+                            );
+                          })}
                       </tbody>
                     </table>
                   </div>

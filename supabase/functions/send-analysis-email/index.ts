@@ -191,7 +191,7 @@ Deno.serve(async (req: Request) => {
       console.error('✗ Error sending customer email:', error);
     }
 
-    // If recipientEmail is provided, skip sending to other addresses (franchise owner, admin, etc.)
+    // If recipientEmail is provided, skip sending to other addresses (franchise owner, etc.)
     if (recipientEmail) {
       console.log('Custom recipient email provided, skipping other email sends');
       return new Response(
@@ -208,6 +208,7 @@ Deno.serve(async (req: Request) => {
       );
     }
 
+    // Send FH report (no PDF) to franchise holder only
     if (franchiseOwnerEmail) {
       try {
         await transporter.sendMail({
@@ -225,67 +226,9 @@ Deno.serve(async (req: Request) => {
       }
     }
 
-    try {
-      await transporter.sendMail({
-        from: `BrainWorx <${GMAIL_USER}>`,
-        to: BRAINWORX_EMAIL,
-        subject: `NIP Assessment Report - ${customerName} - Comprehensive Coach Analysis`,
-        html: franchiseEmailBody,
-      });
-
-      emailResults.brainworxCoach.sent = true;
-      console.log('✓ Admin coach report email sent to:', BRAINWORX_EMAIL);
-    } catch (error) {
-      emailResults.brainworxCoach.error = error.message;
-      console.error('✗ Error sending admin coach report email:', error);
-    }
-
-    // CRITICAL: Send admin client report with PDF attachment
-    try {
-      const pdfFilename = `BrainWorx_Report_${customerName.replace(/\s+/g, '_')}.pdf`;
-      console.log('Sending admin client report with PDF attachment:', pdfFilename);
-
-      await transporter.sendMail({
-        from: `BrainWorx <${GMAIL_USER}>`,
-        to: BRAINWORX_EMAIL,
-        subject: `NIP Client Report - ${customerName} - Assessment Results`,
-        html: customerEmailBody,
-        attachments: [
-          {
-            filename: pdfFilename,
-            content: pdfBuffer,
-            contentType: 'application/pdf'
-          }
-        ]
-      });
-
-      emailResults.brainworxClient.sent = true;
-      console.log('✓ Admin client report email sent to:', BRAINWORX_EMAIL);
-      console.log('✓ PDF attachment included:', pdfFilename);
-    } catch (error) {
-      emailResults.brainworxClient.error = error.message;
-      console.error('✗ Error sending admin client report email:', error);
-    }
-
-    try {
-      await transporter.sendMail({
-        from: `BrainWorx <${GMAIL_USER}>`,
-        to: 'kobus@brainworx.co.za',
-        subject: `NIP Assessment Report - ${customerName} - Comprehensive Coach Analysis`,
-        html: franchiseEmailBody,
-      });
-
-      console.log('✓ Kobus email sent to: kobus@brainworx.co.za');
-    } catch (error) {
-      console.error('✗ Error sending Kobus email:', error);
-    }
-
     console.log('=== Email Delivery Summary ===');
     console.log('Customer:', emailResults.customer.sent ? '✓ Sent' : '✗ Failed');
     console.log('Franchise Owner:', franchiseOwnerEmail ? (emailResults.franchiseOwner.sent ? '✓ Sent' : '✗ Failed') : 'N/A');
-    console.log('Admin Coach Report (info@brainworx.co.za):', emailResults.brainworxCoach.sent ? '✓ Sent' : '✗ Failed');
-    console.log('Admin Client Report (info@brainworx.co.za):', emailResults.brainworxClient.sent ? '✓ Sent' : '✗ Failed');
-    console.log('Kobus (kobus@brainworx.co.za): ✓ Sent');
     console.log('Results URL:', resultsUrl);
     console.log('Booking URL:', bookingUrl);
     console.log('==============================');
