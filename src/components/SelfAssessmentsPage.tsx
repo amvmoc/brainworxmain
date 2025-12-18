@@ -56,7 +56,7 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
       'Full Assessment (343 Questions)': 'nipa',
       'Full ADHD Assessment (128 Questions)': 'nipa',
       'Teen ADHD Screener (48 Questions)': 'teen-adhd',
-      'Parent ADHD Screener (48 Questions)': 'parent-adhd',
+      'Child Focus & Behaviour Screen (100 Questions)': 'child-adhd-7-10',
       'Teen Career & Future Direction': 'teen-career'
     };
 
@@ -115,7 +115,7 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
     if (existingResponse) {
       const assessmentTypeMap: Record<string, typeof selfAssessmentTypes[0]> = {
         'tadhd': selfAssessmentTypes[0],
-        'pcadhd': selfAssessmentTypes[1]
+        'child-adhd-7-10': selfAssessmentTypes[1]
       };
 
       const mappedAssessment = assessmentTypeMap[existingResponse.assessment_type];
@@ -206,12 +206,12 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
       iconColor: 'text-purple-500',
       borderColor: 'border-purple-500',
       bgColor: 'bg-purple-50',
-      targetAudience: 'Parents/Caregivers',
+      targetAudience: 'Children (Ages 7-10)',
       features: [
-        'Observe focus and attention patterns',
-        'Track energy and engagement levels',
-        'Understand emotional responses',
-        'Identify areas needing support'
+        'Parent & teacher observations at home and school',
+        'Track attention, activity & impulse patterns',
+        'Identify emotional and social challenges',
+        'Compare behavior across settings'
       ]
     },
     {
@@ -221,7 +221,7 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
       iconColor: 'text-amber-500',
       borderColor: 'border-amber-500',
       bgColor: 'bg-amber-50',
-      targetAudience: 'Ages 12-18',
+      targetAudience: 'Teens & Young Adults (Ages 15-25)',
       features: [
         'Neural Imprint Patterns + RIASEC interests',
         'Real workplace scenario questions',
@@ -585,7 +585,7 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
                     onClick={() => {
                       const paymentTypeMap: Record<string, 'tadhd' | 'pcadhd' | 'tcf'> = {
                         'teen-adhd': 'tadhd',
-                        'parent-adhd': 'pcadhd',
+                        'child-adhd-7-10': 'pcadhd',
                         'teen-career': 'tcf'
                       };
                       const paymentType = paymentTypeMap[selectedAssessment.id];

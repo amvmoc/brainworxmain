@@ -89,76 +89,6 @@ export const teenADHDAssessment: SelfAssessmentType = {
   }
 };
 
-// Parent ADHD-Linked Neural Imprint Screener
-export const parentADHDQuestions: SelfAssessmentQuestion[] = [
-  { id: 1, text: "My child's mind often jumps from one thing to another when they are supposed to be focusing.", neuralImprint: "DIS" },
-  { id: 2, text: "My child starts listening to a teacher or adult, but their attention drifts away quickly.", neuralImprint: "DIS" },
-  { id: 3, text: "My child forgets what they were about to do, even when it was something important.", neuralImprint: "DIS" },
-  { id: 4, text: "In class, my child seems mentally overloaded and struggles to pick up the main point.", neuralImprint: "DIS" },
-  { id: 5, text: "My child makes careless mistakes because they rush or don't notice small details.", neuralImprint: "DIS" },
-  { id: 6, text: "My child often realises they didn't hear instructions properly and feels lost afterwards.", neuralImprint: "DIS" },
-  { id: 7, text: "My child understands things better when they can see or do them, not just listen to words.", neuralImprint: "LEFT/RIGHT" },
-  { id: 8, text: "My child can focus very well on things they enjoy, but almost switches off for boring tasks.", neuralImprint: "LEFT/RIGHT" },
-  { id: 9, text: "My child gets good ideas quickly but struggles to explain them step by step.", neuralImprint: "LEFT/RIGHT" },
-  { id: 10, text: "My child often sees creative or unusual solutions that others don't think of.", neuralImprint: "LEFT/RIGHT" },
-  { id: 11, text: "Schoolwork seems to drain my child's energy faster than it drains other learners' energy.", neuralImprint: "BURN" },
-  { id: 12, text: "My child appears mentally tired after trying to concentrate for a short time.", neuralImprint: "BURN" },
-  { id: 13, text: "Keeping up with school, chores, and expectations seems exhausting for my child.", neuralImprint: "BURN" },
-  { id: 14, text: "My child sometimes gives up on tasks because they feel too mentally tired to keep trying.", neuralImprint: "BURN" },
-  { id: 15, text: "When my child is bored, they automatically reach for their phone, games, or social media.", neuralImprint: "CPL" },
-  { id: 16, text: "My child often loses track of time when they are online or gaming.", neuralImprint: "CPL" },
-  { id: 17, text: "Doing homework seems almost impossible for my child when favourite apps or games are nearby.", neuralImprint: "CPL" },
-  { id: 18, text: "My child uses their phone or music to keep their brain busy, even when they should be resting.", neuralImprint: "CPL" },
-  { id: 19, text: "People have called my child lazy, even when they are actually struggling to focus.", neuralImprint: "SHT" },
-  { id: 20, text: "When my child forgets things or loses track, they seem to feel that something is wrong with them.", neuralImprint: "SHT" },
-  { id: 21, text: "My child appears embarrassed about how disorganised they can be.", neuralImprint: "SHT" },
-  { id: 22, text: "My child sometimes says or behaves as if they are stupid because their marks don't show how hard they try.", neuralImprint: "SHT" },
-  { id: 23, text: "My child seems ashamed when adults compare them negatively to other learners.", neuralImprint: "SHT" },
-  { id: 24, text: "My child often hides how much they are struggling because they don't want people to judge them.", neuralImprint: "SHT" },
-  { id: 25, text: "My child says things like 'I don't care' about school because it hurts to feel like they are failing.", neuralImprint: "RES" },
-  { id: 26, text: "When people tell my child to just focus, they often become irritated or shut down.", neuralImprint: "RES" },
-  { id: 27, text: "My child sometimes gives up before they start because they expect to mess it up anyway.", neuralImprint: "RES" },
-  { id: 28, text: "Encouraging messages about working harder don't help my child because they feel they have already tried.", neuralImprint: "RES" },
-  { id: 29, text: "My child feels that teachers or adults don't understand how hard it is for them to pay attention.", neuralImprint: "VICTIM" },
-  { id: 30, text: "My child often gets into trouble for behaviours they don't fully mean to do.", neuralImprint: "VICTIM" },
-  { id: 31, text: "It seems that my child is punished more than others, even when they do similar things.", neuralImprint: "VICTIM" },
-  { id: 32, text: "My child feels that no matter what they do, people mainly see their mistakes.", neuralImprint: "VICTIM" },
-  { id: 33, text: "My child shows signs that they can learn better ways to manage their attention and energy.", neuralImprint: "INFLUENCE" },
-  { id: 34, text: "At times my child feels that their brain is simply wired wrong and cannot be improved.", neuralImprint: "INFLUENCE" },
-  { id: 35, text: "When my child uses small strategies (like lists or timers), things sometimes go better for them.", neuralImprint: "INFLUENCE" },
-  { id: 36, text: "My child feels stuck when adults expect them to change but don't show them how.", neuralImprint: "INFLUENCE" },
-  { id: 37, text: "At home or school, people often focus more on my child's behaviour than on what might be behind it.", neuralImprint: "TRAP" },
-  { id: 38, text: "In our world, there is little space for my child to talk about how their brain works differently.", neuralImprint: "TRAP" },
-  { id: 39, text: "The rules where my child lives or studies don't seem to leave room for people who think like they do.", neuralImprint: "TRAP" },
-  { id: 40, text: "Instead of support, my child mostly receives lectures or punishment when they struggle to focus.", neuralImprint: "TRAP" },
-  { id: 41, text: "Growing up, my child was often called naughty, restless, or disruptive.", neuralImprint: "NEG" },
-  { id: 42, text: "As a younger child, my child was sometimes shouted at for things that may have been due to not sitting still.", neuralImprint: "NEG" },
-  { id: 43, text: "Adults in my child's past rarely asked why they struggled; they mostly told my child to behave.", neuralImprint: "NEG" },
-  { id: 44, text: "My child learnt early to hide their energy or ideas so they wouldn't get into trouble.", neuralImprint: "NEG" },
-  { id: 45, text: "My child becomes very frustrated with themselves when they make the same mistakes again and again.", neuralImprint: "ANG" },
-  { id: 46, text: "When my child feels overwhelmed, they sometimes snap at people or storm off.", neuralImprint: "ANG" },
-  { id: 47, text: "My child acts as if everything is fine at school, even when they seem completely lost inside.", neuralImprint: "DEC" },
-  { id: 48, text: "My child sometimes claims not to care about a test or task so that people won't see how much they struggled.", neuralImprint: "DEC" }
-];
-
-export const parentADHDAssessment: SelfAssessmentType = {
-  id: 'parent-adhd',
-  name: 'Parent/Caregiver ADHD-Linked Neural Imprint Screener',
-  description: 'This questionnaire helps you notice patterns in how your child or teenager focuses, manages energy, handles emotions, and responds to school and life demands. It links their behaviours to Neural Imprint Patterns.',
-  instructions: `How to answer:
-• Think about your child's behaviour over the last 6–12 months.
-• Answer based on how they are MOST of the time, not on a single good or bad day.
-• There are no right or wrong answers – be as honest and objective as you can.
-• Use the scale: 1 = Does not describe my child at all, 4 = Describes my child completely.`,
-  disclaimer: 'This is NOT a diagnosis of ADHD. Only a qualified health professional (such as a psychologist, psychiatrist, or medical doctor) can diagnose ADHD. This tool is designed for parent or caregiver reflection and coaching. It can highlight where your child may benefit from support, strategies, or a professional assessment.',
-  questions: parentADHDQuestions,
-  scale: {
-    min: 1,
-    max: 4,
-    labels: ['Does not describe my child at all', 'Describes my child a little', 'Describes my child quite a lot', 'Describes my child completely']
-  }
-};
-
 // Teen Career & Future Direction Assessment
 export const careerAssessment: SelfAssessmentType = {
   id: 'teen-career',
@@ -343,7 +273,6 @@ export const child710ADHDAssessment: SelfAssessmentType = {
 // Export all assessment types
 export const selfAssessmentTypes: SelfAssessmentType[] = [
   teenADHDAssessment,
-  parentADHDAssessment,
   child710ADHDAssessment,
   careerAssessment
 ];
