@@ -74,6 +74,9 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
   const [shareTest, setShareTest] = useState<any>(null);
   const [shareEmail, setShareEmail] = useState('');
   const [shareLoading, setShareLoading] = useState(false);
+  const [showDeleteTestModal, setShowDeleteTestModal] = useState(false);
+  const [testToDelete, setTestToDelete] = useState<any>(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   useEffect(() => {
     loadAllData();
@@ -150,6 +153,31 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
       alert('Failed to send report: ' + error.message);
     } finally {
       setShareLoading(false);
+    }
+  };
+
+  const handleDeleteTest = async () => {
+    if (!testToDelete) return;
+
+    setDeleteLoading(true);
+    try {
+      const tableName = testToDelete.type === 'nipa' ? 'responses' : 'self_assessment_responses';
+
+      const { error } = await supabase
+        .from(tableName)
+        .delete()
+        .eq('id', testToDelete.id);
+
+      if (error) throw error;
+
+      alert('Assessment deleted successfully!');
+      setShowDeleteTestModal(false);
+      setTestToDelete(null);
+      loadAllData();
+    } catch (error: any) {
+      alert('Failed to delete assessment: ' + error.message);
+    } finally {
+      setDeleteLoading(false);
     }
   };
 
@@ -937,6 +965,17 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
                                       <Send size={16} />
                                       Send Email
                                     </button>
+                                    <button
+                                      onClick={() => {
+                                        setTestToDelete(test);
+                                        setShowDeleteTestModal(true);
+                                      }}
+                                      className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors font-medium flex items-center gap-2"
+                                      title="Delete assessment"
+                                    >
+                                      <Trash2 size={16} />
+                                      Delete
+                                    </button>
                                   </div>
                                 </td>
                               </tr>
@@ -1402,6 +1441,64 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {showDeleteTestModal && testToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8">
+            <h2 className="text-2xl font-bold text-red-600 mb-4">Delete Assessment</h2>
+            <p className="text-gray-700 mb-6">
+              Are you sure you want to delete this assessment for <strong>{testToDelete.customer_name}</strong>?
+              This action cannot be undone.
+            </p>
+
+            <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
+              <div className="flex">
+                <div className="flex-shrink-0">
+                  <svg className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <div className="ml-3">
+                  <p className="text-sm text-yellow-700">
+                    This will permanently delete all assessment data, including responses and analysis results.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowDeleteTestModal(false);
+                  setTestToDelete(null);
+                }}
+                disabled={deleteLoading}
+                className="flex-1 px-4 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 disabled:opacity-50 transition-all font-medium"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteTest}
+                disabled={deleteLoading}
+                className="flex-1 bg-red-600 text-white px-4 py-3 rounded-lg hover:bg-red-700 disabled:opacity-50 transition-all font-medium flex items-center justify-center gap-2"
+              >
+                {deleteLoading ? (
+                  <>
+                    <Loader className="animate-spin" size={20} />
+                    Deleting...
+                  </>
+                ) : (
+                  <>
+                    <Trash2 size={20} />
+                    Delete Assessment
+                  </>
+                )}
+              </button>
+            </div>
           </div>
         </div>
       )}
