@@ -19,76 +19,6 @@ export interface SelfAssessmentType {
   };
 }
 
-// Teen ADHD-Linked Neural Imprint Screener
-export const teenADHDQuestions: SelfAssessmentQuestion[] = [
-  { id: 1, text: "My mind often jumps from one thing to another when I'm supposed to be focusing.", neuralImprint: "DIS" },
-  { id: 2, text: "I start listening to a teacher or parent, but my thoughts drift away quickly.", neuralImprint: "DIS" },
-  { id: 3, text: "I forget what I was about to do, even when it was something important.", neuralImprint: "DIS" },
-  { id: 4, text: "In class, it feels like my brain is full of noise and it's hard to hear the main point.", neuralImprint: "DIS" },
-  { id: 5, text: "I make careless mistakes because I rush or don't notice small details.", neuralImprint: "DIS" },
-  { id: 6, text: "I often realise I didn't hear instructions properly and feel lost afterwards.", neuralImprint: "DIS" },
-  { id: 7, text: "I understand things better when I can see or do them, not just listen to words.", neuralImprint: "LEFT/RIGHT" },
-  { id: 8, text: "I can focus really well on things I find interesting, but almost switch off for boring tasks.", neuralImprint: "LEFT/RIGHT" },
-  { id: 9, text: "I get good ideas quickly, but struggle to explain them step-by-step.", neuralImprint: "LEFT/RIGHT" },
-  { id: 10, text: "I often see creative or unusual solutions that others don't think of.", neuralImprint: "LEFT/RIGHT" },
-  { id: 11, text: "Schoolwork drains my energy faster than it seems to drain other people's energy.", neuralImprint: "BURN" },
-  { id: 12, text: "I feel mentally tired after trying to concentrate for a short time.", neuralImprint: "BURN" },
-  { id: 13, text: "Keeping up with school, chores, and expectations feels exhausting for me.", neuralImprint: "BURN" },
-  { id: 14, text: "I sometimes give up on tasks because my brain feels too tired to keep trying.", neuralImprint: "BURN" },
-  { id: 15, text: "When I'm bored, I automatically reach for my phone, games, or social media.", neuralImprint: "CPL" },
-  { id: 16, text: "I often lose track of time when I'm online or gaming.", neuralImprint: "CPL" },
-  { id: 17, text: "Doing homework feels almost impossible when my favourite apps or games are nearby.", neuralImprint: "CPL" },
-  { id: 18, text: "I use my phone or music to keep my brain busy, even when I should be resting.", neuralImprint: "CPL" },
-  { id: 19, text: "People have called me lazy, even when I'm actually struggling to focus.", neuralImprint: "SHT" },
-  { id: 20, text: "When I forget things or lose track, I feel like there's something wrong with me.", neuralImprint: "SHT" },
-  { id: 21, text: "I feel embarrassed about how disorganised I can be.", neuralImprint: "SHT" },
-  { id: 22, text: "I sometimes think I'm stupid because my marks don't show how hard I try.", neuralImprint: "SHT" },
-  { id: 23, text: "I feel ashamed when adults compare me negatively to other learners.", neuralImprint: "SHT" },
-  { id: 24, text: "I often hide how much I'm struggling because I don't want people to judge me.", neuralImprint: "SHT" },
-  { id: 25, text: "I say things like 'I don't care' about school because it hurts to feel like I'm failing.", neuralImprint: "RES" },
-  { id: 26, text: "When people tell me to just focus, I feel irritated or shut down.", neuralImprint: "RES" },
-  { id: 27, text: "I sometimes give up before I start because I expect to mess it up anyway.", neuralImprint: "RES" },
-  { id: 28, text: "Encouraging messages about working harder don't help, because it feels like I have already tried.", neuralImprint: "RES" },
-  { id: 29, text: "I feel like teachers or adults don't understand how hard it is for me to pay attention.", neuralImprint: "VICTIM" },
-  { id: 30, text: "I often get into trouble for behaviours I don't fully mean to do.", neuralImprint: "VICTIM" },
-  { id: 31, text: "It feels like I'm punished more than others, even when we do similar things.", neuralImprint: "VICTIM" },
-  { id: 32, text: "Sometimes I feel like no matter what I do, people only see my mistakes.", neuralImprint: "VICTIM" },
-  { id: 33, text: "Part of me believes I can learn better ways to manage my attention and energy.", neuralImprint: "INFLUENCE" },
-  { id: 34, text: "Another part of me feels like my brain is just wired wrong and can't be improved.", neuralImprint: "INFLUENCE" },
-  { id: 35, text: "When I use small strategies (like lists or timers), things sometimes go better.", neuralImprint: "INFLUENCE" },
-  { id: 36, text: "I feel stuck when adults expect me to change, but don't show me how.", neuralImprint: "INFLUENCE" },
-  { id: 37, text: "At home or school, people focus more on my behaviour than on what might be behind it.", neuralImprint: "TRAP" },
-  { id: 38, text: "In my world, there is little space to talk about how my brain works differently.", neuralImprint: "TRAP" },
-  { id: 39, text: "I feel like the rules where I live or study don't leave room for people who think like me.", neuralImprint: "TRAP" },
-  { id: 40, text: "Instead of support, I mostly receive lectures or punishment when I struggle to focus.", neuralImprint: "TRAP" },
-  { id: 41, text: "Growing up, I was often called naughty, restless, or disruptive.", neuralImprint: "NEG" },
-  { id: 42, text: "As a child, I was sometimes shouted at for things I now think were because I couldn't sit still.", neuralImprint: "NEG" },
-  { id: 43, text: "Adults in my past rarely asked why I struggled; they mostly told me to behave.", neuralImprint: "NEG" },
-  { id: 44, text: "I learnt early to hide my energy or ideas so I wouldn't get into trouble.", neuralImprint: "NEG" },
-  { id: 45, text: "I get very frustrated with myself when I make the same mistakes again and again.", neuralImprint: "ANG" },
-  { id: 46, text: "When I feel overwhelmed, I sometimes snap at people or storm off.", neuralImprint: "ANG" },
-  { id: 47, text: "I act like everything is fine at school, even when inside I feel completely lost.", neuralImprint: "DEC" },
-  { id: 48, text: "I sometimes pretend I didn't care about a test or task, just so people won't see I struggled.", neuralImprint: "DEC" }
-];
-
-export const teenADHDAssessment: SelfAssessmentType = {
-  id: 'teen-adhd',
-  name: 'Teen ADHD-Linked Neural Imprint Screener',
-  description: 'This questionnaire helps you notice patterns in how your brain focuses, manages energy, handles emotions, and responds to school and life demands. It links your answers to Neural Imprint Patterns.',
-  instructions: `How to answer:
-• This is about YOU, not what others expect.
-• There are no right or wrong answers.
-• Answer honestly about how things are MOST of the time.
-• Use the scale: 1 = Does not describe me at all, 4 = Describes me completely.`,
-  disclaimer: 'This is NOT a diagnosis of ADHD. Only a qualified health professional (such as a psychologist, psychiatrist, or medical doctor) can diagnose ADHD. This tool is designed for self-reflection and coaching. It can highlight where you may benefit from support, strategies, or a professional assessment.',
-  questions: teenADHDQuestions,
-  scale: {
-    min: 1,
-    max: 4,
-    labels: ['Does not describe me at all', 'Describes me a little', 'Describes me quite a lot', 'Describes me completely']
-  }
-};
-
 // Teen Career & Future Direction Assessment
 export const careerAssessment: SelfAssessmentType = {
   id: 'teen-career',
@@ -251,6 +181,7 @@ export const child610ADHDQuestions: SelfAssessmentQuestion[] = [
   { id: 100, text: "[AT SCHOOL] My child seems to attract negative attention from peers.", neuralImprint: "BULLY", domain: "teacher" }
 ];
 
+// 6-10 Year Old ADHD Screener (Parent & Caregiver)
 export const child610ADHDAssessment: SelfAssessmentType = {
   id: 'child-adhd-6-10',
   name: 'Child Focus & Behaviour Screen (6–10 years)',
@@ -270,9 +201,31 @@ export const child610ADHDAssessment: SelfAssessmentType = {
   }
 };
 
+// 7-10 Year Old ADHD Screener (Parent & Caregiver) - uses same questions as 6-10
+export const child710ADHDQuestions: SelfAssessmentQuestion[] = child610ADHDQuestions;
+
+export const child710ADHDAssessment: SelfAssessmentType = {
+  id: 'child-adhd-7-10',
+  name: 'Child Focus & Behaviour Screen (7–10 years)',
+  description: 'This screening tool helps parents/caregivers and teachers observe ADHD-style patterns in children aged 7-10, covering attention, activity level, impulse control, emotional patterns, and social experiences at home and school.',
+  instructions: `How to answer:
+• This is about YOUR CHILD, based on your observations.
+• Answer questions marked [AT HOME] based on home observations.
+• Answer questions marked [AT SCHOOL] based on school observations (ask the teacher if needed).
+• Think about how your child behaves MOST of the time, not just on their best or worst days.
+• Use the scale: 1 = Never/Not at all, 4 = Very Often/Very Much.`,
+  disclaimer: 'This is NOT a diagnosis of ADHD. Only a qualified health professional (such as a paediatrician, psychologist, or psychiatrist) can diagnose ADHD. This tool is designed for parent, caregiver, and teacher observation. It can highlight where a child may benefit from support, strategies, or a professional assessment.',
+  questions: child710ADHDQuestions,
+  scale: {
+    min: 1,
+    max: 4,
+    labels: ['Never/Not at all', 'Sometimes/A little', 'Often/Quite a lot', 'Very Often/Very Much']
+  }
+};
+
 // Export all assessment types
 export const selfAssessmentTypes: SelfAssessmentType[] = [
-  teenADHDAssessment,
   child610ADHDAssessment,
+  child710ADHDAssessment,
   careerAssessment
 ];
