@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Career Direction & Behaviour Snapshot - Client Report</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      overflow: hidden;
+    }
+    .copyright {
+      background: #f8f9fa;
+      padding: 10px 30px;
+      text-align: center;
+      font-size: 0.85em;
+      color: #666;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    header {
+      padding: 25px 30px 20px 30px;
+      text-align: center;
+      border-bottom: 3px solid #667eea;
+    }
+    .logo {
+      max-width: 140px;
+      height: auto;
+      display: block;
+      margin: 0 auto 10px auto;
+    }
+    header h1 {
+      font-size: 2.0em;
+      margin-bottom: 4px;
+      color: #667eea;
+    }
+    .coach-line {
+      margin-top: 4px;
+      font-size: 0.95em;
+      color: #444;
+      font-weight: 500;
+    }
+    header p {
+      font-size: 0.95em;
+      color: #666;
+      margin-top: 6px;
+    }
+    main {
+      padding: 30px 30px 40px 30px;
+    }
+    .card {
+      background: #ffffff;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 25px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      border: 1px solid #e0e0e0;
+    }
+    .card-strong {
+      border: 2px solid #667eea;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .gradient-block {
+      background: linear-gradient(135deg, #e8f4f8 0%, #d4e6f1 100%);
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 25px;
+    }
+    h2 {
+      margin-top: 0;
+      color: #2c3e50;
+    }
+    h3 {
+      margin-top: 0;
+      color: #667eea;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+    th, td {
+      padding: 6px 4px;
+      border-bottom: 1px solid #eee;
+      text-align: left;
+    }
+    th {
+      border-bottom: 1px solid #ccc;
+    }
+    .footer-note {
+      text-align: center;
+      color: #999;
+      font-size: 0.85em;
+      margin-top: 20px;
+      font-style: italic;
+    }
+    ol {
+      padding-left: 20px;
+    }
+
+    /* NIPP GRAPH STYLES */
+    .nipp-graph {
+      margin-top: 10px;
+    }
+    .nipp-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+      font-size: 0.85rem;
+    }
+    .nipp-label {
+      flex: 0 0 45%;
+    }
+    .nipp-bar-track {
+      flex: 1;
+      height: 10px;
+      background: #f1f3f5;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .nipp-bar-fill {
+      height: 100%;
+      background: #667eea;
+    }
+    .nipp-value {
+      width: 40px;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      color: #333;
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="copyright">
+      © All copyrights of this program belong to BrainWorx™ | All information is confidential
+    </div>
+
+    <header>
+      <img src="brainworx-logo.png" alt="BrainWorx – Neural Imprint Patterns" class="logo" />
+      <h1>Career Direction & Behaviour Snapshot</h1>
+      <div class="coach-line"><strong>Coach:</strong> Demo Coach</div>
+      <p>
+        Summary of your career interests (RIASEC), your behaviour patterns (Neural Imprints),
+        and how you tend to respond in real work situations.
+      </p>
+    </header>
+
+    <main>
+      <!-- Client info -->
+      <div class="card card-strong">
+        <h3>Client Information</h3>
+        <p><strong style="color:#667eea;">Name:</strong> Demo Learner</p>
+        <p><strong style="color:#667eea;">Age:</strong> 17</p>
+        <p><strong style="color:#667eea;">Grade:</strong> 11</p>
+        <p><strong style="color:#667eea;">Date:</strong> 2025/12/09</p>
+        <p><strong style="color:#667eea;">Coach:</strong> Demo Coach</p>
+      </div>
+
+      <!-- RIASEC summary -->
+      <div class="gradient-block">
+        <h2>Your RIASEC Career Interest Code</h2>
+        <p>
+          Your main interest pattern is:
+          <strong style="font-size:1.1em;">ISA</strong>
+          (Investigative – Social – Artistic)
+        </p>
+        <p style="font-size:0.95em; color:#555;">
+          This code shows which types of work you are most drawn to. Use it as a starting point
+          to explore careers that match you.
+        </p>
+        <ul style="margin-top:10px; padding-left:20px; font-size:0.95em;">
+          <li><strong>I</strong> – Investigative – Analytical, curious, problem-solving (1.80)</li>
+          <li><strong>S</strong> – Social – Helping, teaching, people-focused (1.70)</li>
+          <li><strong>A</strong> – Artistic – Creative, expressive, design &amp; ideas (1.40)</li>
+          <li><strong>E</strong> – Enterprising – Business, leadership, persuading (1.10)</li>
+          <li><strong>C</strong> – Conventional – Organised, structured, info &amp; numbers (0.90)</li>
+          <li><strong>R</strong> – Realistic – Hands-on, practical, tools &amp; outdoors (0.80)</li>
+        </ul>
+      </div>
+
+      <!-- Suggested fields -->
+      <div class="card">
+        <h2>Suggested Career Fields to Explore</h2>
+        <p style="margin-bottom:15px; color:#555; font-size:0.95em;">
+          These fields match your strongest RIASEC patterns. They are not the only options,
+          but they are good areas to research and discuss with a coach, parent or teacher.
+        </p>
+        <ol>
+          <li style="margin-bottom:12px;">
+            <strong>Science, Research &amp; IT / Data</strong> – match: 90%
+            <br />
+            <span style="font-size:0.9rem; color:#555;">
+              Analytical work focused on understanding how things work, solving complex problems,
+              and working with information, data or systems.
+            </span>
+            <br />
+            <span style="font-size:0.9rem;">
+              <em>Example careers:</em> Scientist / lab technician, Data analyst,
+              Software developer, Systems / business analyst
+            </span>
+          </li>
+          <li style="margin-bottom:12px;">
+            <strong>Helping, Counselling &amp; Education</strong> – match: 85%
+            <br />
+            <span style="font-size:0.9rem; color:#555;">
+              People-focused work that involves teaching, supporting, counselling or guiding others.
+            </span>
+            <br />
+            <span style="font-size:0.9rem;">
+              <em>Example careers:</em> Teacher / tutor, Counsellor / coach,
+              Social worker, Community development worker
+            </span>
+          </li>
+          <li style="margin-bottom:12px;">
+            <strong>Creative &amp; Media / Design</strong> – match: 70%
+            <br />
+            <span style="font-size:0.9rem; color:#555;">
+              Work that uses imagination and creativity – design, writing, music, art,
+              content creation and performance.
+            </span>
+            <br />
+            <span style="font-size:0.9rem;">
+              <em>Example careers:</em> Graphic / web designer, Photographer / videographer,
+              Writer / copywriter, Musician / performing artist
+            </span>
+          </li>
+          <li style="margin-bottom:12px;">
+            <strong>Helping + Technical / Health &amp; Practical Support</strong> – match: 62%
+            <br />
+            <span style="font-size:0.9rem; color:#555;">
+              A mix of helping people and using practical or technical skills – health support,
+              rehabilitation, hands-on care.
+            </span>
+            <br />
+            <span style="font-size:0.9rem;">
+              <em>Example careers:</em> Nurse / paramedic, Physiotherapy / occupational therapy assistant,
+              Biokineticist / sport rehab support
+            </span>
+          </li>
+          <li style="margin-bottom:12px;">
+            <strong>Creative Business &amp; Marketing</strong> – match: 62%
+            <br />
+            <span style="font-size:0.9rem; color:#555;">
+              Using creativity inside a business or marketing context – branding, campaigns, digital content
+              that supports sales and growth.
+            </span>
+            <br />
+            <span style="font-size:0.9rem;">
+              <em>Example careers:</em> Digital marketer, Social media content creator,
+              Brand / communication specialist
+            </span>
+          </li>
+        </ol>
+      </div>
+
+      <!-- RIASEC table -->
+      <div class="card">
+        <h3>RIASEC scores (0–2)</h3>
+        <p style="margin-bottom:6px; font-size:0.9rem; color:#555;">
+          Higher scores mean stronger interest in that type of work.
+        </p>
+        <table>
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Avg</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Realistic – Hands-on, practical, tools &amp; outdoors</td>
+              <td>0.80</td>
+            </tr>
+            <tr>
+              <td>Investigative – Analytical, curious, problem-solving</td>
+              <td>1.80</td>
+            </tr>
+            <tr>
+              <td>Artistic – Creative, expressive, design &amp; ideas</td>
+              <td>1.40</td>
+            </tr>
+            <tr>
+              <td>Social – Helping, teaching, people-focused</td>
+              <td>1.70</td>
+            </tr>
+            <tr>
+              <td>Enterprising – Business, leadership, persuading</td>
+              <td>1.10</td>
+            </tr>
+            <tr>
+              <td>Conventional – Organised, structured, info &amp; numbers</td>
+              <td>0.90</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- NIPP GRAPH (replaces old NIPP table) -->
+      <div class="card">
+        <h3>Neural Imprint patterns – visual profile (0–3)</h3>
+        <p style="margin-bottom:6px; font-size:0.9rem; color:#555;">
+          These bars show how strong each pattern is for you. The longer the bar, the stronger the pattern.
+        </p>
+
+        <div class="nipp-graph">
+          <div class="nipp-row">
+            <div class="nipp-label">ORG – Planning &amp; Order</div>
+            <div class="nipp-bar-track">
+              <div class="nipp-bar-fill" style="width:80%;"></div>
+            </div>
+            <div class="nipp-value">2.40</div>
+          </div>
+          <div class="nipp-row">
+            <div class="nipp-label">HYP – High Gear</div>
+            <div class="nipp-bar-track">
+              <div class="nipp-bar-fill" style="width:70%;"></div>
+            </div>
+            <div class="nipp-value">2.10</div>
+          </div>
+          <div class="nipp-row">
+            <div class="nipp-label">IMP – Impulse Rush</div>
+            <div class="nipp-bar-track">
+              <div class="nipp-bar-fill" style="width:43%;"></div>
+            </div>
+            <div class="nipp-value">1.30</div>
+          </div>
+          <div class="nipp-row">
+            <div class="nipp-label">DIM – Flexible Focus</div>
+            <div class="nipp-bar-track">
+              <div class="nipp-bar-fill" style="width:73%;"></div>
+            </div>
+            <div class="nipp-value">2.20</div>
+          </div>
+          <div class="nipp-row">
+            <div class="nipp-label">FOC – Scattered Focus</div>
+            <div class="nipp-bar-track">
+              <div class="nipp-bar-fill" style="width:53%;"></div>
+            </div>
+            <div class="nipp-value">1.60</div>
+          </div>
+          <div class="nipp-row">
+            <div class="nipp-label">RES – Attitude</div>
+            <div class="nipp-bar-track">
+              <div class="nipp-bar-fill" style="width:60%;"></div>
+            </div>
+            <div class="nipp-value">1.80</div>
+          </div>
+          <div class="nipp-row">
+            <div class="nipp-label">INWF – Inward Focus</div>
+            <div class="nipp-bar-track">
+              <div class="nipp-bar-fill" style="width:33%;"></div>
+            </div>
+            <div class="nipp-value">1.00</div>
+          </div>
+          <div class="nipp-row">
+            <div class="nipp-label">INFL – Inside Out</div>
+            <div class="nipp-bar-track">
+              <div class="nipp-bar-fill" style="width:30%;"></div>
+            </div>
+            <div class="nipp-value">0.90</div>
+          </div>
+          <div class="nipp-row">
+            <div class="nipp-label">BULLY – Victim Loops</div>
+            <div class="nipp-bar-track">
+              <div class="nipp-bar-fill" style="width:23%;"></div>
+            </div>
+            <div class="nipp-value">0.70</div>
+          </div>
+          <div class="nipp-row">
+            <div class="nipp-label">LACK – Lack State</div>
+            <div class="nipp-bar-track">
+              <div class="nipp-bar-fill" style="width:40%;"></div>
+            </div>
+            <div class="nipp-value">1.20</div>
+          </div>
+          <div class="nipp-row">
+            <div class="nipp-label">TRAP – Environment</div>
+            <div class="nipp-bar-track">
+              <div class="nipp-bar-fill" style="width:50%;"></div>
+            </div>
+            <div class="nipp-value">1.50</div>
+          </div>
+          <div class="nipp-row">
+            <div class="nipp-label">BURN – Burned Out</div>
+            <div class="nipp-bar-track">
+              <div class="nipp-bar-fill" style="width:63%;"></div>
+            </div>
+            <div class="nipp-value">1.90</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-note">
+        This report is a conversation tool. It does not tell you what you must become.
+        Use it with your coach, parents and teachers to explore options that fit you well.
+      </div>
+    </main>
+  </div>
+</body>
+</html>
