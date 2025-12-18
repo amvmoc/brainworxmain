@@ -5,6 +5,7 @@ import { selfAssessmentTypes } from '../data/selfAssessmentQuestions';
 import { SelfAssessmentQuestionnaire } from './SelfAssessmentQuestionnaire';
 import NIP3Assessment from './NIP3Assessment';
 import { CouponRedemption } from './CouponRedemption';
+import { CareerAssessment } from './CareerAssessment';
 import { supabase } from '../lib/supabase';
 
 interface SelfAssessmentsPageProps {
@@ -34,6 +35,13 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
     franchiseOwnerId: string;
     responseId: string;
   } | null>(null);
+  const [startCareerAssessment, setStartCareerAssessment] = useState(false);
+  const [careerAssessmentData, setCareerAssessmentData] = useState<{
+    email: string;
+    customerName: string;
+    franchiseOwnerId: string;
+    couponId?: string;
+  } | null>(null);
 
   const handleCouponRedemption = (
     assessmentType: string,
@@ -58,6 +66,14 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
       if (onStartPayment) {
         onStartPayment('nipa');
       }
+    } else if (assessmentId === 'teen-career') {
+      setCareerAssessmentData({
+        email: userEmail,
+        customerName: userName,
+        franchiseOwnerId: franchiseOwnerId,
+        couponId: couponId
+      });
+      setStartCareerAssessment(true);
     } else {
       const selectedAssessment = selfAssessmentTypes.find(type => type.id === assessmentId);
 
@@ -113,6 +129,16 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
           franchiseOwnerId: existingResponse.franchise_owner_id || ''
         });
         setStartQuestionnaire(true);
+      } else if (existingResponse.assessment_type === 'career') {
+        setShowResumeModal(false);
+        setShowChoiceModal(false);
+        setCareerAssessmentData({
+          email: resumeEmail,
+          customerName: existingResponse.customer_name || '',
+          franchiseOwnerId: existingResponse.franchise_owner_id || '',
+          couponId: existingResponse.coupon_id || undefined
+        });
+        setStartCareerAssessment(true);
       } else {
         setShowResumeModal(false);
         setShowChoiceModal(false);
@@ -187,6 +213,23 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
         'Understand emotional responses',
         'Identify areas needing support'
       ]
+    },
+    {
+      type: selfAssessmentTypes[2],
+      icon: Briefcase,
+      color: 'from-amber-500 to-orange-500',
+      iconColor: 'text-amber-500',
+      borderColor: 'border-amber-500',
+      bgColor: 'bg-amber-50',
+      targetAudience: 'Ages 12-18',
+      features: [
+        'Neural Imprint Patterns + RIASEC interests',
+        'Real workplace scenario questions',
+        '360° view of career fit',
+        'Detailed client & coach reports',
+        'Structured feedback session included',
+        'Study & career path guidance'
+      ]
     }
   ];
 
@@ -200,6 +243,19 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
         email={questionnaireData.email}
         franchiseOwnerId={questionnaireData.franchiseOwnerId}
         couponId={questionnaireData.couponId || null}
+      />
+    );
+  }
+
+  // Show career assessment after coupon redemption or resume
+  if (startCareerAssessment && careerAssessmentData) {
+    return (
+      <CareerAssessment
+        onClose={onClose}
+        email={careerAssessmentData.email}
+        customerName={careerAssessmentData.customerName}
+        franchiseOwnerId={careerAssessmentData.franchiseOwnerId}
+        couponId={careerAssessmentData.couponId || null}
       />
     );
   }

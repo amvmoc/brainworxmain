@@ -159,8 +159,43 @@ export const parentADHDAssessment: SelfAssessmentType = {
   }
 };
 
+// Teen Career & Future Direction Assessment
+export const careerAssessment: SelfAssessmentType = {
+  id: 'teen-career',
+  name: 'Teen Career & Future Direction',
+  description: `BrainWorx Career & Behaviour Assessments are designed to answer one big question: "Where do I fit, and how do I function best?"
+
+Instead of guessing about subjects, studies and future careers, our assessments give teenagers and young adults a clear, structured picture of who they are in real study and work situations. We combine three powerful lenses – Neural Imprint Patterns (NIP), RIASEC career interests, and real-life work scenarios – to create an integrated map of interests, strengths, stress patterns and decision-making style.
+
+Traditional career tests often focus only on what you like or what you're good at on paper. BrainWorx goes further. Neural Imprint Patterns look at how your brain and behaviour typically show up: organisation and time management, focus, energy, emotional loops, burnout risk, sense of scarcity or possibility, and more. RIASEC adds a globally recognised framework for career interests – from investigative and social paths to creative, business and practical/technical roles. Scenario questions then place you in everyday workplace situations to see how you tend to respond when there are deadlines, conflict, unclear instructions or pressure from others.
+
+Together, these pieces provide a 360° view of career fit. Learners don't just see a list of job titles; they see how their natural style will play out in real classrooms, campuses and workplaces. Parents gain language for meaningful conversations about expectations, motivation, stress and support. Schools, counsellors and BrainWorx coaches receive a professional report with clear graphs, plain-language explanations and a suggested coaching flow for a 45–60 minute feedback session.`,
+  instructions: `How to answer:
+• Answer honestly based on what truly describes you, not what you think sounds good.
+• Think about how you are MOST of the time, not just on your best or worst days.
+• For scenario questions, imagine yourself in that situation and choose the response that feels most natural to you.
+• There are no right or wrong answers – every pattern and preference has value in different careers.
+• Use the scale provided for each section to rate how well each statement describes you.
+• The assessment takes approximately 25-35 minutes to complete.
+• You can save your progress and return at any time.`,
+  disclaimer: `Important: BrainWorx assessments are self-reflection and coaching tools, not clinical diagnostic instruments. They are designed to support personal growth, informed decision-making and guided conversations with qualified professionals, teachers, mentors and parents. For formal psychometric testing or psychological diagnosis, a registered psychologist should be consulted.
+
+All assessments are delivered online and generate two reports:
+• A Client Report – simple, visual and encouraging, ideal for learners and parents.
+• A Coach/Teacher Report – more detailed, with interpretation notes, risk flags and practical next-step suggestions.
+
+Used well, these assessments don't tell a young person what they must become. They provide a clear map, a shared language and a structured conversation so that learner, parent and school can make wiser, more confident choices together.`,
+  questions: [], // Questions are handled in CareerAssessment component
+  scale: {
+    min: 1,
+    max: 5,
+    labels: ['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree']
+  }
+};
+
 // Export all assessment types
 export const selfAssessmentTypes: SelfAssessmentType[] = [
   teenADHDAssessment,
-  parentADHDAssessment
+  parentADHDAssessment,
+  careerAssessment
 ];
