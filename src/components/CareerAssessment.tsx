@@ -305,12 +305,13 @@ export function CareerAssessment({
       const { data, error } = await supabase
         .from('self_assessment_responses')
         .insert({
-          assessment_type: 'career',
+          assessment_type: 'teen-career',
           customer_name: customerInfo.name,
           customer_email: customerInfo.email,
           status: 'completed',
           entry_type: franchiseOwnerId ? 'coach_link' : 'random_visitor',
           franchise_owner_id: franchiseOwnerId,
+          coupon_id: couponId,
           answers: answers,
           analysis_results: {
             scores,
@@ -350,7 +351,8 @@ export function CareerAssessment({
       setShowResults(true);
     } catch (error) {
       console.error('Error saving assessment:', error);
-      alert('Error saving your assessment. Please try again.');
+      const errorMessage = error instanceof Error ? error.message : JSON.stringify(error);
+      alert(`Error saving your assessment. Please try again.\n\nDetails: ${errorMessage}`);
     } finally {
       setIsSubmitting(false);
     }
