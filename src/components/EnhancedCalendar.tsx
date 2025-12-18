@@ -11,6 +11,9 @@ interface TimeSlot {
   is_booked: boolean;
   booking_id?: string;
   customer_name?: string;
+  is_recurring?: boolean;
+  day_of_week?: number;
+  specific_date?: string;
 }
 
 interface EnhancedCalendarProps {

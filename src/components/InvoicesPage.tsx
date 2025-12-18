@@ -190,7 +190,8 @@ export function InvoicesPage({ franchiseOwnerId }: InvoicesPageProps) {
       }
     } catch (error) {
       console.error('Error marking invoice as paid:', error);
-      alert('Invoice updated but email sending failed: ' + error.message);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      alert('Invoice updated but email sending failed: ' + errorMessage);
       loadInvoices();
     }
   };

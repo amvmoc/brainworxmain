@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Ticket, Plus, Trash2, Eye, Copy, Check, X, Mail, Loader } from 'lucide-react';
+import { Plus, Eye, Copy, Check, X, Mail, Loader } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { selfAssessmentTypes } from '../data/selfAssessmentQuestions';
 

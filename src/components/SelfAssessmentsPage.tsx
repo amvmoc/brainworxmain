@@ -777,7 +777,7 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
                       </div>
                       <div className="flex-1 min-w-0">
                         <h2 className="text-3xl font-bold mb-3">
-                          {isNIPA ? card.name : cardData.type.name}
+                          {isNIPA ? card.name : (typeof card.type === 'object' ? card.type.name : '')}
                         </h2>
                         <div className="flex items-center gap-2 flex-wrap">
                           {isNIPA && (
@@ -787,7 +787,7 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
                           )}
                           <span className="flex items-center gap-1 text-white/90 whitespace-nowrap">
                             <Clock size={16} />
-                            {isNIPA ? card.questionCount : cardData.type.questions.length} questions
+                            {isNIPA ? card.questionCount : (typeof card.type === 'object' ? card.type.questions.length : 0)} questions
                           </span>
                           <span className="px-3 py-1 bg-white/20 rounded-full text-sm font-medium whitespace-nowrap">
                             {card.targetAudience}
@@ -805,7 +805,7 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
                   <div className="p-8 flex-1 flex flex-col">
                     <div className="mb-6">
                       <p className="text-gray-700 text-lg leading-relaxed min-h-[120px]">
-                        {isNIPA ? card.description : cardData.type.description}
+                        {isNIPA ? card.description : (typeof card.type === 'object' ? card.type.description : '')}
                       </p>
                     </div>
 
@@ -826,7 +826,7 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
 
                     <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-6">
                       <p className="text-sm text-gray-700">
-                        <strong>Important:</strong> {isNIPA ? card.disclaimer : cardData.type.disclaimer}
+                        <strong>Important:</strong> {isNIPA ? card.disclaimer : (typeof card.type === 'object' ? card.type.disclaimer : '')}
                       </p>
                     </div>
 
@@ -834,8 +834,8 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
                       onClick={() => {
                         if (isNIPA) {
                           setSelectedNIPA(true);
-                        } else {
-                          setSelectedAssessment(cardData.type);
+                        } else if (typeof card.type === 'object') {
+                          setSelectedAssessment(card.type);
                         }
                       }}
                       className={`w-full bg-gradient-to-r ${card.color} text-white px-8 py-4 rounded-xl hover:shadow-xl transition-all duration-300 font-bold text-lg flex items-center justify-center gap-2 group mt-auto`}

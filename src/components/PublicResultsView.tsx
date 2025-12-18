@@ -219,7 +219,7 @@ export function PublicResultsView({ shareToken }: PublicResultsViewProps) {
           </div>
         </div>
 
-        <ClientReport reportData={reportData} />
+        <ClientReport results={reportData} />
 
         <div className="max-w-4xl mx-auto mt-8">
           <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8 text-center">

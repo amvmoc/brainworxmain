@@ -15,8 +15,7 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({ onComplete }) =>
     answerQuestion,
     nextQuestion,
     previousQuestion,
-    completeAssessment,
-    showResumePrompt
+    completeAssessment
   } = useAssessment();
 
   const currentQuestion = questions[currentQuestionIndex];
@@ -27,8 +26,7 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({ onComplete }) =>
   console.log('QuestionScreen rendering:', {
     currentQuestionIndex,
     questionId: currentQuestion?.id,
-    answersCount: answers.size,
-    showResumePrompt
+    answersCount: answers.size
   });
 
   useEffect(() => {

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Brain, TrendingUp, Target, Award, Loader, Mail, CheckCircle, BarChart3, Activity } from 'lucide-react';
+import { TrendingUp, Target, Award, Loader, Mail, CheckCircle, BarChart3, Activity } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { NeuralImprintPatternsHistogram } from './NeuralImprintPatternsHistogram';
 
@@ -48,7 +48,7 @@ const NEURAL_IMPRINT_PATTERN_DEFINITIONS = [
   { code: 'DOG', name: 'Dogmatic', description: 'A way of thinking rooted in old patterns and strict adherence to a single viewpoint. These interprets or responses to everyday issues like relationships, lifestyles, or values outlook is shaped by deeply ingrained conviction - resistant to new perspective' }
 ];
 
-export function AnalysisReport({ responseId, customerEmail, onClose, onStartRound2, isRound2 = false }: AnalysisReportProps) {
+export function AnalysisReport({ responseId, customerEmail, onClose }: AnalysisReportProps) {
   const [isAnalyzing, setIsAnalyzing] = useState(true);
   const [isSendingEmail, setIsSendingEmail] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
@@ -86,7 +86,6 @@ export function AnalysisReport({ responseId, customerEmail, onClose, onStartRoun
 
     if (response) {
       const answers = response.answers as Record<string, string>;
-      const totalAnswers = Object.keys(answers).length;
 
       const neuralImprintPatternScores: NeuralImprintPatternScore[] = NEURAL_IMPRINT_PATTERN_DEFINITIONS.map((hw, index) => {
         const relevantAnswers = Object.entries(answers)

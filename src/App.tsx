@@ -34,7 +34,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [franchiseCode, setFranchiseCode] = useState<string | null>(null);
   const [bookingFranchiseCode, setBookingFranchiseCode] = useState<string | null>(null);
-  const [preselectedPaymentType, setPreselectedPaymentType] = useState<'tcf' | 'tadhd' | 'pcadhd' | null>(null);
+  const [preselectedPaymentType, setPreselectedPaymentType] = useState<'tcf' | 'tadhd' | 'pcadhd' | 'nipa' | null>(null);
   const [couponCode, setCouponCode] = useState<string | null>(null);
   const [shareToken, setShareToken] = useState<string | null>(null);
 
