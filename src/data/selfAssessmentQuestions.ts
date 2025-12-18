@@ -181,13 +181,13 @@ export const child610ADHDQuestions: SelfAssessmentQuestion[] = [
   { id: 100, text: "[AT SCHOOL] My child seems to attract negative attention from peers.", neuralImprint: "BULLY", domain: "teacher" }
 ];
 
-// 6-10 Year Old ADHD Screener (Parent & Caregiver)
+// 4-6 Year Old ADHD Screener (Parent & Caregiver)
 export const child610ADHDAssessment: SelfAssessmentType = {
-  id: 'child-adhd-6-10',
-  name: 'Child Focus & Behaviour Screen (6–10 years)',
-  description: 'This screening tool helps parents/caregivers and teachers observe ADHD-style patterns in children aged 6-10, covering attention, activity level, impulse control, emotional patterns, and social experiences at home and school.',
+  id: 'child-adhd-4-6',
+  name: 'Child Focus & Behaviour Screen (4–6 years)',
+  description: 'This screening tool helps parents/caregivers and teachers observe ADHD-style patterns in children aged 4-6, covering attention, activity level, impulse control, emotional patterns, and social experiences at home and school.',
   instructions: `How to answer:
-• This is about YOUR CHILD, based on your observations.
+• This is about YOUR CHILD (aged 4-6), based on your observations.
 • Answer questions marked [AT HOME] based on home observations.
 • Answer questions marked [AT SCHOOL] based on school observations (ask the teacher if needed).
 • Think about how your child behaves MOST of the time, not just on their best or worst days.
@@ -209,7 +209,7 @@ export const child710ADHDAssessment: SelfAssessmentType = {
   name: 'Child Focus & Behaviour Screen (7–10 years)',
   description: 'This screening tool helps parents/caregivers and teachers observe ADHD-style patterns in children aged 7-10, covering attention, activity level, impulse control, emotional patterns, and social experiences at home and school.',
   instructions: `How to answer:
-• This is about YOUR CHILD, based on your observations.
+• This is about YOUR CHILD (aged 7-10), based on your observations.
 • Answer questions marked [AT HOME] based on home observations.
 • Answer questions marked [AT SCHOOL] based on school observations (ask the teacher if needed).
 • Think about how your child behaves MOST of the time, not just on their best or worst days.

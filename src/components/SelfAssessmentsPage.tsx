@@ -56,7 +56,7 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
       'Full Assessment (343 Questions)': 'nipa',
       'Full ADHD Assessment (128 Questions)': 'nipa',
       'Teen ADHD Screener (48 Questions)': 'teen-adhd',
-      'Child Focus & Behaviour Screen (100 Questions)': 'child-adhd-6-10',
+      'Child Focus & Behaviour Screen (100 Questions)': 'child-adhd-4-6',
       'Teen Career & Future Direction': 'teen-career'
     };
 
@@ -191,7 +191,7 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
       iconColor: 'text-orange-500',
       borderColor: 'border-orange-500',
       bgColor: 'bg-orange-50',
-      targetAudience: 'Teens (Ages 12-18)',
+      targetAudience: 'Children (Ages 4-6)',
       features: [
         'Understand attention patterns',
         'Identify energy management challenges',
@@ -206,7 +206,7 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
       iconColor: 'text-purple-500',
       borderColor: 'border-purple-500',
       bgColor: 'bg-purple-50',
-      targetAudience: 'Children (Ages 6-10)',
+      targetAudience: 'Children (Ages 7-10)',
       features: [
         'Parent & caregiver observations at home and school',
         'Track attention, activity & impulse patterns',
@@ -585,6 +585,7 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
                     onClick={() => {
                       const paymentTypeMap: Record<string, 'tadhd' | 'pcadhd' | 'tcf'> = {
                         'teen-adhd': 'tadhd',
+                        'child-adhd-4-6': 'pcadhd',
                         'child-adhd-7-10': 'pcadhd',
                         'teen-career': 'tcf'
                       };
