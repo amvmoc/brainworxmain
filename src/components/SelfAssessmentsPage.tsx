@@ -763,30 +763,30 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
                   key={index}
                   className={`bg-white rounded-3xl shadow-xl overflow-hidden border-2 ${card.borderColor} hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 flex flex-col h-full`}
                 >
-                  <div className={`bg-gradient-to-r ${card.color} p-8 text-white`}>
-                    <div className="flex items-center gap-4 mb-4">
-                      <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-4">
+                  <div className={`bg-gradient-to-r ${card.color} p-8 text-white min-h-[200px] flex items-center`}>
+                    <div className="flex items-start gap-4 w-full">
+                      <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-4 flex-shrink-0">
                         <card.icon size={48} className="text-white" />
                       </div>
-                      <div className="flex-1">
-                        <h2 className="text-3xl font-bold">
+                      <div className="flex-1 min-w-0">
+                        <h2 className="text-3xl font-bold mb-3">
                           {isNIPA ? card.name : cardData.type.name}
                         </h2>
-                        <div className="flex items-center gap-2 mt-2 flex-wrap">
+                        <div className="flex items-center gap-2 flex-wrap">
                           {isNIPA && (
-                            <span className="px-3 py-1 bg-white rounded-full text-sm font-bold text-[#0A2A5E]">
+                            <span className="px-3 py-1 bg-white rounded-full text-sm font-bold text-[#0A2A5E] whitespace-nowrap">
                               Full Client Assessment
                             </span>
                           )}
-                          <span className="flex items-center gap-1 text-white/90">
+                          <span className="flex items-center gap-1 text-white/90 whitespace-nowrap">
                             <Clock size={16} />
                             {isNIPA ? card.questionCount : cardData.type.questions.length} questions
                           </span>
-                          <span className="px-3 py-1 bg-white/20 rounded-full text-sm font-medium">
+                          <span className="px-3 py-1 bg-white/20 rounded-full text-sm font-medium whitespace-nowrap">
                             {card.targetAudience}
                           </span>
                           {isNIPA && (
-                            <span className="px-3 py-1 bg-[#1FAFA3] rounded-full text-sm font-bold">
+                            <span className="px-3 py-1 bg-[#1FAFA3] rounded-full text-sm font-bold whitespace-nowrap">
                               {card.price}
                             </span>
                           )}
