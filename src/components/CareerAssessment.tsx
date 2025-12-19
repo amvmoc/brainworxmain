@@ -240,6 +240,205 @@ function getRiaSecCode(scores: ScaleScores): string {
   return list.slice(0, 3).map((x) => x.letter).join("");
 }
 
+function generateCareerClientReport(
+  customerName: string,
+  scores: ScaleScores,
+  riaSecCode: string
+) {
+  // Convert scores to array and get top interests
+  const scoresArray = Object.entries(scores).map(([scaleId, scoreData]) => {
+    const percentage = Math.round((scoreData.average / 5) * 100);
+    return {
+      code: scaleId,
+      name: scaleId.replace(/_/g, ' '),
+      score: percentage
+    };
+  }).sort((a, b) => b.score - a.score);
+
+  const topInterests = scoresArray.slice(0, 5);
+
+  // RIASEC descriptions
+  const riasecDescriptions: Record<string, string> = {
+    'R': 'Realistic - You enjoy hands-on, practical work with tools, machines, or nature.',
+    'I': 'Investigative - You enjoy analyzing problems, conducting research, and working with ideas.',
+    'A': 'Artistic - You enjoy creative expression, design, and working with imagination.',
+    'S': 'Social - You enjoy helping others, teaching, and working with people.',
+    'E': 'Enterprising - You enjoy leading, persuading, and business activities.',
+    'C': 'Conventional - You enjoy organizing, data management, and structured tasks.'
+  };
+
+  const riaSecExplanation = riaSecCode.split('').map((letter: string) =>
+    riasecDescriptions[letter as keyof typeof riasecDescriptions] || ''
+  ).filter(Boolean).join('\n\n');
+
+  return {
+    customerName,
+    riaSecCode,
+    riaSecExplanation,
+    topInterests,
+    summary: `Based on your responses, your career profile is ${riaSecCode}. This suggests you would thrive in careers that combine ${riaSecCode.split('').join(', ')} characteristics. Your top interest areas are ${topInterests.slice(0, 3).map(i => i.name.toLowerCase()).join(', ')}.`,
+    nextSteps: [
+      'Research careers that match your RIASEC code',
+      'Talk to professionals in fields that interest you',
+      'Explore educational pathways for your top career interests',
+      'Consider internships or volunteer opportunities in related fields',
+      'Schedule a follow-up coaching session to create your career action plan'
+    ]
+  };
+}
+
+function generateCareerCoachReport(
+  customerName: string,
+  answers: AnswersState,
+  scores: ScaleScores,
+  riaSecCode: string,
+  completedAt: Date
+) {
+  // Convert scores object to array with percentages
+  const scoresArray = Object.entries(scores).map(([scaleId, scoreData]) => {
+    const percentage = Math.round((scoreData.average / 5) * 100);
+    return {
+      code: scaleId,
+      name: scaleId.replace(/_/g, ' '),
+      score: percentage,
+      severity: percentage >= 70 ? 'High' : percentage >= 50 ? 'Medium' : 'Low',
+      color: percentage >= 70 ? 'red' : percentage >= 50 ? 'yellow' : 'blue',
+      questionCount: scoreData.itemCount,
+      rawAverage: scoreData.average.toFixed(2)
+    };
+  }).sort((a, b) => b.score - a.score);
+
+  const topScores = scoresArray.slice(0, 5);
+  const mediumScores = scoresArray.filter(s => s.score >= 50 && s.score < 70);
+  const lowScores = scoresArray.filter(s => s.score < 50);
+
+  return {
+    client: {
+      name: customerName,
+      age: 0,
+      assessmentType: "Teen Career & Future Direction Assessment",
+      practitionerName: "BrainWorx Career Coach",
+      practitionerId: "BWX-CAREER"
+    },
+    assessmentDate: completedAt.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+    profileOverview: `This comprehensive career assessment reveals RIASEC code ${riaSecCode}, indicating strong alignment with ${riaSecCode.split('').join(', ')} career paths. The profile shows ${topScores.length} high-interest areas and provides insights across career interests, work styles, values, strengths, and preferred environments.`,
+    keyStrengths: topScores.map(s => s.name),
+    primaryConcerns: [],
+    criticalFindings: [
+      `RIASEC Career Code: ${riaSecCode}`,
+      `Top ${topScores.length} areas of interest identified`,
+      "Comprehensive career path recommendations provided"
+    ],
+    scores: scoresArray,
+    patterns: {
+      high: topScores.map(s => ({
+        code: s.code,
+        name: s.name,
+        score: s.score,
+        description: `Strong affinity for ${s.name.toLowerCase()} activities and career paths`,
+        clinicalSignificance: "High interest level indicates natural motivation and potential for success in this area",
+        observedBehaviors: ["Shows enthusiasm for related activities", "Demonstrates skills and interest alignment"],
+        neurologicalImpact: "Positive engagement and motivation in related tasks",
+        recommendations: [
+          `Explore careers in ${s.name.toLowerCase()}`,
+          "Seek opportunities to develop these interests further",
+          "Consider education paths that align with this strength"
+        ]
+      })),
+      medium: mediumScores.map(s => ({
+        code: s.code,
+        name: s.name,
+        score: s.score,
+        description: `Moderate interest in ${s.name.toLowerCase()}`,
+        clinicalSignificance: "Areas of potential growth and development",
+        observedBehaviors: ["Some interest shown in related activities"],
+        neurologicalImpact: "Neutral to positive engagement",
+        recommendations: ["Consider as secondary career options", "Explore further to clarify interest level"]
+      })),
+      low: lowScores.map(s => ({
+        code: s.code,
+        name: s.name,
+        score: s.score,
+        description: `Lower interest in ${s.name.toLowerCase()}`,
+        clinicalSignificance: "May not align with natural preferences",
+        observedBehaviors: ["Limited engagement in related activities"],
+        neurologicalImpact: "Lower motivation in these areas",
+        recommendations: ["Consider other career paths that better match interests"]
+      }))
+    },
+    actionPlan: [
+      {
+        phase: "Phase 1: Career Exploration",
+        timeframe: "Weeks 1-4",
+        focus: topScores.slice(0, 3).map(s => s.name),
+        goals: [
+          "Research careers matching RIASEC code " + riaSecCode,
+          "Connect with professionals in top interest areas",
+          "Identify education pathways"
+        ],
+        activities: [
+          "Career research and informational interviews",
+          "Shadowing or volunteering in areas of interest",
+          "Exploring educational requirements"
+        ],
+        successIndicators: [
+          "Clear understanding of top 3 career paths",
+          "Connections made with industry professionals",
+          "Education plan outlined"
+        ]
+      },
+      {
+        phase: "Phase 2: Skills Development",
+        timeframe: "Months 2-6",
+        focus: ["Build relevant skills", "Gain experience", "Refine career direction"],
+        goals: [
+          "Develop skills aligned with top career interests",
+          "Gain practical experience through internships or projects",
+          "Build professional network"
+        ],
+        activities: [
+          "Skill-building courses or workshops",
+          "Part-time work or internships",
+          "Portfolio or project development"
+        ],
+        successIndicators: [
+          "Measurable skill development",
+          "Relevant experience gained",
+          "Growing professional network"
+        ]
+      }
+    ],
+    resources: [
+      {
+        category: "Career Exploration",
+        items: [
+          "RIASEC career matching tools and databases",
+          "Industry association websites",
+          "Professional networking platforms"
+        ]
+      },
+      {
+        category: "Education Planning",
+        items: [
+          "University program guides",
+          "Vocational training resources",
+          "Scholarship and funding information"
+        ]
+      }
+    ],
+    progressTracking: {
+      milestones: [
+        { milestone: "Complete career research", targetDate: "Week 4", status: "pending" },
+        { milestone: "Connect with 3 professionals", targetDate: "Week 8", status: "pending" },
+        { milestone: "Identify education pathway", targetDate: "Month 3", status: "pending" }
+      ],
+      nextReviewDate: new Date(completedAt.getTime() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString()
+    },
+    clinicalNotes: `Assessment completed with full engagement across all sections. RIASEC code ${riaSecCode} provides strong directional guidance for career exploration. Client shows clear interest patterns suitable for career coaching and educational planning.`,
+    summary: `This assessment reveals a ${riaSecCode} career profile with clear strengths in ${topScores.slice(0, 3).map(s => s.name.toLowerCase()).join(', ')}. Recommended next steps include exploring careers aligned with RIASEC code, developing relevant skills, and pursuing education pathways that support identified interests. Regular follow-up recommended to track progress and refine career direction.`
+  };
+}
+
 export function CareerAssessment({
   onClose,
   email = '',
@@ -345,6 +544,50 @@ export function CareerAssessment({
             current_uses: 1
           })
           .eq('id', couponId);
+      }
+
+      // Send client report to customer
+      try {
+        const clientReportData = generateCareerClientReport(customerInfo.name, scores, riaSecCode);
+
+        await supabase.functions.invoke('send-client-report', {
+          body: {
+            recipientEmail: customerInfo.email,
+            recipientName: customerInfo.name,
+            reportData: clientReportData
+          }
+        });
+
+        console.log('Client report email sent to customer');
+      } catch (emailError) {
+        console.error('Error sending client report email:', emailError);
+      }
+
+      // Send comprehensive coach report to franchise owner/coach
+      if (franchiseOwnerId) {
+        try {
+          const { data: franchiseOwner } = await supabase
+            .from('franchise_owners')
+            .select('email, name')
+            .eq('id', franchiseOwnerId)
+            .maybeSingle();
+
+          if (franchiseOwner) {
+            const coachReportData = generateCareerCoachReport(customerInfo.name, answers, scores, riaSecCode, new Date());
+
+            await supabase.functions.invoke('send-comprehensive-coach-report', {
+              body: {
+                recipientEmail: franchiseOwner.email,
+                recipientName: franchiseOwner.name,
+                reportData: coachReportData
+              }
+            });
+
+            console.log('Coach report email sent to franchise owner');
+          }
+        } catch (emailError) {
+          console.error('Error sending coach report email:', emailError);
+        }
       }
 
       setRiaSecCode(riaSecCode);

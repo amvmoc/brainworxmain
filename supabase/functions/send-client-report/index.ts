@@ -13,6 +13,15 @@ interface PatternData {
   description: string;
 }
 
+interface CareerReportData {
+  customerName: string;
+  riaSecCode: string;
+  riaSecExplanation: string;
+  topInterests: Array<{ code: string; name: string; score: number }>;
+  summary: string;
+  nextSteps: string[];
+}
+
 interface ClientReportRequest {
   customerName?: string;
   customerEmail?: string;
@@ -22,6 +31,142 @@ interface ClientReportRequest {
   totalQuestions?: number;
   patterns?: Record<string, PatternData>;
   responseId?: string;
+  recipientEmail?: string;
+  recipientName?: string;
+  reportData?: CareerReportData;
+}
+
+async function sendCareerClientReport(reportData: CareerReportData, recipientEmail: string, recipientName: string) {
+  const { customerName, riaSecCode, riaSecExplanation, topInterests, summary, nextSteps } = reportData;
+
+  const topInterestsHtml = topInterests.map((interest, idx) => `
+    <tr>
+      <td style="padding: 12px; border: 1px solid #e6e9ef;">
+        <strong>${idx + 1}. ${interest.name}</strong>
+      </td>
+      <td style="padding: 12px; border: 1px solid #e6e9ef; text-align: center;">
+        <strong style="color: #0A2A5E; font-size: 18px;">${interest.score}%</strong>
+      </td>
+    </tr>
+  `).join('');
+
+  const nextStepsHtml = nextSteps.map((step, idx) => `
+    <li style="margin-bottom: 10px;">${idx + 1}. ${step}</li>
+  `).join('');
+
+  const riasecLines = riaSecExplanation.split('\n\n');
+  const riasecHtml = riasecLines.map(line => `<p style="margin: 10px 0;">${line}</p>`).join('');
+
+  const htmlContent = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+        .content { background: #ffffff; padding: 30px; border: 1px solid #e6e9ef; }
+        .footer { background: #f8f9fa; padding: 20px; text-align: center; border-radius: 0 0 10px 10px; font-size: 12px; color: #666; }
+        .score-box { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 20px; border-radius: 10px; text-align: center; margin: 20px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th { background-color: #667eea; color: white; padding: 12px; text-align: left; }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <h1 style="margin: 0; font-size: 28px;">Your Career Direction Results</h1>
+          <p style="margin: 10px 0 0 0; opacity: 0.9;">Teen Career & Future Direction Assessment</p>
+        </div>
+
+        <div class="content">
+          <p>Dear ${customerName},</p>
+
+          <p>Thank you for completing the Career Direction Assessment with BrainWorx. Your personalized career profile is ready!</p>
+
+          <div class="score-box">
+            <h2 style="margin: 0 0 10px 0;">Your RIASEC Career Code</h2>
+            <p style="font-size: 48px; font-weight: bold; margin: 0;">${riaSecCode}</p>
+            <p style="margin: 10px 0 0 0; opacity: 0.9;">This code represents your career interests and strengths</p>
+          </div>
+
+          <h2 style="color: #667eea; margin-top: 30px;">What Your Code Means</h2>
+          ${riasecHtml}
+
+          <h2 style="color: #667eea; margin-top: 30px;">Your Top Interest Areas</h2>
+          <p>These are your strongest career interest areas based on your responses:</p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Interest Area</th>
+                <th style="text-align: center;">Score</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${topInterestsHtml}
+            </tbody>
+          </table>
+
+          <h2 style="color: #667eea; margin-top: 30px;">Your Career Profile Summary</h2>
+          <p>${summary}</p>
+
+          <h2 style="color: #667eea; margin-top: 30px;">Recommended Next Steps</h2>
+          <ul style="padding-left: 20px;">
+            ${nextStepsHtml}
+          </ul>
+
+          <div style="background-color: #fff5e6; border-left: 4px solid #667eea; padding: 15px; margin-top: 30px; border-radius: 4px;">
+            <h3 style="color: #0A2A5E; margin-top: 0;">Ready to Explore Further?</h3>
+            <p style="margin-bottom: 0;">Book a career coaching session to create your personalized action plan and explore education pathways that align with your interests and goals.</p>
+          </div>
+
+          <div style="background-color: #fef2f2; border-left: 4px solid #ef4444; padding: 15px; margin-top: 20px; border-radius: 4px;">
+            <p style="margin: 0; font-size: 12px; color: #666;"><strong>Important Note:</strong> This assessment is a career exploration tool designed to help identify interests and potential career directions. It should be used as a guide in conjunction with other career planning resources and professional guidance.</p>
+          </div>
+        </div>
+
+        <div class="footer">
+          <p style="margin: 0 0 10px 0;"><strong>BrainWorx - Career Direction Assessment</strong></p>
+          <p style="margin: 0;">© 2025 BrainWorx. All rights reserved.</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+
+  const GMAIL_USER = "payments@brainworx.co.za";
+  const GMAIL_PASSWORD = "iuhzjjhughbnwsvf";
+
+  const transporter = createTransport({
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false,
+    auth: {
+      user: GMAIL_USER,
+      pass: GMAIL_PASSWORD,
+    },
+  });
+
+  await transporter.sendMail({
+    from: `BrainWorx <${GMAIL_USER}>`,
+    to: recipientEmail,
+    subject: `Your Career Direction Results - ${riaSecCode} Profile`,
+    html: htmlContent,
+  });
+
+  console.log('Career client report sent to:', recipientEmail);
+
+  return new Response(JSON.stringify({
+    success: true,
+    sentTo: recipientEmail
+  }), {
+    headers: {
+      ...corsHeaders,
+      "Content-Type": "application/json",
+    },
+  });
 }
 
 Deno.serve(async (req: Request) => {
@@ -34,6 +179,11 @@ Deno.serve(async (req: Request) => {
 
   try {
     const requestData: ClientReportRequest = await req.json();
+
+    // Handle Career Assessment Reports
+    if (requestData.reportData && requestData.recipientEmail) {
+      return await sendCareerClientReport(requestData.reportData, requestData.recipientEmail, requestData.recipientName || requestData.reportData.customerName);
+    }
 
     let customerName: string;
     let customerEmail: string;
