@@ -266,6 +266,36 @@ All tables have Row Level Security enabled with policies for:
 - UPDATE (modify)
 - DELETE (remove)
 
+## Coupon System Integration
+
+### Coupon Creation
+Super admins and franchise owners can create coupon codes for the ADHD Caregiver Assessment:
+
+**Dropdown Option:** "ADHD Caregiver Assessment (50 Questions)"
+- Location: CouponManagement.tsx → Create Coupon Code modal
+- Database Value: Automatically converted to 'adhd-caregiver'
+- Mapping Function: `getAssessmentDatabaseId()` handles conversion
+
+### Coupon Redemption
+When a coupon is redeemed:
+1. User enters code in CouponRedemption modal
+2. System validates coupon and checks `assessment_type = 'adhd-caregiver'`
+3. Maps display name to 'adhd-caregiver' ID
+4. Routes to ADHD assessment with parent respondent type
+5. Pre-fills franchise_owner_id and coupon_id from coupon data
+
+### System-Generated Coupons
+Parent creates caregiver invitation:
+1. Parent completes their assessment
+2. Provides caregiver contact info
+3. System generates unique coupon code (ADHD-XXXXXXXX)
+4. Creates coupon with:
+   - `assessment_type: 'adhd-caregiver'`
+   - `max_uses: 1`
+   - `recipient_email` and `recipient_name`
+   - 30-day expiration
+5. Sends invitation email with embedded coupon code
+
 ## Important Notes
 
 1. **Both Assessments Required**: Comprehensive report only available when both parent AND caregiver complete their assessments
@@ -283,6 +313,8 @@ All tables have Row Level Security enabled with policies for:
 7. **Coupon Validation**: System checks assessment_type matches 'adhd-caregiver' before allowing redemption
 
 8. **Status Tracking**: Automatic status updates via database trigger ensure accurate progress tracking
+
+9. **Coupon System**: Assessment appears in coupon creation dropdown and properly maps to database ID
 
 ## Standard Assessment Pattern
 

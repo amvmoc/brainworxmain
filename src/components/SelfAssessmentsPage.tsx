@@ -64,7 +64,8 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
       'Full Assessment (343 Questions)': 'nipa',
       'Full ADHD Assessment (128 Questions)': 'nipa',
       'Teen Career & Future Direction': 'teen-career',
-      'ADHD Caregiver Assessment (Parent & Caregiver)': 'adhd-caregiver'
+      'ADHD Caregiver Assessment (Parent & Caregiver)': 'adhd-caregiver',
+      'ADHD Caregiver Assessment (50 Questions)': 'adhd-caregiver'
     };
 
     // Dynamically add all self-assessments from the data file

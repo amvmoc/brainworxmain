@@ -24,11 +24,34 @@ interface Redemption {
   redeemed_at: string;
 }
 
+// Convert human-readable assessment names to database identifiers
+const getAssessmentDatabaseId = (displayName: string): string => {
+  const mapping: Record<string, string> = {
+    'Full Assessment (343 Questions)': 'nipa',
+    'Full ADHD Assessment (128 Questions)': 'nipa',
+    'ADHD Caregiver Assessment (50 Questions)': 'adhd-caregiver',
+    'Teen Career & Future Direction': 'teen-career'
+  };
+
+  // Check static mappings first
+  if (mapping[displayName]) {
+    return mapping[displayName];
+  }
+
+  // Try to find in self-assessment types
+  const assessment = selfAssessmentTypes.find(
+    a => `${a.name} (${a.questions.length} Questions)` === displayName
+  );
+
+  return assessment ? assessment.id : displayName;
+};
+
 // Generate assessment options dynamically from selfAssessmentTypes
 const getAssessmentOptions = () => {
   const options = [
     { value: 'Full Assessment (343 Questions)', label: 'Full Assessment (343 Questions)' },
     { value: 'Full ADHD Assessment (128 Questions)', label: 'Full ADHD Assessment (128 Questions)' },
+    { value: 'ADHD Caregiver Assessment (50 Questions)', label: 'ADHD Caregiver Assessment (50 Questions)' },
   ];
 
   // Dynamically add all self-assessments
@@ -128,11 +151,14 @@ export function CouponManagement() {
 
         const codeToUse = attempts === 0 ? newCoupon.code : generateCode();
 
+        // Convert display name to database ID
+        const dbAssessmentType = getAssessmentDatabaseId(newCoupon.assessmentType);
+
         const { data: couponData, error } = await supabase
           .from('coupon_codes')
           .insert({
             code: codeToUse,
-            assessment_type: newCoupon.assessmentType,
+            assessment_type: dbAssessmentType,
             max_uses: newCoupon.maxUses,
             created_by: userId,
             recipient_name: newCoupon.name,
