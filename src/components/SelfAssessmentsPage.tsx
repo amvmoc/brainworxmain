@@ -240,7 +240,7 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
 
   const adhd710Card = {
     id: 'adhd710',
-    name: 'ADHD 7-10 Assessment (Parent & Teacher)',
+    name: 'Parent/Caregiver ADHD 7-10 Assessment',
     description: 'Advanced dual-respondent ADHD assessment for children aged 7-10 using Neural Imprint Pattern (NIPP) analysis. Requires input from BOTH parent AND teacher to provide comprehensive behavioral analysis across 10 distinct patterns covering attention, hyperactivity, impulsivity, executive function, emotional regulation, social skills, academic performance, and daily functioning.',
     icon: GraduationCap,
     color: 'from-indigo-500 to-purple-600',
@@ -1390,7 +1390,8 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
             {assessmentCards.map((card, index) => {
               const isNIPA = card.type === 'nipa';
               const isADHDCaregiver = card.type === 'adhd-caregiver';
-              const isSpecialType = isNIPA || isADHDCaregiver;
+              const isADHD710 = card.type === 'adhd710';
+              const isSpecialType = isNIPA || isADHDCaregiver || isADHD710;
               const cardData = isSpecialType ? card : { ...card, type: card.type as typeof selfAssessmentTypes[0] };
 
               return (
@@ -1416,6 +1417,11 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
                           {isADHDCaregiver && (
                             <span className="px-3 py-1 bg-white rounded-full text-sm font-bold text-emerald-700 whitespace-nowrap">
                               Dual Assessment
+                            </span>
+                          )}
+                          {isADHD710 && (
+                            <span className="px-3 py-1 bg-white rounded-full text-sm font-bold text-indigo-700 whitespace-nowrap">
+                              Parent & Teacher
                             </span>
                           )}
                           <span className="flex items-center gap-1 text-white/90 whitespace-nowrap">

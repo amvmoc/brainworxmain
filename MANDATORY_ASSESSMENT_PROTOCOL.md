@@ -8,9 +8,14 @@
 
 ## ⚠️ CRITICAL RULE ⚠️
 
-**NO ASSESSMENT IS CONSIDERED "COMPLETE" UNTIL ALL 15 VERIFICATION STEPS PASS.**
+**NO ASSESSMENT IS CONSIDERED "COMPLETE" UNTIL ALL 24 VERIFICATION STEPS PASS.**
 
 If you skip ANY step, the assessment WILL BE BROKEN and users WILL NOT be able to access it.
+
+**MOST COMMON FAILURES:**
+1. ❌ Name shows blank → You forgot Step 5.4b (add to isSpecialType)
+2. ❌ Shows 0 questions → You forgot Step 5.4b (add to isSpecialType)
+3. ❌ Not in coupon dropdown → You forgot Step 6.1 (add to dropdown options)
 
 ---
 
@@ -247,6 +252,26 @@ const assessmentCards = [
 ```
 
 **Verification:** ✅ Card added to array
+
+### Step 5.4b: Add to Rendering Logic Special Types
+**CRITICAL: If you skip this, the card will show blank name and 0 questions!**
+
+**File:** `src/components/SelfAssessmentsPage.tsx`
+
+Find the assessmentCards.map section and add your assessment type to the special types check:
+
+```typescript
+{assessmentCards.map((card, index) => {
+  const isNIPA = card.type === 'nipa';
+  const isADHDCaregiver = card.type === 'adhd-caregiver';
+  const isADHD710 = card.type === 'adhd710';
+  const is[YourAssessment] = card.type === '[assessment-id]';  // ADD THIS LINE
+  const isSpecialType = isNIPA || isADHDCaregiver || isADHD710 || is[YourAssessment];  // ADD YOUR CHECK HERE
+```
+
+**Why:** The rendering logic uses `isSpecialType` to determine if it should use `card.name` and `card.questionCount`. If your assessment is not in this check, it will display empty name and 0 questions!
+
+**Verification:** ✅ Assessment added to isSpecialType check
 
 ### Step 5.5: Add Coupon Redemption Mapping
 ```typescript
@@ -498,10 +523,12 @@ npm run build
 **Self-Assessments Page:**
 - [ ] Assessment card appears
 - [ ] Icon and colors correct
+- [ ] **CRITICAL: Name displays (not blank)**
+- [ ] **CRITICAL: Question count shows correct number (not 0)**
 - [ ] Description displays
 - [ ] Features list shows
 - [ ] Target audience visible
-- [ ] Question count accurate
+- [ ] Special badge displays (if applicable)
 - [ ] "Learn More" button works
 
 **Info Modal:**
@@ -514,12 +541,13 @@ npm run build
 - [ ] Resume button opens resume modal
 
 **Coupon Flow:**
-- [ ] Assessment in coupon dropdown
+- [ ] **CRITICAL: Assessment appears in coupon dropdown with correct name and question count**
+- [ ] Assessment name exactly matches in both dropdown and database mapping
 - [ ] Can create coupon
-- [ ] Correct DB type saved
+- [ ] Correct DB type saved (verify in database)
 - [ ] Can redeem from Self-Assessments page
 - [ ] Can redeem from homepage modal
-- [ ] Assessment launches correctly
+- [ ] Assessment launches correctly after redemption
 
 **Assessment Completion:**
 - [ ] Can enter required info
@@ -573,29 +601,35 @@ Add assessment to current assessment types list in:
 
 ### Integration Points
 1. ✅ Assessment in `SelfAssessmentsPage.tsx` assessment cards array
-2. ✅ Assessment has complete info modal with "Learn More"
-3. ✅ Assessment in `CouponManagement.tsx` dropdown
-4. ✅ Assessment in `CouponManagement.tsx` getAssessmentDatabaseId
-5. ✅ Assessment in `SelfAssessmentsPage` handleCouponRedemption
-6. ✅ Assessment in `GetStartedOptions` assessmentTypeMap
-7. ✅ Assessment component imported in `GetStartedOptions`
-8. ✅ Assessment in `GetStartedOptions` step type union
-9. ✅ Assessment routing in `GetStartedOptions` handleCouponRedemption
-10. ✅ Assessment rendering in `GetStartedOptions`
+2. ✅ **CRITICAL: Assessment added to `isSpecialType` check in rendering logic**
+3. ✅ Assessment has complete info modal with "Learn More"
+4. ✅ Assessment in `CouponManagement.tsx` dropdown
+5. ✅ Assessment in `CouponManagement.tsx` getAssessmentDatabaseId
+6. ✅ Assessment in `SelfAssessmentsPage` handleCouponRedemption
+7. ✅ Assessment in `GetStartedOptions` assessmentTypeMap
+8. ✅ Assessment component imported in `GetStartedOptions`
+9. ✅ Assessment in `GetStartedOptions` step type union
+10. ✅ Assessment routing in `GetStartedOptions` handleCouponRedemption
+11. ✅ Assessment rendering in `GetStartedOptions`
+
+### Visual Display
+12. ✅ **Assessment name displays correctly (not blank)**
+13. ✅ **Question count displays correctly (not 0)**
+14. ✅ **Assessment shows in coupon dropdown**
 
 ### Functionality
-11. ✅ RLS policies allow anonymous INSERT
-12. ✅ Can start from Self-Assessments page
-13. ✅ Can redeem coupon from Self-Assessments
-14. ✅ Can redeem coupon from homepage
-15. ✅ `npm run build` succeeds
+15. ✅ RLS policies allow anonymous INSERT
+16. ✅ Can start from Self-Assessments page
+17. ✅ Can redeem coupon from Self-Assessments
+18. ✅ Can redeem coupon from homepage
+19. ✅ `npm run build` succeeds
 
 ### Testing
-16. ✅ Manual testing complete
-17. ✅ Database queries tested
-18. ✅ Reports generate correctly
-19. ✅ Emails send successfully (if applicable)
-20. ✅ Documentation complete
+20. ✅ Manual testing complete
+21. ✅ Database queries tested
+22. ✅ Reports generate correctly
+23. ✅ Emails send successfully (if applicable)
+24. ✅ Documentation complete
 
 ---
 
@@ -611,8 +645,10 @@ Add assessment to current assessment types list in:
 
 | Violation | Impact | Fix |
 |-----------|--------|-----|
+| Not in isSpecialType check | Name blank, 0 questions display | Add to rendering logic (Step 5.4b) |
+| Not in coupon dropdown | Can't create coupons | Add to getAssessmentOptions (Step 6.1) |
+| No database mapping | Coupon validation fails | Add to getAssessmentDatabaseId (Step 6.2) |
 | Not in SelfAssessmentsPage | Users can't find it | Add full integration |
-| No coupon mapping | Can't redeem coupons | Add to both files |
 | No GetStartedOptions integration | Homepage broken | Add full integration |
 | Missing RLS policies | Users blocked | Create comprehensive policies |
 | No info modal | Poor UX | Create complete modal |
@@ -623,9 +659,9 @@ Add assessment to current assessment types list in:
 
 Before marking assessment as complete, THREE people must verify:
 
-1. **Developer:** "I have completed all 20 checklist items"
-2. **Reviewer:** "I have verified all integration points work"
-3. **Tester:** "I have tested the complete user journey"
+1. **Developer:** "I have completed all 24 checklist items"
+2. **Reviewer:** "I have verified all integration points work, name displays, question count shows"
+3. **Tester:** "I have tested the complete user journey and verified coupon dropdown"
 
 **Signature Block:**
 ```
@@ -646,7 +682,8 @@ Tester:    _________________ Date: _________
 **Review Schedule:** Monthly
 
 **Version History:**
-- v2.0 (2025-12-19): Added comprehensive 20-point checklist after ADHD710 incident
+- v2.1 (2025-12-19): Added critical visual display checks (name, question count, dropdown) and Step 5.4b
+- v2.0 (2025-12-19): Added comprehensive checklist after ADHD710 incident
 - v1.0 (2025-12-01): Initial protocol
 
 ---
