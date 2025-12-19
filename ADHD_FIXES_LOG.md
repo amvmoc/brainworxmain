@@ -87,29 +87,33 @@ This document tracks all fixes and changes made to the ADHD Assessment system.
 
 ---
 
-## Fix #6: Email Function Authentication Error (2025-12-19)
+## Fix #6: Email Sending Method - Changed from Resend to Gmail SMTP (2025-12-19)
 
 **Problem:** Caregiver invitation emails were failing to send with "500 Internal Server Error".
 
 **Root Cause:**
-- Edge function `send-adhd-caregiver-invitation` had `verifyJWT: true` setting
-- Parents invoking the function are not authenticated, causing the function to fail before it can even execute
-- Function needs to be publicly accessible since parents may not have accounts
+- Edge function `send-adhd-caregiver-invitation` was using Resend API instead of Gmail SMTP
+- Project uses Gmail SMTP (via nodemailer) for all email sending, not Resend
+- The function had `verifyJWT: true` which also prevented unauthenticated parent access
 
 **Solution:**
+- Switched email sending from Resend API to Gmail SMTP using nodemailer
+- Uses same Gmail credentials as other email functions: payments@brainworx.co.za
 - Redeployed edge function with `verifyJWT: false` to allow unauthenticated access
-- Added enhanced error logging to capture detailed error information
-- Returns specific error details including whether RESEND_API_KEY is present
+- Removed dependency on RESEND_API_KEY environment variable
 
 **Edge Function Changes:**
 - File: `supabase/functions/send-adhd-caregiver-invitation/index.ts`
+- Added import: `import { createTransport } from "npm:nodemailer@6.9.7"`
+- Replaced Resend API fetch call with nodemailer transporter
 - Changed verifyJWT setting from `true` to `false`
-- Added error detail logging for debugging
+- Uses Gmail SMTP server (smtp.gmail.com:587)
 
-**Important Note:**
-- The RESEND_API_KEY environment variable must be configured in Supabase edge function secrets
-- Without this key, email sending will fail
-- Error response now indicates if the key is missing
+**Technical Details:**
+- Gmail account: payments@brainworx.co.za
+- SMTP server: smtp.gmail.com
+- Port: 587 (TLS)
+- Matches implementation in send-coupon-email function
 
 ---
 
@@ -120,22 +124,26 @@ This document tracks all fixes and changes made to the ADHD Assessment system.
 2. Caregiver invitation prominently displayed at top after parent assessment
 3. Invitation form appears at top when clicked
 4. Fixed database column name from valid_until to expires_at
-5. Email function authentication fixed (verifyJWT: false)
+5. Email sending switched from Resend API to Gmail SMTP (nodemailer)
+6. Email function authentication fixed (verifyJWT: false)
 
 ### Database Changes
 1. Added RLS policy for adhd-caregiver coupon creation (anon/authenticated)
 2. Added RLS policy for adhd-caregiver coupon viewing (anon/authenticated)
 
 ### Edge Function Changes
-1. send-adhd-caregiver-invitation deployed with verifyJWT: false
-2. Enhanced error logging for debugging email issues
+1. send-adhd-caregiver-invitation switched from Resend API to Gmail SMTP
+2. Deployed with verifyJWT: false for public access
+3. Uses nodemailer with payments@brainworx.co.za Gmail account
 
 ### Impact
 - Parents can now complete assessments and invite caregivers without authentication errors
 - Clear user flow guides parents through the invitation process
 - Security maintained through type-specific policies and coupon constraints
 - Email function publicly accessible for unauthenticated parent invitations
+- Emails sent successfully via Gmail SMTP (consistent with other email functions)
 
-### Known Requirements
-- RESEND_API_KEY must be configured in Supabase edge function environment variables
-- Without this key, email invitations will fail with detailed error message
+### Technical Requirements
+- Gmail SMTP credentials embedded in edge function
+- No external API keys needed (removed Resend dependency)
+- Email sent from: BrainWorX Assessments <payments@brainworx.co.za>

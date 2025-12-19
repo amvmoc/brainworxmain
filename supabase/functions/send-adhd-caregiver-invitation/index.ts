@@ -1,6 +1,5 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-
-const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY');
+import { createTransport } from "npm:nodemailer@6.9.7";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -40,6 +39,19 @@ Deno.serve(async (req: Request) => {
       couponCode,
       assessmentUrl
     } = requestData;
+
+    const GMAIL_USER = "payments@brainworx.co.za";
+    const GMAIL_PASSWORD = "iuhzjjhughbnwsvf";
+
+    const transporter = createTransport({
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
+      auth: {
+        user: GMAIL_USER,
+        pass: GMAIL_PASSWORD,
+      },
+    });
 
     const relationshipLabel = caregiverRelationship.replace('_', ' ');
 
@@ -184,32 +196,20 @@ Deno.serve(async (req: Request) => {
 </html>
     `;
 
-    const emailResponse = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${RESEND_API_KEY}`
-      },
-      body: JSON.stringify({
-        from: 'BrainWorX Assessments <noreply@brainworx-app.com>',
-        to: [caregiverEmail],
-        subject: `ADHD Assessment Invitation for ${childName} - Your Input Needed`,
-        html: htmlContent
-      })
+    await transporter.sendMail({
+      from: `BrainWorX Assessments <${GMAIL_USER}>`,
+      to: caregiverEmail,
+      subject: `ADHD Assessment Invitation for ${childName} - Your Input Needed`,
+      html: htmlContent,
     });
 
-    if (!emailResponse.ok) {
-      const errorData = await emailResponse.json();
-      throw new Error(`Failed to send email: ${JSON.stringify(errorData)}`);
-    }
-
-    const emailData = await emailResponse.json();
+    console.log('✅ Invitation email sent successfully to:', caregiverEmail);
 
     return new Response(
       JSON.stringify({
         success: true,
         message: 'Invitation email sent successfully',
-        emailId: emailData.id
+        recipientEmail: caregiverEmail
       }),
       {
         headers: {
@@ -224,15 +224,13 @@ Deno.serve(async (req: Request) => {
     console.error('Error sending invitation:', error);
     console.error('Error details:', {
       message: error.message,
-      stack: error.stack,
-      resendKeyExists: !!RESEND_API_KEY
+      stack: error.stack
     });
 
     return new Response(
       JSON.stringify({
         success: false,
-        error: error.message || 'Failed to send invitation email',
-        details: `RESEND_API_KEY present: ${!!RESEND_API_KEY}`
+        error: error.message || 'Failed to send invitation email'
       }),
       {
         headers: {
