@@ -32,6 +32,11 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
   const [customerName, setCustomerName] = useState('');
   const [couponId, setCouponId] = useState<string | null>(null);
   const [paymentCouponCode, setPaymentCouponCode] = useState('');
+  const [adhdChildName, setAdhdChildName] = useState('');
+  const [adhdChildAge, setAdhdChildAge] = useState<number | null>(null);
+  const [adhdChildGender, setAdhdChildGender] = useState('');
+  const [adhdCaregiverRelationship, setAdhdCaregiverRelationship] = useState('');
+  const [adhdAssessmentId, setAdhdAssessmentId] = useState('');
 
   console.log('GetStartedOptions render:', {
     step,
@@ -114,15 +119,27 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
     redemptionCouponId: string,
     couponFranchiseOwnerId: string,
     userName: string,
-    userEmail: string
+    userEmail: string,
+    childName?: string,
+    childAge?: number,
+    childGender?: string,
+    caregiverRelationship?: string,
+    assessmentId?: string
   ) => {
-    console.log('Coupon redeemed:', { assessmentType, userName, userEmail });
+    console.log('Coupon redeemed:', { assessmentType, userName, userEmail, childName, childAge });
 
     setEmail(userEmail);
     setCustomerName(userName);
     setFranchiseOwnerId(couponFranchiseOwnerId);
     setCouponId(redemptionCouponId);
     setPreviousStep('email');
+
+    // Store ADHD child info if provided
+    if (childName) setAdhdChildName(childName);
+    if (childAge !== undefined) setAdhdChildAge(childAge);
+    if (childGender) setAdhdChildGender(childGender);
+    if (caregiverRelationship) setAdhdCaregiverRelationship(caregiverRelationship);
+    if (assessmentId) setAdhdAssessmentId(assessmentId);
 
     // Build dynamic mapping from assessment names to IDs
     const assessmentTypeMap: Record<string, string> = {
@@ -227,11 +244,19 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
   }
 
   if (step === 'adhd_assessment') {
+    // Determine respondent type based on whether we have child info (caregiver) or not (parent)
+    const respondentType = adhdChildName ? 'caregiver' : 'parent';
+
     return (
       <div className="fixed inset-0 bg-white z-50 overflow-y-auto">
         <ADHDAssessment
           onClose={onClose}
-          respondentType="parent"
+          respondentType={respondentType}
+          assessmentId={adhdAssessmentId || undefined}
+          prefilledChildName={adhdChildName || undefined}
+          prefilledChildAge={adhdChildAge || undefined}
+          prefilledChildGender={adhdChildGender || undefined}
+          prefilledRelationship={adhdCaregiverRelationship || undefined}
         />
       </div>
     );

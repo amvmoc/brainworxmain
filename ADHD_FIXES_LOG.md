@@ -144,6 +144,54 @@ This document tracks all fixes and changes made to the ADHD Assessment system.
 
 ---
 
+## Fix #8: Pre-fill Caregiver Form with Child Details (2025-12-19)
+
+**Problem:** Caregivers had to re-enter child's name, age, gender, and relationship that parent already provided.
+
+**Root Cause:**
+- Coupon system didn't store child information when parent sent invitation
+- No way to pass child details from coupon to assessment form
+- Relationship field shown even though parent already specified it (Teacher, Therapist, etc.)
+
+**Solution:**
+1. **Database Changes:**
+   - Added columns to `coupon_codes`: `child_name`, `child_age`, `child_gender`, `caregiver_relationship`, `assessment_id`
+   - Created migration: `add_child_info_to_coupons`
+   - Updated `validate_and_use_coupon` function to return these fields
+
+2. **Coupon Creation:**
+   - Modified `ADHDAssessment.tsx` (line 247-263) to store child info when creating caregiver invitation
+
+3. **Coupon Redemption:**
+   - Updated `CouponRedemption.tsx` interface to accept child details
+   - Modified callback to pass child info back (lines 6-17, 71-82)
+
+4. **Form Pre-filling:**
+   - Added prefilled props to `ADHDAssessment` component
+   - Child name, age, gender fields pre-filled and disabled
+   - Relationship field hidden when pre-filled from invitation
+   - Only caregiver's own name and email need to be entered
+
+5. **Flow Management:**
+   - `GetStartedOptions.tsx` tracks and passes child info
+   - Auto-detects caregiver vs parent based on presence of child data
+   - Links caregiver response to correct assessment via `assessment_id`
+
+**Files Changed:**
+- `supabase/migrations/[timestamp]_add_child_info_to_coupons.sql` (new)
+- `supabase/migrations/[timestamp]_update_coupon_validation_return_child_info.sql` (new)
+- `src/components/ADHDAssessment.tsx` (lines 16-25, 29-38, 44-49, 247-263, 563-606, 634-653)
+- `src/components/CouponRedemption.tsx` (lines 5-20, 69-82)
+- `src/components/GetStartedOptions.tsx` (lines 32-39, 117-142, 246-263)
+
+**User Experience Improvement:**
+- Eliminates redundant data entry
+- Ensures consistency between parent and caregiver responses
+- Reduces form fields from 6 to 2 for caregivers
+- Clear visual indication (grayed out fields) that data came from parent
+
+---
+
 ## Summary of All Changes
 
 ### Code Changes
@@ -154,10 +202,14 @@ This document tracks all fixes and changes made to the ADHD Assessment system.
 5. Email sending switched from Resend API to Gmail SMTP (nodemailer)
 6. Email function authentication fixed (verifyJWT: false)
 7. Coupon redemption validation allows NULL created_by field
+8. Caregiver assessment form pre-fills child details from coupon
+9. Relationship field hidden when pre-filled by parent
 
 ### Database Changes
 1. Added RLS policy for adhd-caregiver coupon creation (anon/authenticated)
 2. Added RLS policy for adhd-caregiver coupon viewing (anon/authenticated)
+3. Added child info columns to coupon_codes table
+4. Updated validate_and_use_coupon function to return child details
 
 ### Edge Function Changes
 1. send-adhd-caregiver-invitation switched from Resend API to Gmail SMTP
@@ -167,6 +219,9 @@ This document tracks all fixes and changes made to the ADHD Assessment system.
 ### Impact
 - Parents can now complete assessments and invite caregivers without authentication errors
 - Clear user flow guides parents through the invitation process
+- Caregivers only enter their own name and email (child info pre-filled)
+- Guaranteed data consistency between parent and caregiver responses
+- Relationship type determined by parent (Teacher, Therapist, etc.)
 - Security maintained through type-specific policies and coupon constraints
 - Email function publicly accessible for unauthenticated parent invitations
 - Emails sent successfully via Gmail SMTP (consistent with other email functions)

@@ -3,7 +3,18 @@ import { Ticket, Check, X } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
 interface CouponRedemptionProps {
-  onRedemptionSuccess: (assessmentType: string, couponId: string, franchiseOwnerId: string, userName: string, userEmail: string) => void;
+  onRedemptionSuccess: (
+    assessmentType: string,
+    couponId: string,
+    franchiseOwnerId: string,
+    userName: string,
+    userEmail: string,
+    childName?: string,
+    childAge?: number,
+    childGender?: string,
+    caregiverRelationship?: string,
+    assessmentId?: string
+  ) => void;
   onCancel: () => void;
   initialCouponCode?: string;
 }
@@ -62,7 +73,12 @@ export function CouponRedemption({ onRedemptionSuccess, onCancel, initialCouponC
         result.coupon_id,
         result.created_by || null,
         formData.name,
-        formData.email
+        formData.email,
+        result.child_name,
+        result.child_age,
+        result.child_gender,
+        result.caregiver_relationship,
+        result.assessment_id
       );
     } catch (err: any) {
       console.error('Coupon redemption error:', err);

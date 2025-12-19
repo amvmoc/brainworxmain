@@ -18,22 +18,35 @@ interface ADHDAssessmentProps {
   respondentType: 'parent' | 'caregiver';
   couponCode?: string;
   onClose?: () => void;
+  prefilledChildName?: string;
+  prefilledChildAge?: number;
+  prefilledChildGender?: string;
+  prefilledRelationship?: string;
 }
 
 type AssessmentStage = 'info' | 'questions' | 'parent_report' | 'invite_caregiver' | 'complete' | 'caregiver_waiting' | 'comprehensive_report';
 
-export default function ADHDAssessment({ assessmentId, respondentType, couponCode, onClose }: ADHDAssessmentProps) {
+export default function ADHDAssessment({
+  assessmentId,
+  respondentType,
+  couponCode,
+  onClose,
+  prefilledChildName,
+  prefilledChildAge,
+  prefilledChildGender,
+  prefilledRelationship
+}: ADHDAssessmentProps) {
   const [stage, setStage] = useState<AssessmentStage>('info');
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const [childName, setChildName] = useState('');
-  const [childAge, setChildAge] = useState('');
-  const [childGender, setChildGender] = useState('male');
+  const [childName, setChildName] = useState(prefilledChildName || '');
+  const [childAge, setChildAge] = useState(prefilledChildAge ? String(prefilledChildAge) : '');
+  const [childGender, setChildGender] = useState(prefilledChildGender || 'male');
   const [respondentName, setRespondentName] = useState('');
   const [respondentEmail, setRespondentEmail] = useState('');
-  const [respondentRelationship, setRespondentRelationship] = useState('');
+  const [respondentRelationship, setRespondentRelationship] = useState(prefilledRelationship || '');
 
   const [caregiverName, setCaregiverName] = useState('');
   const [caregiverEmail, setCaregiverEmail] = useState('');
@@ -252,6 +265,11 @@ export default function ADHDAssessment({ assessmentId, respondentType, couponCod
           max_uses: 1,
           recipient_email: caregiverEmail,
           recipient_name: caregiverName,
+          child_name: childName,
+          child_age: parseInt(childAge),
+          child_gender: childGender,
+          caregiver_relationship: caregiverRelationship,
+          assessment_id: assessmentData.id,
           expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
         })
         .select()
@@ -550,8 +568,8 @@ export default function ADHDAssessment({ assessmentId, respondentType, couponCod
                   type="text"
                   value={childName}
                   onChange={(e) => setChildName(e.target.value)}
-                  disabled={!!assessmentId}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  disabled={!!assessmentId || !!prefilledChildName}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
                   required
                 />
               </div>
@@ -566,8 +584,8 @@ export default function ADHDAssessment({ assessmentId, respondentType, couponCod
                   max="18"
                   value={childAge}
                   onChange={(e) => setChildAge(e.target.value)}
-                  disabled={!!assessmentId}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  disabled={!!assessmentId || !!prefilledChildAge}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
                   required
                 />
               </div>
@@ -579,8 +597,8 @@ export default function ADHDAssessment({ assessmentId, respondentType, couponCod
                 <select
                   value={childGender}
                   onChange={(e) => setChildGender(e.target.value)}
-                  disabled={!!assessmentId}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  disabled={!!assessmentId || !!prefilledChildGender}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
                 >
                   <option value="male">Male</option>
                   <option value="female">Female</option>
@@ -613,24 +631,26 @@ export default function ADHDAssessment({ assessmentId, respondentType, couponCod
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Your Relationship to Child *
-                </label>
-                <select
-                  value={respondentRelationship}
-                  onChange={(e) => setRespondentRelationship(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  required
-                >
-                  <option value="">Select relationship...</option>
-                  {RELATIONSHIP_OPTIONS[respondentType].map(option => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              {!prefilledRelationship && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Your Relationship to Child *
+                  </label>
+                  <select
+                    value={respondentRelationship}
+                    onChange={(e) => setRespondentRelationship(e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    required
+                  >
+                    <option value="">Select relationship...</option>
+                    {RELATIONSHIP_OPTIONS[respondentType].map(option => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
             </div>
 
             <div className="flex justify-between pt-6">
