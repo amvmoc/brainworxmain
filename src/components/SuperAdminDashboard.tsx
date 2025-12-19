@@ -7,11 +7,9 @@ import { CouponManagement } from './CouponManagement';
 import { CalendarManagement } from './CalendarManagement';
 import { BookingManagement } from './BookingManagement';
 import { HomePage } from './HomePage';
-import { ClientReport } from './ClientReport';
 import { SelfAssessmentReport } from './SelfAssessmentReport';
 import CoachReport from './coach-report/CoachReport';
 import NIP3CoachReport from './nip3/CoachReport';
-import { generateClientReportData } from '../utils/clientReportScoring';
 import { generateCoachReportData } from '../utils/coachReportGenerator';
 import { selfAssessmentTypes } from '../data/selfAssessmentQuestions';
 

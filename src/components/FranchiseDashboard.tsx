@@ -2,13 +2,11 @@ import { useState, useEffect } from 'react';
 import { LogOut, Users, TrendingUp, Copy, Share2, Eye, EyeOff, FileText, LayoutDashboard, Mail, FileCheck, Calendar } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { InvoicesPage } from './InvoicesPage';
-import { ClientReport } from './ClientReport';
 import { SelfAssessmentReport } from './SelfAssessmentReport';
 import CoachReport from './coach-report/CoachReport';
 import { CalendarManagement } from './CalendarManagement';
 import { BookingManagement } from './BookingManagement';
 import { FranchiseBookingCalendar } from './FranchiseBookingCalendar';
-import { generateClientReportData } from '../utils/clientReportScoring';
 import { generateCoachReportData } from '../utils/coachReportGenerator';
 import { selfAssessmentTypes } from '../data/selfAssessmentQuestions';
 
@@ -64,8 +62,8 @@ export function FranchiseDashboard({
   const [copied, setCopied] = useState(false);
   const [currentView, setCurrentView] = useState<'dashboard' | 'invoices' | 'calendar'>('dashboard');
   const [calendarTab, setCalendarTab] = useState<'availability' | 'bookings'>('bookings');
-  const [showClientReport, setShowClientReport] = useState(false);
-  const [clientReportData, setClientReportData] = useState<any>(null);
+  const [showCoachReport, setShowCoachReport] = useState(false);
+  const [coachReportData, setCoachReportData] = useState<any>(null);
   const [sendingEmail, setSendingEmail] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
   const [viewingTestReport, setViewingTestReport] = useState<Response | null>(null);
@@ -139,15 +137,15 @@ export function FranchiseDashboard({
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const viewClientReport = (response: Response) => {
-    const reportData = generateClientReportData(
+  const viewCoachReport = (response: Response) => {
+    const reportData = generateCoachReportData(
       response.customer_name,
       response.answers,
       new Date(response.completed_at),
       Object.keys(response.answers).length
     );
-    setClientReportData(reportData);
-    setShowClientReport(true);
+    setCoachReportData(reportData);
+    setShowCoachReport(true);
     setSelectedResponse(null);
   };
 
@@ -424,7 +422,7 @@ export function FranchiseDashboard({
 
           Z-INDEX HIERARCHY (to prevent overlap issues):
           - Base dashboard content: z-0 to z-40
-          - Standard modals (selectedResponse, showClientReport): z-50
+          - Standard modals (selectedResponse, showCoachReport): z-50
           - Test report modals (viewingTestReport): z-100 to z-110
           - Customer profile modal (CustomerProfileModal): z-200
 
@@ -531,11 +529,11 @@ export function FranchiseDashboard({
               <div className="mt-6 flex gap-3">
                 {selectedResponse.response_type === 'nipa' && (
                   <button
-                    onClick={() => viewClientReport(selectedResponse)}
+                    onClick={() => viewCoachReport(selectedResponse)}
                     className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-[#3DB3E3] to-[#1FAFA3] text-white px-6 py-3 rounded-lg hover:shadow-lg transition-all font-semibold"
                   >
                     <FileCheck size={20} />
-                    View Full Client Report
+                    View Coach Report
                   </button>
                 )}
                 {selectedResponse.response_type === 'nipa' && (
@@ -559,12 +557,12 @@ export function FranchiseDashboard({
         </div>
       )}
 
-      {/* Modal: Full Client Report (NIPA assessments) */}
-      {showClientReport && clientReportData && (
+      {/* Modal: Full Coach Report (NIPA assessments) */}
+      {showCoachReport && coachReportData && (
         <div className="fixed inset-0 bg-black/80 z-50 overflow-y-auto">
           <div className="relative">
             <button
-              onClick={() => setShowClientReport(false)}
+              onClick={() => setShowCoachReport(false)}
               className="fixed top-4 right-4 z-50 bg-white text-gray-900 rounded-full p-3 shadow-xl hover:shadow-2xl transition-all border-2 border-gray-300 hover:border-gray-500"
               title="Close report"
             >
@@ -572,7 +570,7 @@ export function FranchiseDashboard({
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
-            <ClientReport results={clientReportData} showActions={true} />
+            <CoachReport data={coachReportData} />
           </div>
         </div>
       )}
