@@ -281,16 +281,133 @@ Deno.serve(async (req: Request) => {
 });
 ```
 
-### 8. Payment Integration (if applicable)
+### 8. Payment Integration (Paid Assessments)
 
-**Location:** `/src/components/HomePage.tsx` or payment handler
+**CRITICAL:** This section is for paid assessments that appear in the "Get Started" modal with payment options. If your assessment is free/coupon-only, skip to section 9.
+
+**Primary Location:** `/src/components/GetStartedOptions.tsx`
+
+#### 8.1 Add Payment Type to TypeScript Interfaces
+
+**Line ~14:** Update `preselectedPaymentType` interface prop:
+```tsx
+preselectedPaymentType?: 'tadhd' | 'pcadhd' | 'tcf' | 'YOUR_NEW_TYPE' | null;
+```
+
+**Line ~20:** Update `selectedPaymentType` state type:
+```tsx
+const [selectedPaymentType, setSelectedPaymentType] = useState<'nipa' | 'tadhd' | 'pcadhd' | 'tcf' | 'YOUR_NEW_TYPE' | null>(preselectedPaymentType || null);
+```
+
+#### 8.2 Add Assessment Selection Button
+
+**Location:** Assessment type selection screen (~line 270-345)
 
 **Actions:**
-- [ ] Add payment type to `onStartPayment` callback
-- [ ] Update payment type union in interfaces
-- [ ] Configure pricing in payment system
-- [ ] Test payment flow
-- [ ] Verify successful payment launches assessment
+- [ ] Add button with appropriate styling (border color, icon color)
+- [ ] Choose icon from lucide-react
+- [ ] Set onClick to: `setSelectedPaymentType('YOUR_NEW_TYPE'); setStep('payment');`
+- [ ] Add title, description, and price
+
+**Template:**
+```tsx
+<button
+  onClick={() => {
+    setSelectedPaymentType('YOUR_NEW_TYPE');
+    setStep('payment');
+  }}
+  className="w-full p-4 border-2 border-[COLOR]-500 rounded-lg hover:bg-[COLOR]-500/10 transition-all text-left group"
+>
+  <div className="flex items-center gap-3">
+    <YourIcon className="text-[COLOR]-500 group-hover:scale-110 transition-transform" size={24} />
+    <div className="flex-1">
+      <h3 className="font-bold text-[#0A2A5E]">CODE - Assessment Name</h3>
+      <p className="text-sm text-gray-600">XX questions • Description</p>
+    </div>
+    <div className="text-right">
+      <p className="text-lg font-bold text-[COLOR]-500">R850</p>
+    </div>
+  </div>
+</button>
+```
+
+#### 8.3 Add Payment Summary Display
+
+**Location:** Payment confirmation screen (~line 545-565)
+
+**Actions:**
+- [ ] Add conditional display for assessment name:
+  ```tsx
+  {selectedPaymentType === 'YOUR_NEW_TYPE' && 'Full Assessment Name'}
+  ```
+- [ ] Add conditional display for price:
+  ```tsx
+  {selectedPaymentType === 'YOUR_NEW_TYPE' && 'R850.00'}
+  ```
+
+#### 8.4 Add Payment Form Fields
+
+**Location:** Hidden form fields for payment gateway (~line 620-695)
+
+**Actions:**
+- [ ] Add conditional form section for your assessment:
+  ```tsx
+  {selectedPaymentType === 'YOUR_NEW_TYPE' && (
+    <>
+      {/* Standard payment fields */}
+      <input required type="hidden" name="merchant_id" value={import.meta.env.VITE_PAYFAST_MERCHANT_ID} />
+      <input required type="hidden" name="merchant_key" value={import.meta.env.VITE_PAYFAST_MERCHANT_KEY} />
+      <input required type="hidden" name="return_url" value={returnUrl} />
+      <input required type="hidden" name="cancel_url" value={cancelUrl} />
+      <input required type="hidden" name="notify_url" value={notifyUrl} />
+
+      {/* Assessment-specific fields */}
+      <input required type="hidden" name="item_name" maxLength={255} value="YOUR_CODE" />
+      <input type="hidden" name="item_description" maxLength={255} value="Full Description" />
+      <input required type="hidden" name="amount" value="850.00" />
+
+      {/* Customer fields */}
+      <input type="hidden" name="name_first" value={customerName.split(' ')[0]} />
+      <input type="hidden" name="name_last" value={customerName.split(' ').slice(1).join(' ') || customerName.split(' ')[0]} />
+      <input required type="hidden" name="email_address" maxLength={100} value={email} />
+
+      {/* Custom fields */}
+      <input type="hidden" name="custom_str1" value={franchiseOwnerId || ''} />
+      <input type="hidden" name="custom_str2" value={couponId || ''} />
+      <input type="hidden" name="custom_str3" value="YOUR_NEW_TYPE" />
+    </>
+  )}
+  ```
+
+#### 8.5 Current Paid Assessment Types Reference
+
+| Code | Full Name | Questions | Price | Icon | Color | Line (~) |
+|------|-----------|-----------|-------|------|-------|----------|
+| NIPA | Full Assessment | 343 | R950 | Brain | Blue (3DB3E3) | ~270 |
+| TADHD | Teen ADHD Screener | 48 | R850 | Baby | Purple | ~289 |
+| PCADHD | Parent/Caregiver ADHD | 48 | R850 | UserCheck | Blue | ~308 |
+| TCF | Teen Career & Future Direction | 132 | R850 | Briefcase | Amber | ~327 |
+
+#### 8.6 Testing Checklist
+
+- [ ] TypeScript types include new payment type (no errors)
+- [ ] Button appears in "Get Started" modal
+- [ ] Button styling matches other assessments
+- [ ] Clicking button navigates to payment screen
+- [ ] Payment summary shows correct name and price
+- [ ] Payment form includes all required fields
+- [ ] Payment gateway receives correct data
+- [ ] Successful payment redirects correctly
+- [ ] Assessment launches after payment
+- [ ] Database records payment transaction
+
+#### 8.7 Additional Integration Points
+
+**Other files that may need updates:**
+- `/src/components/HomePage.tsx` - If assessment is launched from homepage
+- Payment callback handlers - To process successful payments
+- Database tables - To record payment transactions
+- Invoice system - To generate invoices for paid assessments
 
 ### 9. Dashboard Integration
 
@@ -402,22 +519,63 @@ Deno.serve(async (req: Request) => {
 
 ## Assessment Type Mappings Reference
 
-### Current Assessment Types
+### Paid Assessments (GetStartedOptions Modal)
 
-| Display Name | Database ID | Component | Questions |
-|-------------|-------------|-----------|-----------|
-| Full Assessment (343 Questions) | nipa | NIP3Assessment | 343 |
-| ADHD Caregiver Assessment (50 Questions) | adhd-caregiver | ADHDAssessment | 50 |
-| Teen Career & Future Direction | teen-career | CareerAssessment | Varies |
-| Child Focus & Behaviour Screen (4-6 years) | tcf | SelfAssessmentQuestionnaire | 48 |
-| Child Focus & Behaviour Screen (7-10 years) | tadhd | SelfAssessmentQuestionnaire | 60 |
+These appear in the "Get Started" payment modal with pricing.
 
-### Where Mappings Are Used
+| Payment Code | Full Name | Database ID | Questions | Price | Component |
+|-------------|-----------|-------------|-----------|-------|-----------|
+| nipa | Full Assessment | nip3 | 343 | R950 | NIP3Assessment |
+| tadhd | Teen ADHD Screener | tadhd | 48 | R850 | SelfAssessmentQuestionnaire |
+| pcadhd | Parent/Caregiver ADHD | pcadhd | 48 | R850 | SelfAssessmentQuestionnaire |
+| tcf | Teen Career & Future Direction | teen-career | 132 | R850 | CareerAssessment |
 
-1. **CouponManagement.tsx**: `getAssessmentDatabaseId()` function
-2. **SelfAssessmentsPage.tsx**: `handleCouponRedemption()` function
-3. **Database**: `assessment_type` column in various tables
-4. **Edge Functions**: Email templates and routing logic
+**Where Used:**
+- **GetStartedOptions.tsx**: Payment type unions (line ~14, ~20)
+- **GetStartedOptions.tsx**: Assessment selection buttons (~line 270-345)
+- **GetStartedOptions.tsx**: Payment summary (~line 545-565)
+- **GetStartedOptions.tsx**: Payment form fields (~line 620-695)
+
+### Free/Coupon-Based Assessments
+
+These are accessed via the Self-Assessments page and require coupon codes.
+
+| Display Name (Coupon Dropdown) | Database ID | Component | Questions | Access |
+|-------------------------------|-------------|-----------|-----------|--------|
+| Full Assessment (343 Questions) | nipa | NIP3Assessment | 343 | Paid + Coupon |
+| Full ADHD Assessment (128 Questions) | nipa | NIP3Assessment | 128 | Paid + Coupon |
+| ADHD Caregiver Assessment (50 Questions) | adhd-caregiver | ADHDAssessment | 50 | Coupon Only |
+| Teen Career & Future Direction | teen-career | CareerAssessment | Varies | Paid + Coupon |
+| Child Focus & Behaviour Screen (4-6 years) | tcf | SelfAssessmentQuestionnaire | 48 | Coupon Only |
+| Child Focus & Behaviour Screen (7-10 years) | tadhd | SelfAssessmentQuestionnaire | 60 | Coupon Only |
+
+**Where Used:**
+- **CouponManagement.tsx**: `getAssessmentOptions()` (dropdown list)
+- **CouponManagement.tsx**: `getAssessmentDatabaseId()` (display name → DB ID mapping)
+- **SelfAssessmentsPage.tsx**: `handleCouponRedemption()` (routing logic)
+- **GetStartedOptions.tsx**: `assessmentTypeMap` (homepage coupon redemption)
+
+### Critical Mapping Locations
+
+When adding ANY new assessment, update ALL of these:
+
+1. **For Paid Assessments:**
+   - `GetStartedOptions.tsx` - Add to TypeScript types
+   - `GetStartedOptions.tsx` - Add selection button
+   - `GetStartedOptions.tsx` - Add to payment summary
+   - `GetStartedOptions.tsx` - Add payment form fields
+
+2. **For Free/Coupon Assessments:**
+   - `CouponManagement.tsx` - Add to `getAssessmentOptions()`
+   - `CouponManagement.tsx` - Add to `getAssessmentDatabaseId()`
+   - `SelfAssessmentsPage.tsx` - Add to `handleCouponRedemption()`
+   - `GetStartedOptions.tsx` - Add to `assessmentTypeMap`
+
+3. **For ALL Assessments:**
+   - Database migrations - Create tables
+   - Assessment card - Add to SelfAssessmentsPage
+   - Dashboard integration - SuperAdmin and Franchise
+   - Edge functions - If emails needed
 
 ## File Structure Template
 
