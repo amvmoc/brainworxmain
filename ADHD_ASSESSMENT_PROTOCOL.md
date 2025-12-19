@@ -278,11 +278,17 @@ Super admins and franchise owners can create coupon codes for the ADHD Caregiver
 
 ### Coupon Redemption
 When a coupon is redeemed:
-1. User enters code in CouponRedemption modal
+1. User enters code in CouponRedemption modal (can be from SelfAssessmentsPage OR GetStartedOptions)
 2. System validates coupon and checks `assessment_type = 'adhd-caregiver'`
 3. Maps display name to 'adhd-caregiver' ID
-4. Routes to ADHD assessment with parent respondent type
+4. Routes appropriately based on redemption location:
+   - **From SelfAssessmentsPage**: Routes to ADHD assessment with parent respondent type
+   - **From GetStartedOptions (homepage)**: Shows message directing user to Self-Assessments page
 5. Pre-fills franchise_owner_id and coupon_id from coupon data
+
+**Two Redemption Points:**
+- **SelfAssessmentsPage.tsx**: Dedicated assessment page with full ADHD flow
+- **GetStartedOptions.tsx**: Homepage modal - redirects to assessment page with helpful message
 
 ### System-Generated Coupons
 Parent creates caregiver invitation:

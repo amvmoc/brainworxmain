@@ -127,6 +127,7 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
     const assessmentTypeMap: Record<string, string> = {
       'Full Assessment (343 Questions)': 'nip3',
       'Full ADHD Assessment (128 Questions)': 'nip3',
+      'ADHD Caregiver Assessment (50 Questions)': 'adhd-caregiver',
       'Teen Career & Future Direction': 'teen-career'
     };
 
@@ -147,6 +148,11 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
       console.log('Navigating to Career Assessment');
       setShowCouponModal(false);
       setStep('career_assessment');
+    } else if (mappedType === 'adhd-caregiver') {
+      console.log('ADHD Caregiver Assessment - redirecting to assessments page');
+      setShowCouponModal(false);
+      alert('This coupon is for the ADHD Caregiver Assessment. Please access this assessment from the Self-Assessments page (Book Your Free Assessment → Self-Assessment).');
+      onClose();
     } else {
       const selectedAssessment = selfAssessmentTypes.find(type => type.id === mappedType);
       console.log('Found self-assessment:', selectedAssessment);

@@ -132,7 +132,7 @@ if (selectedXXX) {
 - [ ] Ensure mapping function is called in `handleCreateCoupon`
 - [ ] Test coupon creation saves correct `assessment_type` in database
 
-#### 4.2 Coupon Redemption Mapping
+#### 4.2 Coupon Redemption Mapping (SelfAssessmentsPage)
 
 **Location:** `/src/components/SelfAssessmentsPage.tsx`
 
@@ -151,6 +151,43 @@ if (selectedXXX) {
   }
   ```
 - [ ] Test coupon code properly launches assessment
+
+#### 4.3 Coupon Redemption Mapping (GetStartedOptions)
+
+**Location:** `/src/components/GetStartedOptions.tsx`
+
+**CRITICAL:** This file handles coupon redemption from the homepage "Get Started" flow. ALL assessment types must be recognized here to prevent "Unknown assessment type" errors.
+
+**Actions:**
+- [ ] Add mapping in `assessmentTypeMap`:
+  ```tsx
+  'Assessment Name (XX Questions)': 'assessment-id'
+  ```
+- [ ] Add handling logic in the if-else chain:
+  ```tsx
+  else if (mappedType === 'assessment-id') {
+    // Option 1: Handle directly if assessment can be started from here
+    setShowCouponModal(false);
+    setStep('assessment_step');
+
+    // Option 2: Redirect with helpful message if assessment requires special flow
+    setShowCouponModal(false);
+    alert('This coupon is for [Assessment Name]. Please access this from [Location].');
+    onClose();
+  }
+  ```
+- [ ] Choose appropriate handling based on assessment requirements:
+  - If assessment can be started from homepage → Add new step and render component
+  - If assessment requires specific page/flow → Show message and close modal
+- [ ] Test coupon redemption from homepage
+- [ ] Verify error message is clear and helpful
+
+**Why This Matters:**
+Users can redeem coupons from two places:
+1. From the Self-Assessments page (dedicated assessment selection)
+2. From the homepage "Get Started" modal (quick access)
+
+Both locations MUST recognize all valid assessment types to avoid errors.
 
 ### 5. Assessment Component Creation
 
