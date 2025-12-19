@@ -9,18 +9,336 @@ const corsHeaders = {
 };
 
 interface EmailRequest {
-  customerName: string;
-  customerEmail: string;
-  assessmentType: string;
-  overallScore: number;
-  topImprints: Array<{
+  customerName?: string;
+  customerEmail?: string;
+  assessmentType?: string;
+  overallScore?: number;
+  topImprints?: Array<{
     code: string;
     name: string;
     percentage: number;
     severity: string;
   }>;
-  recommendations: string[];
+  recommendations?: string[];
   responseId?: string;
+  recipientType?: 'client' | 'coach';
+}
+
+async function handleResponseIdRequest(responseId: string, recipientType: 'client' | 'coach') {
+  const { createClient } = await import('npm:@supabase/supabase-js@2.39.0');
+  const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+  const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+  const supabase = createClient(supabaseUrl, supabaseKey);
+
+  // Fetch self-assessment data
+  const { data: response, error: fetchError } = await supabase
+    .from('self_assessment_responses')
+    .select('*')
+    .eq('id', responseId)
+    .maybeSingle();
+
+  if (fetchError || !response) {
+    throw new Error('Self-assessment response not found');
+  }
+
+  const customerName = response.customer_name;
+  const customerEmail = response.customer_email;
+  const assessmentType = response.assessment_type || 'Self Assessment';
+  const analysisResults = response.analysis_results || {};
+  const overallScore = analysisResults.overallScore || 0;
+  const topImprints = analysisResults.topImprints || [];
+
+  if (recipientType === 'client') {
+    // Send client report to customer
+    return await sendClientReport(
+      customerName,
+      customerEmail,
+      assessmentType,
+      overallScore,
+      topImprints,
+      responseId
+    );
+  } else {
+    // Send coach report to franchise owner
+    const { data: franchiseOwner } = await supabase
+      .from('franchise_owners')
+      .select('email, name')
+      .eq('id', response.franchise_owner_id)
+      .maybeSingle();
+
+    if (!franchiseOwner) {
+      throw new Error('Franchise owner not found');
+    }
+
+    return await sendCoachReport(
+      customerName,
+      customerEmail,
+      franchiseOwner.email,
+      franchiseOwner.name,
+      assessmentType,
+      overallScore,
+      topImprints,
+      analysisResults,
+      responseId
+    );
+  }
+}
+
+async function sendClientReport(
+  customerName: string,
+  customerEmail: string,
+  assessmentType: string,
+  overallScore: number,
+  topImprints: any[],
+  responseId: string
+) {
+  const GMAIL_USER = "payments@brainworx.co.za";
+  const GMAIL_PASSWORD = "iuhzjjhughbnwsvf";
+  const SITE_URL = Deno.env.get('SITE_URL') || 'https://brainworx.co.za';
+
+  const topImprintsHtml = topImprints.slice(0, 5)
+    .map((imprint, idx) => `
+      <tr>
+        <td style="padding: 12px; border: 1px solid #e6e9ef;">
+          <strong>${idx + 1}. ${imprint.code} - ${imprint.name}</strong>
+        </td>
+        <td style="padding: 12px; border: 1px solid #e6e9ef; text-align: center;">
+          <strong style="color: #0A2A5E; font-size: 18px;">${imprint.percentage}%</strong>
+        </td>
+      </tr>
+    `).join("");
+
+  const htmlContent = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #0A2A5E, #3DB3E3); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+        .content { background: #ffffff; padding: 30px; border: 1px solid #e6e9ef; }
+        .footer { background: #f8f9fa; padding: 20px; text-align: center; border-radius: 0 0 10px 10px; font-size: 12px; color: #666; }
+        .score-box { background: linear-gradient(135deg, #3DB3E3, #1FAFA3); color: white; padding: 20px; border-radius: 10px; text-align: center; margin: 20px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th { background-color: #0A2A5E; color: white; padding: 12px; text-align: left; }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <h1 style="margin: 0; font-size: 28px;">Your Assessment Results</h1>
+          <p style="margin: 10px 0 0 0; opacity: 0.9;">${assessmentType}</p>
+        </div>
+
+        <div class="content">
+          <p>Dear ${customerName},</p>
+
+          <p>Thank you for completing your assessment with BrainWorx. Your personalized results are ready!</p>
+
+          <div class="score-box">
+            <h2 style="margin: 0 0 10px 0;">Overall Score</h2>
+            <p style="font-size: 48px; font-weight: bold; margin: 0;">${overallScore}%</p>
+          </div>
+
+          <h2 style="color: #0A2A5E; margin-top: 30px;">Your Top Areas</h2>
+          <p>These are your highest scoring areas based on your responses:</p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Area</th>
+                <th style="text-align: center;">Score</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${topImprintsHtml}
+            </tbody>
+          </table>
+
+          <div style="background-color: #fff5e6; border-left: 4px solid #0A2A5E; padding: 15px; margin-top: 30px; border-radius: 4px;">
+            <h3 style="color: #0A2A5E; margin-top: 0;">Next Steps</h3>
+            <p style="margin-bottom: 0;">Schedule a consultation with a BrainWorx coach to discuss your results and create a personalized action plan.</p>
+          </div>
+        </div>
+
+        <div class="footer">
+          <p style="margin: 0 0 10px 0;"><strong>BrainWorx - ${assessmentType}</strong></p>
+          <p style="margin: 0;">© 2025 BrainWorx. All rights reserved.</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+
+  const transporter = createTransport({
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false,
+    auth: {
+      user: GMAIL_USER,
+      pass: GMAIL_PASSWORD,
+    },
+  });
+
+  await transporter.sendMail({
+    from: `BrainWorx <${GMAIL_USER}>`,
+    to: customerEmail,
+    subject: `Your ${assessmentType} Results`,
+    html: htmlContent,
+  });
+
+  console.log('Client report sent to:', customerEmail);
+
+  return new Response(JSON.stringify({
+    success: true,
+    sentTo: customerEmail,
+    type: 'client'
+  }), {
+    headers: {
+      ...corsHeaders,
+      "Content-Type": "application/json",
+    },
+  });
+}
+
+async function sendCoachReport(
+  customerName: string,
+  customerEmail: string,
+  coachEmail: string,
+  coachName: string,
+  assessmentType: string,
+  overallScore: number,
+  topImprints: any[],
+  analysisResults: any,
+  responseId: string
+) {
+  const GMAIL_USER = "payments@brainworx.co.za";
+  const GMAIL_PASSWORD = "iuhzjjhughbnwsvf";
+
+  const allImprintsHtml = topImprints
+    .map((imprint, idx) => `
+      <tr>
+        <td style="padding: 12px; border: 1px solid #e6e9ef;">
+          <strong>${idx + 1}. ${imprint.code} - ${imprint.name}</strong>
+        </td>
+        <td style="padding: 12px; border: 1px solid #e6e9ef; text-align: center;">
+          <span style="background-color: ${imprint.severity === 'high' ? '#ef4444' : imprint.severity === 'moderate' ? '#eab308' : '#22c55e'}; color: white; padding: 4px 12px; border-radius: 12px; font-weight: bold; font-size: 12px;">
+            ${imprint.severity.toUpperCase()}
+          </span>
+        </td>
+        <td style="padding: 12px; border: 1px solid #e6e9ef; text-align: center;">
+          <strong style="color: #0A2A5E; font-size: 18px;">${imprint.percentage}%</strong>
+        </td>
+        <td style="padding: 12px; border: 1px solid #e6e9ef; font-size: 12px;">
+          ${imprint.itemCount} questions
+        </td>
+      </tr>
+    `).join("");
+
+  const htmlContent = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #0A2A5E, #3DB3E3); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+        .content { background: #ffffff; padding: 30px; border: 1px solid #e6e9ef; }
+        .footer { background: #f8f9fa; padding: 20px; text-align: center; border-radius: 0 0 10px 10px; font-size: 12px; color: #666; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th { background-color: #0A2A5E; color: white; padding: 12px; text-align: left; }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <h1 style="margin: 0; font-size: 28px;">Coach Report - ${assessmentType}</h1>
+          <p style="margin: 10px 0 0 0; opacity: 0.9;">Comprehensive Analysis</p>
+        </div>
+
+        <div class="content">
+          <p>Dear ${coachName},</p>
+
+          <p>This comprehensive coach report provides detailed analysis for <strong>${customerName}</strong> (${customerEmail}).</p>
+
+          <div style="background: linear-gradient(135deg, #3DB3E3, #1FAFA3); color: white; padding: 20px; border-radius: 10px; text-align: center; margin: 20px 0;">
+            <h2 style="margin: 0 0 10px 0;">Overall Score</h2>
+            <p style="font-size: 48px; font-weight: bold; margin: 0;">${overallScore}%</p>
+          </div>
+
+          <h2 style="color: #0A2A5E; margin-top: 30px;">Complete Neural Imprint Profile</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Neural Imprint</th>
+                <th style="text-align: center;">Severity</th>
+                <th style="text-align: center;">Score</th>
+                <th style="text-align: center;">Questions</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${allImprintsHtml}
+            </tbody>
+          </table>
+
+          <h2 style="color: #0A2A5E; margin-top: 30px;">Clinical Notes</h2>
+          <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px;">
+            <p><strong>Client:</strong> ${customerName}</p>
+            <p><strong>Email:</strong> ${customerEmail}</p>
+            <p><strong>Assessment Type:</strong> ${assessmentType}</p>
+            <p><strong>Overall Score:</strong> ${overallScore}%</p>
+            <p><strong>Date:</strong> ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+          </div>
+
+          <h2 style="color: #0A2A5E; margin-top: 30px;">Coaching Recommendations</h2>
+          <ul>
+            <li>Review high-severity areas for immediate intervention</li>
+            <li>Develop targeted action plan based on top imprints</li>
+            <li>Schedule follow-up assessment in 3-6 months</li>
+            <li>Consider additional specialized assessments as needed</li>
+          </ul>
+        </div>
+
+        <div class="footer">
+          <p style="margin: 0 0 10px 0;"><strong>BrainWorx - Comprehensive Coach Report</strong></p>
+          <p style="margin: 0;">© 2025 BrainWorx. All rights reserved.</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+
+  const transporter = createTransport({
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false,
+    auth: {
+      user: GMAIL_USER,
+      pass: GMAIL_PASSWORD,
+    },
+  });
+
+  await transporter.sendMail({
+    from: `BrainWorx <${GMAIL_USER}>`,
+    to: coachEmail,
+    subject: `Coach Report: ${customerName} - ${assessmentType}`,
+    html: htmlContent,
+  });
+
+  console.log('Coach report sent to:', coachEmail);
+
+  return new Response(JSON.stringify({
+    success: true,
+    sentTo: coachEmail,
+    type: 'coach'
+  }), {
+    headers: {
+      ...corsHeaders,
+      "Content-Type": "application/json",
+    },
+  });
 }
 
 Deno.serve(async (req: Request) => {
@@ -32,6 +350,14 @@ Deno.serve(async (req: Request) => {
   }
 
   try {
+    const requestBody: EmailRequest = await req.json();
+
+    // If responseId and recipientType are provided, fetch data from database
+    if (requestBody.responseId && requestBody.recipientType) {
+      return await handleResponseIdRequest(requestBody.responseId, requestBody.recipientType);
+    }
+
+    // Otherwise use the legacy direct data flow
     const {
       customerName,
       customerEmail,
@@ -40,7 +366,7 @@ Deno.serve(async (req: Request) => {
       topImprints,
       recommendations,
       responseId
-    }: EmailRequest = await req.json();
+    } = requestBody as Required<EmailRequest>;
 
     const SITE_URL = Deno.env.get('SITE_URL') || 'https://brainworx.co.za';
 

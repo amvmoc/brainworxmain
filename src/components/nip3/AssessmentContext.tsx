@@ -338,6 +338,36 @@ export const AssessmentProvider: React.FC<AssessmentProviderProps> = ({
           })
           .eq('id', responseId);
 
+        // Send client report to customer
+        try {
+          console.log('Sending NIP3 client report to customer:', email);
+          const results = nipResults.map(nip => ({
+            code: nip.code,
+            shortName: nip.name,
+            percentage: Math.round(nip.percentage),
+            actualScore: nip.actualScore,
+            maxScore: nip.maxScore,
+            totalQuestions: nip.totalQuestions,
+            level: nip.percentage >= 70 ? 'Strongly Present' : nip.percentage >= 50 ? 'Moderately Present' : nip.percentage >= 30 ? 'Mild Pattern' : 'Minimal Pattern'
+          }));
+
+          const { error: clientEmailError } = await supabase.functions.invoke('send-nip3-results', {
+            body: {
+              recipients: [email],
+              results: results,
+              completedAt: new Date().toISOString()
+            }
+          });
+
+          if (clientEmailError) {
+            console.error('Error sending NIP3 client report:', clientEmailError);
+          } else {
+            console.log('NIP3 client report sent successfully to customer!');
+          }
+        } catch (error) {
+          console.error('Failed to send NIP3 client report:', error);
+        }
+
         // Send comprehensive coach report email to franchise owner if applicable
         if (franchiseOwnerId) {
           try {

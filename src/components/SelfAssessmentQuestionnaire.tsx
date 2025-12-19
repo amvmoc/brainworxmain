@@ -170,6 +170,46 @@ export function SelfAssessmentQuestionnaire({
           .eq('id', couponId);
       }
 
+      // Send client report to customer via email
+      try {
+        console.log('Sending self-assessment client report to customer:', customerInfo.email);
+        const { error: clientEmailError } = await supabase.functions.invoke('send-self-assessment-email', {
+          body: {
+            responseId,
+            recipientType: 'client'
+          }
+        });
+
+        if (clientEmailError) {
+          console.error('Error sending self-assessment client report:', clientEmailError);
+        } else {
+          console.log('Self-assessment client report sent successfully to customer!');
+        }
+      } catch (error) {
+        console.error('Failed to send self-assessment client report:', error);
+      }
+
+      // Send comprehensive coach report to franchise owner if applicable
+      if (franchiseOwnerId) {
+        try {
+          console.log('Sending self-assessment coach report to franchise owner');
+          const { error: coachEmailError } = await supabase.functions.invoke('send-self-assessment-email', {
+            body: {
+              responseId,
+              recipientType: 'coach'
+            }
+          });
+
+          if (coachEmailError) {
+            console.error('Error sending self-assessment coach report:', coachEmailError);
+          } else {
+            console.log('Self-assessment coach report sent successfully to franchise owner!');
+          }
+        } catch (error) {
+          console.error('Failed to send self-assessment coach report:', error);
+        }
+      }
+
       setShowAnalysis(true);
     }
 
