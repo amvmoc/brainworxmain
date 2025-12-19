@@ -2,9 +2,34 @@
 
 ## Complete Guide for Adding New Assessments to BrainworX Platform
 
-**Version:** 1.0
+**Version:** 1.1
 **Last Updated:** December 19, 2025
 **Author:** BrainworX Development Team
+
+---
+
+## ⚠️ CRITICAL: PRE-DEPLOYMENT CHECKLIST ⚠️
+
+**BEFORE marking ANY assessment as "complete", verify ALL of these:**
+
+### Integration Checklist
+1. ✅ Assessment appears in `SelfAssessmentsPage.tsx` assessment cards array
+2. ✅ Assessment has complete info modal with "Learn More" functionality
+3. ✅ Assessment in `CouponManagement.tsx` dropdown options
+4. ✅ Assessment in `CouponManagement.tsx` getAssessmentDatabaseId mapping
+5. ✅ Assessment in `SelfAssessmentsPage` handleCouponRedemption mapping
+6. ✅ Assessment in `GetStartedOptions` assessmentTypeMap
+7. ✅ Assessment component imported in `GetStartedOptions`
+8. ✅ Assessment has step type in `GetStartedOptions` union
+9. ✅ Assessment has routing logic in `GetStartedOptions` handleCouponRedemption
+10. ✅ Assessment has rendering block in `GetStartedOptions`
+11. ✅ RLS policies allow anonymous INSERT
+12. ✅ Can start assessment from Self-Assessments page
+13. ✅ Can redeem coupon from Self-Assessments page
+14. ✅ Can redeem coupon from homepage "Get Started" modal
+15. ✅ `npm run build` completes without errors
+
+**IF ANY ITEM IS MISSING, THE ASSESSMENT IS NOT COMPLETE!**
 
 ---
 

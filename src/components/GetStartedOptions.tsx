@@ -6,6 +6,7 @@ import { SelfAssessmentQuestionnaire } from './SelfAssessmentQuestionnaire';
 import { CouponRedemption } from './CouponRedemption';
 import { CareerAssessment } from './CareerAssessment';
 import ADHDAssessment from './ADHDAssessment';
+import ADHD710Assessment from './ADHD710Assessment';
 import { supabase } from '../lib/supabase';
 import { selfAssessmentTypes, SelfAssessmentType } from '../data/selfAssessmentQuestions';
 
@@ -17,7 +18,7 @@ interface GetStartedOptionsProps {
 }
 
 export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentType, initialCouponCode }: GetStartedOptionsProps) {
-  const [step, setStep] = useState<'options' | 'assessment_type' | 'coach_link' | 'email' | 'resume' | 'patterns_info' | 'questionnaire' | 'self_assessment' | 'career_assessment' | 'adhd_assessment' | 'payment'>(preselectedPaymentType ? 'payment' : 'options');
+  const [step, setStep] = useState<'options' | 'assessment_type' | 'coach_link' | 'email' | 'resume' | 'patterns_info' | 'questionnaire' | 'self_assessment' | 'career_assessment' | 'adhd_assessment' | 'adhd710_assessment' | 'payment'>(preselectedPaymentType ? 'payment' : 'options');
   const [selectedPaymentType, setSelectedPaymentType] = useState<'nipa' | 'tadhd' | 'pcadhd' | 'tcf' | null>(preselectedPaymentType || null);
   const [coachLink, setCoachLink] = useState(franchiseCode || '');
   const [email, setEmail] = useState('');
@@ -146,6 +147,7 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
       'Full Assessment (343 Questions)': 'nip3',
       'Full ADHD Assessment (128 Questions)': 'nip3',
       'ADHD Caregiver Assessment (50 Questions)': 'adhd-caregiver',
+      'ADHD 7-10 Assessment (80 Questions)': 'adhd710',
       'Teen Career & Future Direction': 'teen-career'
     };
 
@@ -170,6 +172,10 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
       console.log('Navigating to ADHD Caregiver Assessment');
       setShowCouponModal(false);
       setStep('adhd_assessment');
+    } else if (mappedType === 'adhd710') {
+      console.log('Navigating to ADHD710 Assessment');
+      setShowCouponModal(false);
+      setStep('adhd710_assessment');
     } else {
       const selectedAssessment = selfAssessmentTypes.find(type => type.id === mappedType);
       console.log('Found self-assessment:', selectedAssessment);
@@ -257,6 +263,24 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
           prefilledChildAge={adhdChildAge || undefined}
           prefilledChildGender={adhdChildGender || undefined}
           prefilledRelationship={adhdCaregiverRelationship || undefined}
+        />
+      </div>
+    );
+  }
+
+  if (step === 'adhd710_assessment') {
+    // Determine respondent type based on whether we have assessment ID (teacher) or not (parent)
+    const respondentType = adhdAssessmentId ? 'caregiver' : 'parent';
+
+    return (
+      <div className="fixed inset-0 bg-white z-50 overflow-y-auto">
+        <ADHD710Assessment
+          assessmentId={adhdAssessmentId || undefined}
+          respondentType={respondentType}
+          onComplete={() => {
+            setStep('options');
+            onClose();
+          }}
         />
       </div>
     );
