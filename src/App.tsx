@@ -14,6 +14,8 @@ import { Library } from './components/Library';
 import { PublicBookingPage } from './components/PublicBookingPage';
 import { PublicResultsView } from './components/PublicResultsView';
 import NIP3Assessment from './components/NIP3Assessment';
+import ADHD710Assessment from './components/ADHD710Assessment';
+import ADHD710PublicResults from './components/ADHD710PublicResults';
 import { supabase } from './lib/supabase';
 
 function App() {
@@ -37,6 +39,7 @@ function App() {
   const [preselectedPaymentType, setPreselectedPaymentType] = useState<'tcf' | 'tadhd' | 'pcadhd' | 'nipa' | null>(null);
   const [couponCode, setCouponCode] = useState<string | null>(null);
   const [shareToken, setShareToken] = useState<string | null>(null);
+  const [adhd710Route, setAdhd710Route] = useState<{ type: 'assessment' | 'results', id: string, respondentType?: 'parent' | 'caregiver' } | null>(null);
 
   useEffect(() => {
     const currentPath = window.location.pathname;
@@ -44,6 +47,29 @@ function App() {
     // Check for NIP3 route
     if (currentPath === '/nip3' || currentPath === '/nip3/') {
       setShowNIP3(true);
+      setLoading(false);
+      return;
+    }
+
+    // Check for ADHD 7-10 assessment routes
+    const adhd710AssessmentMatch = currentPath.match(/\/adhd710\/([a-f0-9-]+)\/(parent|teacher)/);
+    if (adhd710AssessmentMatch && adhd710AssessmentMatch[1] && adhd710AssessmentMatch[2]) {
+      setAdhd710Route({
+        type: 'assessment',
+        id: adhd710AssessmentMatch[1],
+        respondentType: adhd710AssessmentMatch[2] === 'parent' ? 'parent' : 'caregiver'
+      });
+      setLoading(false);
+      return;
+    }
+
+    // Check for ADHD 7-10 results routes
+    const adhd710ResultsMatch = currentPath.match(/\/adhd710\/([a-f0-9]+)\/results/);
+    if (adhd710ResultsMatch && adhd710ResultsMatch[1]) {
+      setAdhd710Route({
+        type: 'results',
+        id: adhd710ResultsMatch[1]
+      });
       setLoading(false);
       return;
     }
@@ -130,6 +156,21 @@ function App() {
   const urlParams = new URLSearchParams(window.location.search);
   const verifyToken = urlParams.get('verify_token');
 
+  // Handle ADHD 7-10 routes
+  if (adhd710Route) {
+    if (adhd710Route.type === 'assessment' && adhd710Route.respondentType) {
+      return (
+        <ADHD710Assessment
+          assessmentId={adhd710Route.id}
+          respondentType={adhd710Route.respondentType}
+        />
+      );
+    }
+    if (adhd710Route.type === 'results') {
+      return <ADHD710PublicResults shareToken={adhd710Route.id} />;
+    }
+  }
+
   if (shareToken) {
     return <PublicResultsView shareToken={shareToken} />;
   }
@@ -177,7 +218,7 @@ function App() {
   }
 
   // CRITICAL: Don't show admin dashboards if user is in public flow (coupon, get started, assessments)
-  const isInPublicFlow = showGetStarted || showSelfAssessments || showNeuralPatterns || showBooking || showNIP3 || couponCode;
+  const isInPublicFlow = showGetStarted || showSelfAssessments || showNeuralPatterns || showBooking || showNIP3 || couponCode || adhd710Route;
 
   if (currentUser && franchiseData && !isInPublicFlow) {
     if (franchiseData.is_super_admin) {
