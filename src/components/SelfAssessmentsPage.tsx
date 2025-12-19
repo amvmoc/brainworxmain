@@ -816,7 +816,9 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
           <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
             {assessmentCards.map((card, index) => {
               const isNIPA = card.type === 'nipa';
-              const cardData = isNIPA ? card : { ...card, type: card.type as typeof selfAssessmentTypes[0] };
+              const isADHDCaregiver = card.type === 'adhd-caregiver';
+              const isSpecialType = isNIPA || isADHDCaregiver;
+              const cardData = isSpecialType ? card : { ...card, type: card.type as typeof selfAssessmentTypes[0] };
 
               return (
                 <div
@@ -830,7 +832,7 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
                       </div>
                       <div className="flex-1 min-w-0">
                         <h2 className="text-3xl font-bold mb-3">
-                          {isNIPA ? card.name : (typeof card.type === 'object' ? card.type.name : '')}
+                          {isSpecialType ? card.name : (typeof card.type === 'object' ? card.type.name : '')}
                         </h2>
                         <div className="flex items-center gap-2 flex-wrap">
                           {isNIPA && (
@@ -838,9 +840,14 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
                               Full Client Assessment
                             </span>
                           )}
+                          {isADHDCaregiver && (
+                            <span className="px-3 py-1 bg-white rounded-full text-sm font-bold text-emerald-700 whitespace-nowrap">
+                              Dual Assessment
+                            </span>
+                          )}
                           <span className="flex items-center gap-1 text-white/90 whitespace-nowrap">
                             <Clock size={16} />
-                            {isNIPA ? card.questionCount : (typeof card.type === 'object' ? card.type.questions.length : 0)} questions
+                            {isSpecialType ? card.questionCount : (typeof card.type === 'object' ? card.type.questions.length : 0)} questions
                           </span>
                           <span className="px-3 py-1 bg-white/20 rounded-full text-sm font-medium whitespace-nowrap">
                             {card.targetAudience}
@@ -858,7 +865,7 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
                   <div className="p-8 flex-1 flex flex-col">
                     <div className="mb-6">
                       <p className="text-gray-700 text-lg leading-relaxed min-h-[120px]">
-                        {isNIPA ? card.description : (typeof card.type === 'object' ? card.type.description : '')}
+                        {isSpecialType ? card.description : (typeof card.type === 'object' ? card.type.description : '')}
                       </p>
                     </div>
 
@@ -879,7 +886,7 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
 
                     <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-6">
                       <p className="text-sm text-gray-700">
-                        <strong>Important:</strong> {isNIPA ? card.disclaimer : (typeof card.type === 'object' ? card.type.disclaimer : '')}
+                        <strong>Important:</strong> {isSpecialType ? card.disclaimer : (typeof card.type === 'object' ? card.type.disclaimer : '')}
                       </p>
                     </div>
 
@@ -887,6 +894,11 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
                       onClick={() => {
                         if (isNIPA) {
                           setSelectedNIPA(true);
+                        } else if (isADHDCaregiver) {
+                          setADHDAssessmentData({
+                            respondentType: 'parent'
+                          });
+                          setStartADHDAssessment(true);
                         } else if (typeof card.type === 'object') {
                           setSelectedAssessment(card.type);
                         }
