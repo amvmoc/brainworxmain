@@ -17,6 +17,7 @@ interface SelfAssessmentsPageProps {
 export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessmentsPageProps) {
   const [selectedAssessment, setSelectedAssessment] = useState<typeof selfAssessmentTypes[0] | null>(null);
   const [selectedNIPA, setSelectedNIPA] = useState(false);
+  const [selectedADHD, setSelectedADHD] = useState(false);
   const [showCouponModal, setShowCouponModal] = useState(false);
   const [showChoiceModal, setShowChoiceModal] = useState(false);
   const [showResumeModal, setShowResumeModal] = useState(false);
@@ -789,6 +790,263 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
     );
   }
 
+  // Show detailed ADHD assessment info page
+  if (selectedADHD) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-[#E6E9EF] via-white to-[#E6E9EF]">
+        <div className="container mx-auto px-6 py-12">
+          <button
+            onClick={() => setSelectedADHD(false)}
+            className="fixed top-4 right-4 z-50 bg-white text-gray-600 hover:text-gray-900 rounded-full p-3 shadow-lg"
+          >
+            <X size={24} />
+          </button>
+
+          <div className="max-w-4xl mx-auto">
+            <div className={`bg-gradient-to-r ${adhdCaregiverCard.color} rounded-3xl p-8 text-white mb-8`}>
+              <div className="flex items-center gap-4 mb-4">
+                <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-4">
+                  <adhdCaregiverCard.icon size={48} className="text-white" />
+                </div>
+                <div>
+                  <h1 className="text-4xl font-bold">{adhdCaregiverCard.name}</h1>
+                  <div className="flex items-center gap-2 mt-2 flex-wrap">
+                    <span className="px-3 py-1 bg-white rounded-full text-sm font-bold text-emerald-700">
+                      Dual Assessment
+                    </span>
+                    <span className="flex items-center gap-1 text-white/90">
+                      <Clock size={16} />
+                      {adhdCaregiverCard.questionCount} questions per respondent
+                    </span>
+                    <span className="px-3 py-1 bg-white/20 rounded-full text-sm font-medium">
+                      {adhdCaregiverCard.targetAudience}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-3xl shadow-xl p-8 mb-8">
+              <h2 className="text-2xl font-bold text-emerald-700 mb-4">About This Assessment</h2>
+              <p className="text-gray-700 text-lg leading-relaxed mb-6">
+                {adhdCaregiverCard.description}
+              </p>
+
+              <div className="bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border-2 border-emerald-500/30 rounded-xl p-6 mb-6">
+                <h3 className="font-bold text-emerald-700 mb-2 flex items-center gap-2">
+                  <Heart size={20} className="text-emerald-700" />
+                  What Makes This Assessment Different?
+                </h3>
+                <p className="text-gray-700 leading-relaxed">
+                  <strong>This is a dual-respondent ADHD assessment</strong> — requiring input from BOTH a parent/guardian AND a teacher/caregiver. Unlike single-perspective assessments, this comprehensive approach captures how the child behaves across different settings (home vs. school), providing crucial context for accurate evaluation. Both respondents complete the same 50 questions from their unique perspective, and the system generates comparative analysis showing areas of agreement and discrepancy.
+                </p>
+              </div>
+
+              <div className={`${adhdCaregiverCard.bgColor} border ${adhdCaregiverCard.borderColor} rounded-xl p-6 mb-6`}>
+                <h3 className="font-bold text-emerald-700 mb-3 flex items-center gap-2">
+                  <CheckCircle size={20} className="text-emerald-600" />
+                  What You'll Discover:
+                </h3>
+                <ul className="grid md:grid-cols-1 gap-3">
+                  {adhdCaregiverCard.features.map((feature, idx) => (
+                    <li key={idx} className="flex items-start gap-2 text-gray-700">
+                      <span className="text-emerald-600 mt-1">•</span>
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-6">
+                <h3 className="font-bold text-emerald-700 mb-3">How It Works</h3>
+                <div className="text-gray-700 space-y-3">
+                  <div className="flex gap-3">
+                    <div className="flex-shrink-0 w-8 h-8 bg-emerald-600 text-white rounded-full flex items-center justify-center font-bold">1</div>
+                    <div>
+                      <strong>Parent/Guardian starts:</strong> Enter child information and complete 50 questions based on home observations
+                    </div>
+                  </div>
+                  <div className="flex gap-3">
+                    <div className="flex-shrink-0 w-8 h-8 bg-emerald-600 text-white rounded-full flex items-center justify-center font-bold">2</div>
+                    <div>
+                      <strong>Invite caregiver:</strong> Provide teacher/caregiver contact info and we'll send them a unique access code
+                    </div>
+                  </div>
+                  <div className="flex gap-3">
+                    <div className="flex-shrink-0 w-8 h-8 bg-emerald-600 text-white rounded-full flex items-center justify-center font-bold">3</div>
+                    <div>
+                      <strong>Caregiver completes:</strong> Teacher/caregiver answers the same 50 questions from their perspective
+                    </div>
+                  </div>
+                  <div className="flex gap-3">
+                    <div className="flex-shrink-0 w-8 h-8 bg-emerald-600 text-white rounded-full flex items-center justify-center font-bold">4</div>
+                    <div>
+                      <strong>Get comprehensive report:</strong> View individual reports plus combined analysis comparing both perspectives
+                    </div>
+                  </div>
+                  <p className="text-sm text-gray-600 italic mt-4">
+                    {adhdCaregiverCard.instructions}
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-6 mb-6">
+                <h3 className="font-bold text-emerald-700 mb-3">Important Disclaimer</h3>
+                <p className="text-gray-700">
+                  {adhdCaregiverCard.disclaimer}
+                </p>
+              </div>
+
+              <div className="space-y-4">
+                <div className="flex gap-4">
+                  <button
+                    onClick={() => setSelectedADHD(false)}
+                    className="flex-1 bg-gray-200 text-gray-700 px-8 py-4 rounded-xl hover:bg-gray-300 transition-all duration-300 font-bold text-lg"
+                  >
+                    Back to Assessments
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (onStartPayment) {
+                        onStartPayment('tadhd');
+                      }
+                    }}
+                    className={`flex-1 bg-gradient-to-r ${adhdCaregiverCard.color} text-white px-8 py-4 rounded-xl hover:shadow-xl transition-all duration-300 font-bold text-lg flex items-center justify-center gap-2 group`}
+                  >
+                    Proceed to Payment
+                    <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                  </button>
+                </div>
+                <button
+                  onClick={() => setShowChoiceModal(true)}
+                  className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white px-8 py-4 rounded-xl hover:shadow-xl transition-all duration-300 font-bold text-lg flex items-center justify-center gap-2 group"
+                >
+                  <Ticket size={20} />
+                  Have a Coupon Code? / Resume My Test
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {showChoiceModal && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative">
+              <button
+                onClick={() => setShowChoiceModal(false)}
+                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+              >
+                <X size={24} />
+              </button>
+
+              <div className="pt-4">
+                <h2 className="text-3xl font-bold text-emerald-700 mb-2">Choose an Option</h2>
+                <p className="text-gray-600 mb-6">
+                  Select what you'd like to do
+                </p>
+
+                <div className="space-y-4">
+                  <button
+                    onClick={() => {
+                      setShowChoiceModal(false);
+                      setShowCouponModal(true);
+                    }}
+                    className="w-full p-4 border-2 border-green-500 rounded-lg hover:bg-green-500/10 transition-all text-left group"
+                  >
+                    <div className="flex items-center gap-3">
+                      <Ticket className="text-green-500 group-hover:scale-110 transition-transform" size={24} />
+                      <div>
+                        <h3 className="font-bold text-emerald-700">Redeem Coupon Code</h3>
+                        <p className="text-sm text-gray-600">Enter your free access code</p>
+                      </div>
+                    </div>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setShowChoiceModal(false);
+                      setShowResumeModal(true);
+                    }}
+                    className="w-full p-4 border-2 border-orange-500 rounded-lg hover:bg-orange-500/10 transition-all text-left group"
+                  >
+                    <div className="flex items-center gap-3">
+                      <RotateCcw className="text-orange-500 group-hover:scale-110 transition-transform" size={24} />
+                      <div>
+                        <h3 className="font-bold text-emerald-700">Resume My Test</h3>
+                        <p className="text-sm text-gray-600">Continue from where you left off</p>
+                      </div>
+                    </div>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {showResumeModal && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative">
+              <button
+                onClick={() => {
+                  setShowResumeModal(false);
+                  setNoProgressFound(false);
+                  setResumeEmail('');
+                }}
+                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+              >
+                <X size={24} />
+              </button>
+
+              <div className="pt-4">
+                <h2 className="text-3xl font-bold text-emerald-700 mb-2">Resume ADHD Assessment</h2>
+                <p className="text-gray-600 mb-6">
+                  Enter your email to find your saved assessment
+                </p>
+
+                <form onSubmit={handleResumeSubmit} className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Email Address
+                    </label>
+                    <input
+                      type="email"
+                      value={resumeEmail}
+                      onChange={(e) => setResumeEmail(e.target.value)}
+                      placeholder="your.email@example.com"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                      required
+                    />
+                  </div>
+
+                  {noProgressFound && (
+                    <div className="bg-orange-50 border border-orange-200 text-orange-800 p-3 rounded-lg text-sm">
+                      No in-progress ADHD assessment found for this email. Please start a new assessment.
+                    </div>
+                  )}
+
+                  <button
+                    type="submit"
+                    disabled={!resumeEmail.trim() || checkingProgress}
+                    className="w-full bg-emerald-600 text-white py-3 rounded-lg hover:bg-emerald-700 disabled:opacity-50 transition-colors font-medium"
+                  >
+                    {checkingProgress ? 'Checking...' : 'Find My Assessment'}
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {showCouponModal && (
+          <CouponRedemption
+            onRedemptionSuccess={handleCouponRedemption}
+            onCancel={() => setShowCouponModal(false)}
+          />
+        )}
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#E6E9EF] via-white to-[#E6E9EF]">
       <div className="container mx-auto px-6 py-12">
@@ -895,10 +1153,7 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
                         if (isNIPA) {
                           setSelectedNIPA(true);
                         } else if (isADHDCaregiver) {
-                          setADHDAssessmentData({
-                            respondentType: 'parent'
-                          });
-                          setStartADHDAssessment(true);
+                          setSelectedADHD(true);
                         } else if (typeof card.type === 'object') {
                           setSelectedAssessment(card.type);
                         }
