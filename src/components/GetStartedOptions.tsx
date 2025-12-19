@@ -148,6 +148,7 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
       'Full ADHD Assessment (128 Questions)': 'nip3',
       'ADHD Caregiver Assessment (50 Questions)': 'adhd-caregiver',
       'ADHD 7-10 Assessment (80 Questions)': 'adhd710',
+      'Parent/Caregiver ADHD 7-10 Assessment (80 Questions)': 'adhd710',
       'Teen Career & Future Direction': 'teen-career'
     };
 

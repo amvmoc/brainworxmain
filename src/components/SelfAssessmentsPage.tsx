@@ -73,7 +73,8 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
       'Teen Career & Future Direction': 'teen-career',
       'ADHD Caregiver Assessment (Parent & Caregiver)': 'adhd-caregiver',
       'ADHD Caregiver Assessment (50 Questions)': 'adhd-caregiver',
-      'ADHD 7-10 Assessment (80 Questions)': 'adhd710'
+      'ADHD 7-10 Assessment (80 Questions)': 'adhd710',
+      'Parent/Caregiver ADHD 7-10 Assessment (80 Questions)': 'adhd710'
     };
 
     // Dynamically add all self-assessments from the data file

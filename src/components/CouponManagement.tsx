@@ -31,6 +31,7 @@ const getAssessmentDatabaseId = (displayName: string): string => {
     'Full ADHD Assessment (128 Questions)': 'nipa',
     'ADHD Caregiver Assessment (50 Questions)': 'adhd-caregiver',
     'ADHD 7-10 Assessment (80 Questions)': 'adhd710',
+    'Parent/Caregiver ADHD 7-10 Assessment (80 Questions)': 'adhd710',
     'Teen Career & Future Direction': 'teen-career'
   };
 
@@ -53,7 +54,7 @@ const getAssessmentOptions = () => {
     { value: 'Full Assessment (343 Questions)', label: 'Full Assessment (343 Questions)' },
     { value: 'Full ADHD Assessment (128 Questions)', label: 'Full ADHD Assessment (128 Questions)' },
     { value: 'ADHD Caregiver Assessment (50 Questions)', label: 'ADHD Caregiver Assessment (50 Questions)' },
-    { value: 'ADHD 7-10 Assessment (80 Questions)', label: 'ADHD 7-10 Assessment (80 Questions)' },
+    { value: 'Parent/Caregiver ADHD 7-10 Assessment (80 Questions)', label: 'Parent/Caregiver ADHD 7-10 Assessment (80 Questions)' },
   ];
 
   // Dynamically add all self-assessments

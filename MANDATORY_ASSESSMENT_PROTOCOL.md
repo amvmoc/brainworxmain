@@ -1,6 +1,6 @@
 # MANDATORY ASSESSMENT INTEGRATION PROTOCOL
 
-**VERSION:** 2.0
+**VERSION:** 2.2
 **EFFECTIVE DATE:** December 19, 2025
 **STATUS:** MANDATORY - NO EXCEPTIONS
 
@@ -8,7 +8,7 @@
 
 ## ⚠️ CRITICAL RULE ⚠️
 
-**NO ASSESSMENT IS CONSIDERED "COMPLETE" UNTIL ALL 24 VERIFICATION STEPS PASS.**
+**NO ASSESSMENT IS CONSIDERED "COMPLETE" UNTIL ALL 25 VERIFICATION STEPS PASS.**
 
 If you skip ANY step, the assessment WILL BE BROKEN and users WILL NOT be able to access it.
 
@@ -16,6 +16,27 @@ If you skip ANY step, the assessment WILL BE BROKEN and users WILL NOT be able t
 1. ❌ Name shows blank → You forgot Step 5.4b (add to isSpecialType)
 2. ❌ Shows 0 questions → You forgot Step 5.4b (add to isSpecialType)
 3. ❌ Not in coupon dropdown → You forgot Step 6.1 (add to dropdown options)
+4. ❌ Coupon redemption fails → Name mismatch between card (Step 5.1) and dropdown (Step 6.1)
+
+---
+
+## 🔑 NAME CONSISTENCY REQUIREMENT
+
+**CRITICAL:** The assessment display name MUST be EXACTLY the same in all 5 integration points:
+
+1. **Step 5.3:** Assessment card `name` field
+2. **Step 6.1:** Coupon dropdown option
+3. **Step 6.2:** Database ID mapping
+4. **Step 5.5:** SelfAssessmentsPage redemption mapping
+5. **Step 7.3:** GetStartedOptions type mapping
+
+**Format:** `[Card Name] ([X] Questions)`
+
+**Example:** If card name is `Parent/Caregiver ADHD 7-10 Assessment`, then:
+- Dropdown: `Parent/Caregiver ADHD 7-10 Assessment (80 Questions)`
+- All mappings: `'Parent/Caregiver ADHD 7-10 Assessment (80 Questions)': 'adhd710'`
+
+**One character difference will break coupon redemption!**
 
 ---
 
@@ -215,10 +236,12 @@ const [[assessment]Data, set[Assessment]Data] = useState<{
 **Verification:** ✅ State variables added
 
 ### Step 5.3: Create Assessment Card Object
+**⚠️ CRITICAL: The `name` field value MUST be used EXACTLY in all other integration points!**
+
 ```typescript
 const [assessment]Card = {
   id: '[assessment-id]',
-  name: '[Display Name]',
+  name: '[Card Display Name]',  // ← THIS EXACT STRING MUST BE USED IN STEPS 6.1, 6.2, 5.5, 7.3
   description: '[2-3 sentence description]',
   icon: [IconComponent],
   color: 'from-[color1]-500 to-[color2]-500',
@@ -238,7 +261,7 @@ const [assessment]Card = {
 };
 ```
 
-**Verification:** ✅ Card object created
+**Verification:** ✅ Card object created with consistent name
 
 ### Step 5.4: Add to assessmentCards Array
 ```typescript
@@ -274,14 +297,16 @@ Find the assessmentCards.map section and add your assessment type to the special
 **Verification:** ✅ Assessment added to isSpecialType check
 
 ### Step 5.5: Add Coupon Redemption Mapping
+**⚠️ CRITICAL: Must match dropdown option from Step 6.1 exactly!**
+
 ```typescript
 const assessmentNameMap: Record<string, string> = {
   // ... existing mappings
-  '[Display Name] ([X] Questions)': '[assessment-id]'
+  '[Card Name] ([X] Questions)': '[assessment-id]',  // ← EXACT MATCH WITH STEP 6.1
 };
 ```
 
-**Verification:** ✅ Coupon mapping added
+**Verification:** ✅ Redemption mapping added with exact string match
 
 ### Step 5.6: Add Coupon Handler Logic
 ```typescript
@@ -352,18 +377,29 @@ onClick={() => {
 ### Step 6.1: Update CouponManagement Dropdown
 **File:** `src/components/CouponManagement.tsx`
 
+**⚠️ CRITICAL: The dropdown option MUST match the card name EXACTLY!**
+
+**Format:** `'[Card Name from Step 5.3] ([questionCount] Questions)'`
+
 **Location:** `getAssessmentOptions()` function
 
 ```typescript
 const options = [
   // ... existing options
-  { value: '[Display Name] ([X] Questions)', label: '[Display Name] ([X] Questions)' },
+  { value: '[Card Name] ([X] Questions)', label: '[Card Name] ([X] Questions)' },
 ];
 ```
 
-**Verification:** ✅ Dropdown option added
+**Example:** If card name is "Parent/Caregiver ADHD 7-10 Assessment", dropdown must be:
+```typescript
+{ value: 'Parent/Caregiver ADHD 7-10 Assessment (80 Questions)', label: 'Parent/Caregiver ADHD 7-10 Assessment (80 Questions)' }
+```
+
+**Verification:** ✅ Dropdown option added with exact name match
 
 ### Step 6.2: Update Database ID Mapping
+**⚠️ CRITICAL: The mapping key MUST exactly match the dropdown option from Step 6.1!**
+
 **File:** `src/components/CouponManagement.tsx`
 
 **Location:** `getAssessmentDatabaseId()` function
@@ -371,11 +407,16 @@ const options = [
 ```typescript
 const mapping: Record<string, string> = {
   // ... existing mappings
-  '[Display Name] ([X] Questions)': '[assessment-id]'
+  '[Card Name] ([X] Questions)': '[assessment-id]',  // ← MUST MATCH STEP 6.1 EXACTLY
 };
 ```
 
-**Verification:** ✅ Database mapping added
+**Example:**
+```typescript
+'Parent/Caregiver ADHD 7-10 Assessment (80 Questions)': 'adhd710',
+```
+
+**Verification:** ✅ Database mapping added with exact string match
 
 ### Step 6.3: Test Coupon Creation
 - [ ] New assessment appears in dropdown
@@ -405,14 +446,18 @@ const [step, setStep] = useState<'options' | ... | '[assessment]_step' | 'paymen
 **Verification:** ✅ Step type added
 
 ### Step 7.3: Add Assessment Type Mapping
+**⚠️ CRITICAL: Must match dropdown option from Step 6.1 exactly!**
+
+**File:** `src/components/GetStartedOptions.tsx`
+
 ```typescript
 const assessmentTypeMap: Record<string, string> = {
   // ... existing mappings
-  '[Display Name] ([X] Questions)': '[assessment-id]'
+  '[Card Name] ([X] Questions)': '[assessment-id]',  // ← EXACT MATCH WITH STEP 6.1
 };
 ```
 
-**Verification:** ✅ Type mapping added
+**Verification:** ✅ Type mapping added with exact string match
 
 ### Step 7.4: Add Routing Logic
 ```typescript
@@ -615,21 +660,22 @@ Add assessment to current assessment types list in:
 ### Visual Display
 12. ✅ **Assessment name displays correctly (not blank)**
 13. ✅ **Question count displays correctly (not 0)**
-14. ✅ **Assessment shows in coupon dropdown**
+14. ✅ **Assessment shows in coupon dropdown with EXACT name match**
+15. ✅ **Name is IDENTICAL in: Card, Dropdown, Database mapping, Redemption mapping, Homepage**
 
 ### Functionality
-15. ✅ RLS policies allow anonymous INSERT
-16. ✅ Can start from Self-Assessments page
-17. ✅ Can redeem coupon from Self-Assessments
-18. ✅ Can redeem coupon from homepage
-19. ✅ `npm run build` succeeds
+16. ✅ RLS policies allow anonymous INSERT
+17. ✅ Can start from Self-Assessments page
+18. ✅ Can redeem coupon from Self-Assessments
+19. ✅ Can redeem coupon from homepage
+20. ✅ `npm run build` succeeds
 
 ### Testing
-20. ✅ Manual testing complete
-21. ✅ Database queries tested
-22. ✅ Reports generate correctly
-23. ✅ Emails send successfully (if applicable)
-24. ✅ Documentation complete
+21. ✅ Manual testing complete
+22. ✅ Database queries tested
+23. ✅ Reports generate correctly
+24. ✅ Emails send successfully (if applicable)
+25. ✅ Documentation complete
 
 ---
 
@@ -648,6 +694,7 @@ Add assessment to current assessment types list in:
 | Not in isSpecialType check | Name blank, 0 questions display | Add to rendering logic (Step 5.4b) |
 | Not in coupon dropdown | Can't create coupons | Add to getAssessmentOptions (Step 6.1) |
 | No database mapping | Coupon validation fails | Add to getAssessmentDatabaseId (Step 6.2) |
+| **Name inconsistency** | **Redemption fails silently** | **Ensure exact match: Steps 5.3, 6.1, 6.2, 5.5, 7.3** |
 | Not in SelfAssessmentsPage | Users can't find it | Add full integration |
 | No GetStartedOptions integration | Homepage broken | Add full integration |
 | Missing RLS policies | Users blocked | Create comprehensive policies |
@@ -659,9 +706,9 @@ Add assessment to current assessment types list in:
 
 Before marking assessment as complete, THREE people must verify:
 
-1. **Developer:** "I have completed all 24 checklist items"
-2. **Reviewer:** "I have verified all integration points work, name displays, question count shows"
-3. **Tester:** "I have tested the complete user journey and verified coupon dropdown"
+1. **Developer:** "I have completed all 25 checklist items and verified name consistency across all 5 integration points"
+2. **Reviewer:** "I have verified all integration points work, name displays, question count shows, and names match exactly"
+3. **Tester:** "I have tested the complete user journey and verified coupon dropdown shows assessment correctly"
 
 **Signature Block:**
 ```
@@ -682,6 +729,7 @@ Tester:    _________________ Date: _________
 **Review Schedule:** Monthly
 
 **Version History:**
+- v2.2 (2025-12-19): Added name consistency requirements across all integration points
 - v2.1 (2025-12-19): Added critical visual display checks (name, question count, dropdown) and Step 5.4b
 - v2.0 (2025-12-19): Added comprehensive checklist after ADHD710 incident
 - v1.0 (2025-12-01): Initial protocol
