@@ -87,6 +87,32 @@ This document tracks all fixes and changes made to the ADHD Assessment system.
 
 ---
 
+## Fix #6: Email Function Authentication Error (2025-12-19)
+
+**Problem:** Caregiver invitation emails were failing to send with "500 Internal Server Error".
+
+**Root Cause:**
+- Edge function `send-adhd-caregiver-invitation` had `verifyJWT: true` setting
+- Parents invoking the function are not authenticated, causing the function to fail before it can even execute
+- Function needs to be publicly accessible since parents may not have accounts
+
+**Solution:**
+- Redeployed edge function with `verifyJWT: false` to allow unauthenticated access
+- Added enhanced error logging to capture detailed error information
+- Returns specific error details including whether RESEND_API_KEY is present
+
+**Edge Function Changes:**
+- File: `supabase/functions/send-adhd-caregiver-invitation/index.ts`
+- Changed verifyJWT setting from `true` to `false`
+- Added error detail logging for debugging
+
+**Important Note:**
+- The RESEND_API_KEY environment variable must be configured in Supabase edge function secrets
+- Without this key, email sending will fail
+- Error response now indicates if the key is missing
+
+---
+
 ## Summary of All Changes
 
 ### Code Changes
@@ -94,12 +120,22 @@ This document tracks all fixes and changes made to the ADHD Assessment system.
 2. Caregiver invitation prominently displayed at top after parent assessment
 3. Invitation form appears at top when clicked
 4. Fixed database column name from valid_until to expires_at
+5. Email function authentication fixed (verifyJWT: false)
 
 ### Database Changes
 1. Added RLS policy for adhd-caregiver coupon creation (anon/authenticated)
 2. Added RLS policy for adhd-caregiver coupon viewing (anon/authenticated)
 
+### Edge Function Changes
+1. send-adhd-caregiver-invitation deployed with verifyJWT: false
+2. Enhanced error logging for debugging email issues
+
 ### Impact
 - Parents can now complete assessments and invite caregivers without authentication errors
 - Clear user flow guides parents through the invitation process
 - Security maintained through type-specific policies and coupon constraints
+- Email function publicly accessible for unauthenticated parent invitations
+
+### Known Requirements
+- RESEND_API_KEY must be configured in Supabase edge function environment variables
+- Without this key, email invitations will fail with detailed error message

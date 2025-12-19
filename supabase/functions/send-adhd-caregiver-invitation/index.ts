@@ -222,11 +222,17 @@ Deno.serve(async (req: Request) => {
 
   } catch (error: any) {
     console.error('Error sending invitation:', error);
+    console.error('Error details:', {
+      message: error.message,
+      stack: error.stack,
+      resendKeyExists: !!RESEND_API_KEY
+    });
 
     return new Response(
       JSON.stringify({
         success: false,
-        error: error.message || 'Failed to send invitation email'
+        error: error.message || 'Failed to send invitation email',
+        details: `RESEND_API_KEY present: ${!!RESEND_API_KEY}`
       }),
       {
         headers: {
