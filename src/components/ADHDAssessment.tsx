@@ -533,12 +533,23 @@ export default function ADHDAssessment({
     <div className="max-w-4xl mx-auto p-6">
       <div className="bg-white rounded-lg shadow-lg p-8">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            ADHD Caregiver Assessment
-          </h1>
-          <p className="text-lg text-gray-600">
-            {respondentType === 'parent' ? 'Parent/Guardian' : 'Teacher/Caregiver'} Assessment
-          </p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                ADHD Caregiver Assessment
+              </h1>
+              <p className="text-lg text-gray-600">
+                {respondentType === 'parent' ? 'Parent/Guardian' : 'Teacher/Caregiver'} Assessment
+              </p>
+            </div>
+            {childName && (
+              <div className="text-right">
+                <p className="text-sm text-gray-500">Assessment for:</p>
+                <p className="text-xl font-bold text-purple-600">{childName}</p>
+                {childAge && <p className="text-sm text-gray-600">Age: {childAge}</p>}
+              </div>
+            )}
+          </div>
         </div>
 
         {error && (
@@ -549,6 +560,36 @@ export default function ADHDAssessment({
 
         {stage === 'info' && (
           <div className="space-y-6">
+            {/* Child Information Banner - Show when assessmentId exists (caregiver flow) */}
+            {assessmentId && childName && (
+              <div className="p-6 bg-gradient-to-r from-purple-50 to-blue-50 border-b-4 border-purple-300 rounded-lg">
+                <div className="flex items-center justify-center">
+                  <div className="text-center">
+                    <p className="text-sm font-medium text-purple-600 uppercase tracking-wide mb-1">
+                      Assessment For
+                    </p>
+                    <h2 className="text-3xl font-bold text-gray-900 mb-2">
+                      {childName}
+                    </h2>
+                    <div className="flex items-center justify-center gap-6 text-gray-700">
+                      {childAge && (
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-medium">Age:</span>
+                          <span className="text-lg font-bold text-purple-600">{childAge}</span>
+                        </div>
+                      )}
+                      {childGender && (
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-medium">Gender:</span>
+                          <span className="text-lg font-bold text-purple-600 capitalize">{childGender}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
             <div>
               <h2 className="text-xl font-semibold text-gray-900 mb-4">
                 Assessment Information

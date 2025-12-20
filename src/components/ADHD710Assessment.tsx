@@ -247,6 +247,32 @@ export default function ADHD710Assessment({ assessmentId, respondentType, onComp
             </div>
           </div>
 
+          {/* Child Information Banner */}
+          {assessment && (
+            <div className="p-6 bg-gradient-to-r from-purple-50 to-blue-50 border-b-4 border-purple-300">
+              <div className="flex items-center justify-center">
+                <div className="text-center">
+                  <p className="text-sm font-medium text-purple-600 uppercase tracking-wide mb-1">
+                    Assessment For
+                  </p>
+                  <h2 className="text-3xl font-bold text-gray-900 mb-2">
+                    {assessment.child_name}
+                  </h2>
+                  <div className="flex items-center justify-center gap-6 text-gray-700">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-medium">Age:</span>
+                      <span className="text-lg font-bold text-purple-600">{assessment.child_age}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-medium">Gender:</span>
+                      <span className="text-lg font-bold text-purple-600 capitalize">{assessment.child_gender}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Respondent Information */}
           <div className="p-6 bg-blue-50 border-b">
             <h3 className="font-semibold text-gray-900 mb-3">Your Information</h3>
