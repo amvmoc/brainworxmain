@@ -10,9 +10,12 @@ interface RequestBody {
   assessmentId: string;
   teacherName: string;
   teacherEmail: string;
+  teacherRelationship?: string;
   childName: string;
   childAge: number;
   parentName: string;
+  couponCode?: string;
+  assessmentUrl?: string;
 }
 
 Deno.serve(async (req: Request) => {
@@ -30,7 +33,7 @@ Deno.serve(async (req: Request) => {
     }
 
     const body: RequestBody = await req.json();
-    const { assessmentId, teacherName, teacherEmail, childName, childAge, parentName } = body;
+    const { assessmentId, teacherName, teacherEmail, childName, childAge, parentName, assessmentUrl, couponCode } = body;
 
     if (!assessmentId || !teacherEmail || !childName || !parentName) {
       return new Response(
@@ -42,10 +45,8 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    // Get the base URL from the request
-    const url = new URL(req.url);
-    const baseUrl = `${url.protocol}//${url.host}`;
-    const assessmentLink = `${baseUrl}/#/adhd710/${assessmentId}/teacher`;
+    // Use the provided assessment URL, or build a default one
+    const assessmentLink = assessmentUrl || `${new URL(req.url).origin}?assessment=${assessmentId}&respondent=caregiver&coupon=${couponCode || ''}`;
 
     // Create HTML email
     const htmlContent = `
