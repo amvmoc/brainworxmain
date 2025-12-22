@@ -18,7 +18,7 @@ interface GetStartedOptionsProps {
 }
 
 export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentType, initialCouponCode }: GetStartedOptionsProps) {
-  const [step, setStep] = useState<'options' | 'assessment_type' | 'coach_link' | 'email' | 'resume' | 'patterns_info' | 'questionnaire' | 'self_assessment' | 'career_assessment' | 'adhd_assessment' | 'adhd710_assessment' | 'payment'>(preselectedPaymentType ? 'payment' : 'options');
+  const [step, setStep] = useState<'options' | 'assessment_type' | 'coach_link' | 'email' | 'resume' | 'patterns_info' | 'questionnaire' | 'self_assessment' | 'career_assessment' | 'adhd_assessment' | 'adhd710_assessment' | 'adhd1118_assessment' | 'payment'>(preselectedPaymentType ? 'payment' : 'options');
   const [selectedPaymentType, setSelectedPaymentType] = useState<'nipa' | 'tadhd' | 'pcadhd' | 'tcf' | null>(preselectedPaymentType || null);
   const [coachLink, setCoachLink] = useState(franchiseCode || '');
   const [email, setEmail] = useState('');
@@ -178,6 +178,11 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
       console.log('Navigating to ADHD710 Assessment');
       setShowCouponModal(false);
       setStep('adhd710_assessment');
+    } else if (mappedType === 'adhd1118') {
+      console.log('Navigating to ADHD 11-18 Assessment');
+      setShowCouponModal(false);
+      alert('ADHD 11-18 Assessment: Please contact your franchise owner to set up this dual-respondent assessment (teen + parent). They will create the assessment and send you invitation links.');
+      setStep('options');
     } else {
       const selectedAssessment = selfAssessmentTypes.find(type => type.id === mappedType);
       console.log('Found self-assessment:', selectedAssessment);
