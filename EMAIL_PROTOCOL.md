@@ -81,8 +81,52 @@ This project has Gmail already configured and working across all functions. Usin
 - May not be properly configured in production
 - Has caused issues in the past (see ADHD 710 teacher invitation bug)
 
+## ADHD 710 Assessment Report Requirements
+
+**CRITICAL:** When both parent and teacher complete an ADHD 710 assessment, three emails must be sent:
+
+1. **Parent Email**: Simple summary with top 3 patterns and link to view full report
+2. **Teacher Email**: Thank you message with link to view results
+3. **Franchise Owner Email**: **COMPREHENSIVE COACH REPORT** (full HTML report embedded in email)
+
+### Franchise Owner Report Must Include:
+
+- Complete header with all assessment details (child name, age, parent, teacher, date)
+- Report Overview section
+- Overall ADHD Pattern Indicator with interpretation
+- **Core ADHD Domains** section with detailed pattern cards for each:
+  - FOC (Scattered Focus)
+  - HYP (High Energy)
+  - IMP (Impulse Rush)
+  - ORG (Disorganized Thinking)
+  - DIM (Academic Struggles)
+- **Emotional & Impact Domains** section with pattern cards for:
+  - ANG (Emotional Anger)
+  - RES (Daily Functioning)
+  - INWF (Inward Focus)
+  - BURN (Burned Out)
+  - BULLY (Social Conflict)
+- Each pattern card must show:
+  - Parent score, Teacher score, Combined average
+  - Severity labels with color coding
+  - Discrepancy analysis if scores differ by ≥1.0
+  - Coaching focus recommendations
+- Summary & Next Steps section with:
+  - Top 3 priority patterns
+  - Recommended actions based on severity
+  - Link to interactive online report
+
+**This is the LONG, COMPREHENSIVE report** - not a simple summary with a link. The franchise owner must receive the full detailed report embedded in the email body so they can print/save it immediately.
+
+Reference implementation: `supabase/functions/send-adhd710-reports/index.ts`
+
+The `generateComprehensiveCoachReport()` function creates this full HTML report.
+
 ## History
 
-On 2025-12-20, the `send-adhd710-teacher-invitation` function was incorrectly created using Resend API instead of Gmail. This caused a production failure where teacher invitations could not be sent because `RESEND_API_KEY` was not configured.
+On 2025-12-20:
+1. The `send-adhd710-teacher-invitation` function was incorrectly created using Resend API instead of Gmail. This caused a production failure where teacher invitations could not be sent because `RESEND_API_KEY` was not configured.
 
-This protocol document ensures this mistake never happens again.
+2. The `send-adhd710-reports` function was initially only sending a simple email notification to franchise owners with a link, instead of the comprehensive coach report embedded in the email. This was corrected to send the full detailed HTML report.
+
+This protocol document ensures these mistakes never happen again.
