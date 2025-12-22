@@ -1,18 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useAssessment } from './AssessmentContext';
-import ClientReport from './ClientReport';
-import CoachReport from './CoachReport';
+import { Mail, CheckCircle, FileText, Clock } from 'lucide-react';
 import './ResultsScreen.css';
 
 interface ResultsScreenProps {
   onRestart: () => void;
 }
 
-type ReportType = 'client' | 'coach' | 'summary';
-
 export const ResultsScreen: React.FC<ResultsScreenProps> = ({ onRestart }) => {
-  const { results } = useAssessment();
-  const [reportType, setReportType] = useState<ReportType>('coach');
+  const { results, email, customerName } = useAssessment();
 
   if (!results) {
     return <div>Loading results...</div>;
@@ -24,122 +20,206 @@ export const ResultsScreen: React.FC<ResultsScreenProps> = ({ onRestart }) => {
     day: 'numeric'
   });
 
-  // Transform results for new report components
-  const transformedResults = results.nipResults.map(nip => ({
-    nipGroup: nip.code,
-    score: nip.actualScore,
-    maxScore: nip.maxScore,
-    percentage: Math.round(nip.percentage),
-    count: nip.totalQuestions
-  }));
-
-  if (reportType === 'client') {
-    return <ClientReport results={transformedResults} completionDate={completionDate} />;
-  }
-
-  if (reportType === 'coach') {
-    return <CoachReport results={transformedResults} completionDate={completionDate} />;
-  }
-
-  // Summary/Selection Screen
   return (
     <div className="results-screen">
-      <div className="results-container">
-        <div className="results-header">
-          <h2>🎉 Assessment Complete!</h2>
-          <p className="completed-date">
+      <div className="results-container" style={{ maxWidth: '600px', margin: '0 auto', padding: '40px 20px' }}>
+        <div className="results-header" style={{ textAlign: 'center', marginBottom: '40px' }}>
+          <div style={{
+            width: '80px',
+            height: '80px',
+            background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            margin: '0 auto 24px'
+          }}>
+            <CheckCircle size={48} color="white" />
+          </div>
+          <h2 style={{
+            fontSize: '32px',
+            fontWeight: 'bold',
+            color: '#0A2A5E',
+            marginBottom: '12px'
+          }}>
+            Assessment Complete!
+          </h2>
+          <p style={{ fontSize: '18px', color: '#64748b', marginBottom: '8px' }}>
+            Thank you, {customerName || 'valued client'}
+          </p>
+          <p style={{ fontSize: '14px', color: '#94a3b8' }}>
             Completed on {completionDate}
           </p>
         </div>
 
-        <div className="report-selection">
-          <h3>Choose Your Report Type</h3>
-          <p className="selection-intro">
-            Your assessment is complete! Select which type of report you'd like to view:
+        <div style={{
+          background: '#f8fafc',
+          border: '2px solid #e2e8f0',
+          borderRadius: '12px',
+          padding: '32px',
+          marginBottom: '32px'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
+            <Mail size={24} color="#3b82f6" />
+            <h3 style={{ fontSize: '20px', fontWeight: '600', color: '#0A2A5E', margin: 0 }}>
+              Your Reports Are On The Way
+            </h3>
+          </div>
+
+          <p style={{ fontSize: '16px', color: '#475569', lineHeight: '1.6', marginBottom: '24px' }}>
+            We've sent your comprehensive Neural Imprint Pattern analysis to:
           </p>
 
-          <div className="report-cards">
-            <div className="report-card client-card">
-              <div className="card-icon">📊</div>
-              <h4>Client Report</h4>
-              <p>
-                Personal assessment report with visual charts, complete score table, 
-                and actionable next steps. Perfect for personal review.
+          <div style={{
+            background: 'white',
+            border: '1px solid #e2e8f0',
+            borderRadius: '8px',
+            padding: '16px',
+            marginBottom: '24px'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Mail size={18} color="#64748b" />
+              <span style={{ fontSize: '16px', color: '#0f172a', fontWeight: '500' }}>
+                {email}
+              </span>
+            </div>
+          </div>
+
+          <div style={{
+            borderLeft: '3px solid #3b82f6',
+            paddingLeft: '16px',
+            marginBottom: '20px'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'start', gap: '12px', marginBottom: '12px' }}>
+              <FileText size={20} color="#3b82f6" style={{ marginTop: '2px' }} />
+              <div>
+                <h4 style={{ fontSize: '16px', fontWeight: '600', color: '#0f172a', marginBottom: '4px' }}>
+                  Client Report (PDF)
+                </h4>
+                <p style={{ fontSize: '14px', color: '#64748b', margin: 0 }}>
+                  Your personal assessment with visual charts, score tables, and actionable insights
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div style={{
+            background: '#fef3c7',
+            border: '1px solid #fde047',
+            borderRadius: '8px',
+            padding: '16px',
+            display: 'flex',
+            gap: '12px'
+          }}>
+            <Clock size={20} color="#f59e0b" style={{ flexShrink: 0, marginTop: '2px' }} />
+            <div>
+              <p style={{ fontSize: '14px', color: '#92400e', margin: 0, lineHeight: '1.5' }}>
+                <strong>Please allow 5-10 minutes</strong> for the email to arrive. Check your spam folder if you don't see it in your inbox.
               </p>
-              <ul className="card-features">
-                <li>✓ Stacked bar chart visualization</li>
-                <li>✓ Complete 20-pattern score table</li>
-                <li>✓ Top 3 priority patterns</li>
-                <li>✓ Clear next steps guidance</li>
-              </ul>
-              <button 
-                className="view-button client-button"
-                onClick={() => setReportType('client')}
-              >
-                View Client Report →
-              </button>
-            </div>
-
-            <div className="report-card coach-card">
-              <div className="card-icon">🎓</div>
-              <h4>Coach Report</h4>
-              <p>
-                Comprehensive clinical analysis with detailed descriptions, manifestations, 
-                root causes, and evidence-based interventions for all 20 patterns.
-              </p>
-              <ul className="card-features">
-                <li>✓ Same charts/tables as client report</li>
-                <li>✓ Full clinical descriptions</li>
-                <li>✓ Root causes & manifestations</li>
-                <li>✓ 5 interventions per pattern</li>
-                <li>✓ Personalized coaching notes</li>
-              </ul>
-              <button 
-                className="view-button coach-button"
-                onClick={() => setReportType('coach')}
-              >
-                View Coach Report →
-              </button>
             </div>
           </div>
+        </div>
 
-          <div className="quick-summary">
-            <h4>Quick Summary</h4>
-            <div className="summary-stats">
-              <div className="summary-stat">
-                <span className="stat-value">{results.nipResults.length}</span>
-                <span className="stat-label">Patterns Assessed</span>
-              </div>
-              <div className="summary-stat">
-                <span className="stat-value">{results.answers.length}</span>
-                <span className="stat-label">Questions Completed</span>
-              </div>
-              <div className="summary-stat">
-                <span className="stat-value">{Math.round(results.overallPercentage)}%</span>
-                <span className="stat-label">Average Score</span>
-              </div>
-            </div>
+        <div style={{
+          background: 'white',
+          border: '2px solid #e0f2fe',
+          borderRadius: '12px',
+          padding: '24px',
+          marginBottom: '32px'
+        }}>
+          <h4 style={{ fontSize: '18px', fontWeight: '600', color: '#0A2A5E', marginBottom: '16px' }}>
+            What Happens Next?
+          </h4>
+          <ul style={{
+            listStyle: 'none',
+            padding: 0,
+            margin: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '12px'
+          }}>
+            <li style={{ display: 'flex', gap: '12px', alignItems: 'start' }}>
+              <span style={{
+                background: '#3b82f6',
+                color: 'white',
+                borderRadius: '50%',
+                width: '24px',
+                height: '24px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '12px',
+                fontWeight: 'bold',
+                flexShrink: 0
+              }}>1</span>
+              <span style={{ fontSize: '15px', color: '#475569', paddingTop: '2px' }}>
+                Review your client report to understand your neural imprint patterns
+              </span>
+            </li>
+            <li style={{ display: 'flex', gap: '12px', alignItems: 'start' }}>
+              <span style={{
+                background: '#3b82f6',
+                color: 'white',
+                borderRadius: '50%',
+                width: '24px',
+                height: '24px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '12px',
+                fontWeight: 'bold',
+                flexShrink: 0
+              }}>2</span>
+              <span style={{ fontSize: '15px', color: '#475569', paddingTop: '2px' }}>
+                Your coach will receive a comprehensive analysis report
+              </span>
+            </li>
+            <li style={{ display: 'flex', gap: '12px', alignItems: 'start' }}>
+              <span style={{
+                background: '#3b82f6',
+                color: 'white',
+                borderRadius: '50%',
+                width: '24px',
+                height: '24px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '12px',
+                fontWeight: 'bold',
+                flexShrink: 0
+              }}>3</span>
+              <span style={{ fontSize: '15px', color: '#475569', paddingTop: '2px' }}>
+                Your coach will reach out to schedule a debrief session to discuss your results
+              </span>
+            </li>
+          </ul>
+        </div>
 
-            <div className="top-patterns">
-              <h5>Your Top 3 Patterns:</h5>
-              <ol>
-                {results.nipResults.slice(0, 3).map(nip => (
-                  <li key={nip.code}>
-                    <strong>{nip.name}</strong> - {Math.round(nip.percentage)}%
-                  </li>
-                ))}
-              </ol>
-            </div>
-          </div>
-
-          <div className="action-section">
-            <button 
-              className="restart-button"
-              onClick={onRestart}
-            >
-              🔄 Take Assessment Again
-            </button>
-          </div>
+        <div style={{ textAlign: 'center' }}>
+          <button
+            onClick={onRestart}
+            style={{
+              background: 'white',
+              border: '2px solid #e2e8f0',
+              color: '#64748b',
+              padding: '12px 24px',
+              borderRadius: '8px',
+              fontSize: '16px',
+              fontWeight: '500',
+              cursor: 'pointer',
+              transition: 'all 0.2s'
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.borderColor = '#cbd5e1';
+              e.currentTarget.style.background = '#f8fafc';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.borderColor = '#e2e8f0';
+              e.currentTarget.style.background = 'white';
+            }}
+          >
+            Close
+          </button>
         </div>
       </div>
     </div>
