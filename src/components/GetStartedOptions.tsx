@@ -370,38 +370,57 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
 
               <button
                 onClick={() => {
-                  setSelectedPaymentType('tadhd');
+                  setSelectedPaymentType('pcadhd');
                   setStep('payment');
                 }}
-                className="w-full p-4 border-2 border-purple-500 rounded-lg hover:bg-purple-500/10 transition-all text-left group"
+                className="w-full p-4 border-2 border-emerald-500 rounded-lg hover:bg-emerald-500/10 transition-all text-left group"
               >
                 <div className="flex items-center gap-3">
-                  <Baby className="text-purple-500 group-hover:scale-110 transition-transform" size={24} />
+                  <Baby className="text-emerald-500 group-hover:scale-110 transition-transform" size={24} />
                   <div className="flex-1">
-                    <h3 className="font-bold text-[#0A2A5E]">TADHD - Teen ADHD Screener</h3>
-                    <p className="text-sm text-gray-600">48 questions • Self-report</p>
+                    <h3 className="font-bold text-[#0A2A5E]">ADHD Assessment (Ages 4-6)</h3>
+                    <p className="text-sm text-gray-600">50 questions per respondent • Parent + Caregiver</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-lg font-bold text-purple-500">R850</p>
+                    <p className="text-lg font-bold text-emerald-500">R850</p>
                   </div>
                 </div>
               </button>
 
               <button
                 onClick={() => {
-                  setSelectedPaymentType('pcadhd');
+                  setSelectedPaymentType('tadhd');
                   setStep('payment');
                 }}
-                className="w-full p-4 border-2 border-blue-500 rounded-lg hover:bg-blue-500/10 transition-all text-left group"
+                className="w-full p-4 border-2 border-indigo-500 rounded-lg hover:bg-indigo-500/10 transition-all text-left group"
               >
                 <div className="flex items-center gap-3">
-                  <UserCheck className="text-blue-500 group-hover:scale-110 transition-transform" size={24} />
+                  <UserCheck className="text-indigo-500 group-hover:scale-110 transition-transform" size={24} />
                   <div className="flex-1">
-                    <h3 className="font-bold text-[#0A2A5E]">PCADHD - Parent/Caregiver ADHD</h3>
-                    <p className="text-sm text-gray-600">48 questions • For parents</p>
+                    <h3 className="font-bold text-[#0A2A5E]">ADHD Assessment (Ages 7-10)</h3>
+                    <p className="text-sm text-gray-600">80 questions per respondent • Parent + Teacher</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-lg font-bold text-blue-500">R850</p>
+                    <p className="text-lg font-bold text-indigo-500">R850</p>
+                  </div>
+                </div>
+              </button>
+
+              <button
+                onClick={() => {
+                  setSelectedPaymentType('tadhd');
+                  setStep('payment');
+                }}
+                className="w-full p-4 border-2 border-violet-500 rounded-lg hover:bg-violet-500/10 transition-all text-left group"
+              >
+                <div className="flex items-center gap-3">
+                  <Users className="text-violet-500 group-hover:scale-110 transition-transform" size={24} />
+                  <div className="flex-1">
+                    <h3 className="font-bold text-[#0A2A5E]">ADHD Assessment (Ages 11-18)</h3>
+                    <p className="text-sm text-gray-600">50 questions • Teen self-assessment</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-lg font-bold text-violet-500">R850</p>
                   </div>
                 </div>
               </button>
