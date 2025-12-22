@@ -28,6 +28,7 @@ export function ADHDAssessmentsManagement({ franchiseOwnerId, isSuperAdmin = fal
 
   const [creating, setCreating] = useState(false);
   const [sendingInvite, setSendingInvite] = useState<string | null>(null);
+  const [sendingReports, setSendingReports] = useState<string | null>(null);
 
   useEffect(() => {
     loadAssessments();
@@ -160,6 +161,35 @@ export function ADHDAssessmentsManagement({ franchiseOwnerId, isSuperAdmin = fal
       alert('Error sending invitation: ' + error.message);
     } finally {
       setSendingInvite(null);
+    }
+  };
+
+  const handleSendReports = async (assessment: any) => {
+    setSendingReports(assessment.id);
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-adhd710-reports`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
+        },
+        body: JSON.stringify({
+          assessmentId: assessment.id
+        })
+      });
+
+      if (!response.ok) {
+        const error = await response.text();
+        throw new Error(error || 'Failed to send reports');
+      }
+
+      alert('Reports sent successfully to parent and teacher!');
+    } catch (error: any) {
+      console.error('Error sending reports:', error);
+      alert('Error sending reports: ' + error.message);
+    } finally {
+      setSendingReports(null);
     }
   };
 
@@ -470,6 +500,18 @@ export function ADHDAssessmentsManagement({ franchiseOwnerId, isSuperAdmin = fal
                         )}
                         {assessment.status === 'both_completed' && (
                           <>
+                            <button
+                              onClick={() => handleSendReports(assessment)}
+                              disabled={sendingReports === assessment.id}
+                              className="p-2 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors disabled:opacity-50"
+                              title="Send reports to parent and teacher"
+                            >
+                              {sendingReports === assessment.id ? (
+                                <Loader2 className="w-4 h-4 animate-spin" />
+                              ) : (
+                                <Mail className="w-4 h-4" />
+                              )}
+                            </button>
                             <button
                               onClick={() => handleViewReport(assessment, 'parent')}
                               className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
