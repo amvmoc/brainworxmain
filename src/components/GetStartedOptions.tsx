@@ -146,9 +146,9 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
     const assessmentTypeMap: Record<string, string> = {
       'Full Assessment (343 Questions)': 'nip3',
       'Full ADHD Assessment (128 Questions)': 'nip3',
-      'ADHD Caregiver Assessment (50 Questions)': 'adhd-caregiver',
       'ADHD 7-10 Assessment (80 Questions)': 'adhd710',
       'Parent/Caregiver ADHD 7-10 Assessment (80 Questions)': 'adhd710',
+      'ADHD 11-18 Assessment (50 Questions)': 'adhd1118',
       'Teen Career & Future Direction': 'teen-career',
       'adhd-710-caregiver': 'adhd710'
     };

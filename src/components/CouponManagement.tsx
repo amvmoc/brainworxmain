@@ -29,9 +29,9 @@ const getAssessmentDatabaseId = (displayName: string): string => {
   const mapping: Record<string, string> = {
     'Full Assessment (343 Questions)': 'nipa',
     'Full ADHD Assessment (128 Questions)': 'nipa',
-    'ADHD Caregiver Assessment (50 Questions)': 'adhd-caregiver',
     'ADHD 7-10 Assessment (80 Questions)': 'adhd710',
     'Parent/Caregiver ADHD 7-10 Assessment (80 Questions)': 'adhd710',
+    'ADHD 11-18 Assessment (50 Questions)': 'adhd1118',
     'Teen Career & Future Direction': 'teen-career'
   };
 
@@ -53,8 +53,8 @@ const getAssessmentOptions = () => {
   const options = [
     { value: 'Full Assessment (343 Questions)', label: 'Full Assessment (343 Questions)' },
     { value: 'Full ADHD Assessment (128 Questions)', label: 'Full ADHD Assessment (128 Questions)' },
-    { value: 'ADHD Caregiver Assessment (50 Questions)', label: 'ADHD Caregiver Assessment (50 Questions)' },
     { value: 'Parent/Caregiver ADHD 7-10 Assessment (80 Questions)', label: 'Parent/Caregiver ADHD 7-10 Assessment (80 Questions)' },
+    { value: 'ADHD 11-18 Assessment (50 Questions)', label: 'ADHD 11-18 Assessment (50 Questions)' },
   ];
 
   // Dynamically add all self-assessments

@@ -225,7 +225,5 @@ export const child710ADHDAssessment: SelfAssessmentType = {
 
 // Export all assessment types
 export const selfAssessmentTypes: SelfAssessmentType[] = [
-  child610ADHDAssessment,
-  child710ADHDAssessment,
   careerAssessment
 ];
