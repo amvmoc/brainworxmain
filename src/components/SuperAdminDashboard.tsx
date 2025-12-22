@@ -37,7 +37,8 @@ interface SalesLog {
 }
 
 export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLogout }: SuperAdminDashboardProps) {
-  const [currentView, setCurrentView] = useState<'overview' | 'sales' | 'responses' | 'adhd-assessments' | 'adhd-1118-assessments' | 'invoices' | 'calendar' | 'users' | 'library' | 'coupons' | 'visitor_view'>('overview');
+  const [currentView, setCurrentView] = useState<'overview' | 'sales' | 'responses' | 'adhd-assessments' | 'invoices' | 'calendar' | 'users' | 'library' | 'coupons' | 'visitor_view'>('overview');
+  const [adhdTab, setAdhdTab] = useState<'adhd-710' | 'adhd-1118'>('adhd-710');
   const [calendarTab, setCalendarTab] = useState<'availability' | 'bookings'>('bookings');
   const [salesLogs, setSalesLogs] = useState<SalesLog[]>([]);
   const [responses, setResponses] = useState<any[]>([]);
@@ -477,7 +478,7 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
               }`}
             >
               <Users size={20} />
-              Assessments
+              NIP3
             </button>
             <button
               onClick={() => setCurrentView('adhd-assessments')}
@@ -488,18 +489,7 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
               }`}
             >
               <Brain size={20} />
-              ADHD 7-10
-            </button>
-            <button
-              onClick={() => setCurrentView('adhd-1118-assessments')}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg whitespace-nowrap transition-all ${
-                currentView === 'adhd-1118-assessments'
-                  ? 'bg-white text-[#0A2A5E] font-semibold'
-                  : 'bg-white/20 text-white hover:bg-white/30'
-              }`}
-            >
-              <Brain size={20} />
-              ADHD 11-18
+              ADHD
             </button>
             <button
               onClick={() => setCurrentView('calendar')}
@@ -889,11 +879,38 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
         )}
 
         {currentView === 'adhd-assessments' && (
-          <ADHDAssessmentsManagement franchiseOwnerId={franchiseOwnerId} isSuperAdmin={true} />
-        )}
+          <div className="space-y-6">
+            <div className="flex items-center gap-4 mb-6">
+              <button
+                onClick={() => setAdhdTab('adhd-710')}
+                className={`px-6 py-3 rounded-lg font-semibold transition-all ${
+                  adhdTab === 'adhd-710'
+                    ? 'bg-blue-600 text-white shadow-lg'
+                    : 'bg-white text-gray-700 hover:bg-gray-50'
+                }`}
+              >
+                ADHD 7-10
+              </button>
+              <button
+                onClick={() => setAdhdTab('adhd-1118')}
+                className={`px-6 py-3 rounded-lg font-semibold transition-all ${
+                  adhdTab === 'adhd-1118'
+                    ? 'bg-blue-600 text-white shadow-lg'
+                    : 'bg-white text-gray-700 hover:bg-gray-50'
+                }`}
+              >
+                ADHD 11-18
+              </button>
+            </div>
 
-        {currentView === 'adhd-1118-assessments' && (
-          <ADHD1118AssessmentsManagement franchiseOwnerId={franchiseOwnerId} isSuperAdmin={true} />
+            {adhdTab === 'adhd-710' && (
+              <ADHDAssessmentsManagement franchiseOwnerId={franchiseOwnerId} isSuperAdmin={true} />
+            )}
+
+            {adhdTab === 'adhd-1118' && (
+              <ADHD1118AssessmentsManagement franchiseOwnerId={franchiseOwnerId} isSuperAdmin={true} />
+            )}
+          </div>
         )}
 
         {currentView === 'responses' && (

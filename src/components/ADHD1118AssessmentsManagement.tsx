@@ -155,13 +155,18 @@ export function ADHD1118AssessmentsManagement({ franchiseOwnerId, isSuperAdmin =
         throw new Error(error || 'Failed to send reports');
       }
 
-      alert('Reports sent successfully to teen, parent, and coach!');
+      alert('Reports sent successfully to teen and coach!');
     } catch (error: any) {
       console.error('Error sending reports:', error);
       alert('Error sending reports: ' + error.message);
     } finally {
       setSendingReports(null);
     }
+  };
+
+  const handleViewReport = async (assessment: any) => {
+    setSelectedAssessment(assessment);
+    setViewMode('coach-report');
   };
 
   const handleDeleteAssessment = async (assessmentId: string) => {
@@ -299,18 +304,27 @@ export function ADHD1118AssessmentsManagement({ franchiseOwnerId, isSuperAdmin =
                           </button>
                         )}
                         {assessment.status === 'teen_completed' && (
-                          <button
-                            onClick={() => handleSendReports(assessment)}
-                            disabled={sendingReports === assessment.id}
-                            className="p-2 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors disabled:opacity-50"
-                            title="Send reports to teen and coach"
-                          >
-                            {sendingReports === assessment.id ? (
-                              <Loader2 className="w-4 h-4 animate-spin" />
-                            ) : (
-                              <Mail className="w-4 h-4" />
-                            )}
-                          </button>
+                          <>
+                            <button
+                              onClick={() => handleSendReports(assessment)}
+                              disabled={sendingReports === assessment.id}
+                              className="p-2 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors disabled:opacity-50"
+                              title="Send reports to teen and coach"
+                            >
+                              {sendingReports === assessment.id ? (
+                                <Loader2 className="w-4 h-4 animate-spin" />
+                              ) : (
+                                <Mail className="w-4 h-4" />
+                              )}
+                            </button>
+                            <button
+                              onClick={() => handleViewReport(assessment)}
+                              className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
+                              title="View coach report"
+                            >
+                              <Eye className="w-4 h-4" />
+                            </button>
+                          </>
                         )}
                         <button
                           onClick={() => handleDeleteAssessment(assessment.id)}

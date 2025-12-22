@@ -255,6 +255,28 @@ export default function ADHD1118Assessment({ assessmentId: initialAssessmentId, 
         .update({ status: 'teen_completed' })
         .eq('id', assessmentId);
 
+      // Automatically send reports to teen and coach
+      try {
+        const reportResponse = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-adhd1118-reports`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
+          },
+          body: JSON.stringify({
+            assessmentId: assessmentId
+          })
+        });
+
+        if (!reportResponse.ok) {
+          console.error('Failed to send reports automatically');
+        } else {
+          console.log('Reports sent automatically to teen and coach');
+        }
+      } catch (emailError) {
+        console.error('Error sending automatic reports:', emailError);
+      }
+
       setShowSuccess(true);
     } catch (error: any) {
       console.error('Error submitting assessment:', error);
