@@ -1,6 +1,6 @@
 // Self-assessments with mandatory payment gateway
 import { useState } from 'react';
-import { Briefcase, Users, Brain, Heart, ArrowRight, X, CheckCircle, Clock, Ticket, RotateCcw, UserCheck, GraduationCap } from 'lucide-react';
+import { Briefcase, Users, Brain, Heart, ArrowRight, X, CheckCircle, Clock, Ticket, RotateCcw, UserCheck, GraduationCap, UserPlus } from 'lucide-react';
 import { selfAssessmentTypes } from '../data/selfAssessmentQuestions';
 import { SelfAssessmentQuestionnaire } from './SelfAssessmentQuestionnaire';
 import NIP3Assessment from './NIP3Assessment';
@@ -74,7 +74,8 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
       'ADHD Caregiver Assessment (Parent & Caregiver)': 'adhd-caregiver',
       'ADHD Caregiver Assessment (50 Questions)': 'adhd-caregiver',
       'ADHD 7-10 Assessment (80 Questions)': 'adhd710',
-      'Parent/Caregiver ADHD 7-10 Assessment (80 Questions)': 'adhd710'
+      'Parent/Caregiver ADHD 7-10 Assessment (80 Questions)': 'adhd710',
+      'ADHD 11-18 Assessment (50 Questions)': 'adhd1118'
     };
 
     // Dynamically add all self-assessments from the data file
@@ -272,36 +273,6 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
     },
     {
       type: selfAssessmentTypes[0],
-      icon: Brain,
-      color: 'from-orange-500 to-red-500',
-      iconColor: 'text-orange-500',
-      borderColor: 'border-orange-500',
-      bgColor: 'bg-orange-50',
-      targetAudience: 'Children (Ages 4-6)',
-      features: [
-        'Understand attention patterns',
-        'Identify energy management challenges',
-        'Recognize emotional responses',
-        'Discover helpful strategies'
-      ]
-    },
-    {
-      type: selfAssessmentTypes[1],
-      icon: Users,
-      color: 'from-purple-500 to-pink-500',
-      iconColor: 'text-purple-500',
-      borderColor: 'border-purple-500',
-      bgColor: 'bg-purple-50',
-      targetAudience: 'Children (Ages 7-10)',
-      features: [
-        'Parent & caregiver observations at home and school',
-        'Track attention, activity & impulse patterns',
-        'Identify emotional and social challenges',
-        'Compare behavior across settings'
-      ]
-    },
-    {
-      type: selfAssessmentTypes[2],
       icon: Briefcase,
       color: 'from-amber-500 to-orange-500',
       iconColor: 'text-amber-500',
