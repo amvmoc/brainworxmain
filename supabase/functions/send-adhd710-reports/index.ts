@@ -568,7 +568,7 @@ Deno.serve(async (req: Request) => {
 
     const url = new URL(req.url);
     const baseUrl = `${url.protocol}//${url.host}`;
-    const resultsLink = `${baseUrl}/#/adhd710/${assessment.share_token}/results`;
+    const resultsLink = `${baseUrl}/adhd710/${assessment.share_token}/results`;
 
     const parentScores = parentResponse.scores?.nippScores || {};
     const teacherScores = teacherResponse.scores?.nippScores || {};
