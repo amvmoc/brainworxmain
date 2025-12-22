@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { Plus, Send, Eye, Trash2, Loader2, Mail, Users, CheckCircle, Clock, AlertCircle } from 'lucide-react';
+import ADHD1118CoachReport from './ADHD1118CoachReport';
+import { getSeverityLabel1118, scoreToPercentage } from '../data/adhd1118AssessmentQuestions';
 
 interface ADHD1118AssessmentsManagementProps {
   franchiseOwnerId: string;
@@ -205,6 +207,73 @@ export function ADHD1118AssessmentsManagement({ franchiseOwnerId, isSuperAdmin =
       </span>
     );
   };
+
+  if (viewMode === 'coach-report' && selectedAssessment) {
+    const teenResponse = selectedAssessment.adhd_1118_assessment_responses?.find((r: any) => r.respondent_type === 'teen');
+
+    if (!teenResponse || !teenResponse.scores?.nippScores) {
+      return (
+        <div className="p-6">
+          <button
+            onClick={() => {
+              setViewMode('list');
+              setSelectedAssessment(null);
+            }}
+            className="text-blue-600 hover:text-blue-700 mb-4"
+          >
+            ← Back to Assessments
+          </button>
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+            <p className="text-red-800">Unable to load report data. Assessment may not be completed yet.</p>
+          </div>
+        </div>
+      );
+    }
+
+    const NIPP_PATTERN_INFO: Record<string, { name: string }> = {
+      FOC: { name: 'Focus / Attention' },
+      DIM: { name: 'Dim (low emotional energy)' },
+      ORG: { name: 'Organization' },
+      HYP: { name: 'Hyperactive / Restless' },
+      IMP: { name: 'Impulsive' },
+      ANG: { name: 'Anger / Frustration' },
+      INWF: { name: 'Inadequate / Worthless' },
+      RES: { name: 'Resistant / Defiant' },
+      BURN: { name: 'Burned Out' },
+      BULLY: { name: 'Victim Loops' }
+    };
+
+    const teenScores = teenResponse.scores.nippScores;
+    const patterns = Object.keys(teenScores).map(code => {
+      const teenScore = teenScores[code];
+      return {
+        code,
+        name: NIPP_PATTERN_INFO[code]?.name || code,
+        category: ['FOC', 'HYP', 'IMP', 'ORG', 'DIM'].includes(code) ? 'Core ADHD' : 'Emotional/Impact',
+        teenScore,
+        teenLabel: getSeverityLabel1118(teenScore),
+        percentage: scoreToPercentage(teenScore)
+      };
+    });
+
+    patterns.sort((a, b) => b.teenScore - a.teenScore);
+
+    return (
+      <ADHD1118CoachReport
+        teenInfo={{
+          name: selectedAssessment.teen_name,
+          age: selectedAssessment.teen_age
+        }}
+        teenEmail={teenResponse.respondent_email}
+        patterns={patterns}
+        date={new Date(selectedAssessment.created_at).toLocaleDateString()}
+        onClose={() => {
+          setViewMode('list');
+          setSelectedAssessment(null);
+        }}
+      />
+    );
+  }
 
   return (
     <div className="p-6">
