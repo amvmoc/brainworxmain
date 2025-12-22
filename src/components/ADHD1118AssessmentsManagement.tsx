@@ -17,9 +17,7 @@ export function ADHD1118AssessmentsManagement({ franchiseOwnerId, isSuperAdmin =
   const [formData, setFormData] = useState({
     teen_name: '',
     teen_age: 12,
-    teen_email: '',
-    parent_name: '',
-    parent_email: ''
+    teen_email: ''
   });
 
   const [creating, setCreating] = useState(false);
@@ -65,7 +63,7 @@ export function ADHD1118AssessmentsManagement({ franchiseOwnerId, isSuperAdmin =
           teen_name: formData.teen_name,
           teen_age: formData.teen_age,
           franchise_owner_id: franchiseOwnerId,
-          created_by_email: formData.parent_email,
+          created_by_email: formData.teen_email,
           status: 'pending'
         })
         .select()
@@ -86,28 +84,13 @@ export function ADHD1118AssessmentsManagement({ franchiseOwnerId, isSuperAdmin =
 
       if (teenError) throw teenError;
 
-      const { error: parentError } = await supabase
-        .from('adhd_1118_assessment_responses')
-        .insert({
-          assessment_id: assessment.id,
-          respondent_type: 'parent',
-          respondent_name: formData.parent_name,
-          respondent_email: formData.parent_email,
-          respondent_relationship: 'parent',
-          completed: false
-        });
-
-      if (parentError) throw parentError;
-
       const teenLink = `${window.location.origin}/adhd1118/${assessment.id}/teen`;
-      alert(`Assessment created!\n\nTeen link: ${teenLink}\n\nShare this link with ${formData.teen_name}`);
+      alert(`Assessment created!\n\nTeen Assessment Link: ${teenLink}\n\nShare this link with ${formData.teen_name} to complete their self-assessment.`);
 
       setFormData({
         teen_name: '',
         teen_age: 12,
-        teen_email: '',
-        parent_name: '',
-        parent_email: ''
+        teen_email: ''
       });
       setShowCreateModal(false);
       loadAssessments();
@@ -204,9 +187,7 @@ export function ADHD1118AssessmentsManagement({ franchiseOwnerId, isSuperAdmin =
 
     const badges = {
       pending: { icon: Clock, color: 'bg-yellow-100 text-yellow-800', text: 'Pending' },
-      teen_completed: { icon: CheckCircle, color: 'bg-blue-100 text-blue-800', text: 'Teen Complete' },
-      parent_completed: { icon: CheckCircle, color: 'bg-purple-100 text-purple-800', text: 'Parent Complete' },
-      both_completed: { icon: CheckCircle, color: 'bg-green-100 text-green-800', text: 'Complete' }
+      teen_completed: { icon: CheckCircle, color: 'bg-green-100 text-green-800', text: 'Complete' }
     };
 
     const badge = badges[status as keyof typeof badges] || badges.pending;
@@ -225,7 +206,7 @@ export function ADHD1118AssessmentsManagement({ franchiseOwnerId, isSuperAdmin =
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">ADHD Assessments (Ages 11-18)</h2>
-          <p className="text-gray-600 mt-1">Manage teen self-assessments and parent assessments</p>
+          <p className="text-gray-600 mt-1">Manage teen self-assessments</p>
         </div>
         <button
           onClick={() => setShowCreateModal(true)}
@@ -317,12 +298,12 @@ export function ADHD1118AssessmentsManagement({ franchiseOwnerId, isSuperAdmin =
                             )}
                           </button>
                         )}
-                        {assessment.status === 'both_completed' && (
+                        {assessment.status === 'teen_completed' && (
                           <button
                             onClick={() => handleSendReports(assessment)}
                             disabled={sendingReports === assessment.id}
                             className="p-2 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors disabled:opacity-50"
-                            title="Send reports to teen, parent and coach"
+                            title="Send reports to teen and coach"
                           >
                             {sendingReports === assessment.id ? (
                               <Loader2 className="w-4 h-4 animate-spin" />
@@ -401,35 +382,6 @@ export function ADHD1118AssessmentsManagement({ franchiseOwnerId, isSuperAdmin =
                 </div>
               </div>
 
-              <div>
-                <h4 className="font-semibold text-gray-900 mb-3">Parent/Guardian Information</h4>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Parent Name *
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.parent_name}
-                      onChange={(e) => setFormData({ ...formData, parent_name: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Parent Email *
-                    </label>
-                    <input
-                      type="email"
-                      required
-                      value={formData.parent_email}
-                      onChange={(e) => setFormData({ ...formData, parent_email: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                  </div>
-                </div>
-              </div>
 
               <div className="flex items-center gap-3 pt-4">
                 <button

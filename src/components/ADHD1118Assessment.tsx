@@ -248,27 +248,12 @@ export default function ADHD1118Assessment({ assessmentId: initialAssessmentId, 
         if (updateError) throw updateError;
       }
 
-      const { data: allResponses } = await supabase
-        .from('adhd_1118_assessment_responses')
-        .select('*')
-        .eq('assessment_id', assessmentId);
-
-      if (allResponses && allResponses.length === 2 && allResponses.every(r => r.completed)) {
-        await supabase
-          .from('adhd_1118_assessments')
-          .update({ status: 'both_completed' })
-          .eq('id', assessmentId);
-      } else if (respondentType === 'teen') {
-        await supabase
-          .from('adhd_1118_assessments')
-          .update({ status: 'teen_completed' })
-          .eq('id', assessmentId);
-      } else {
-        await supabase
-          .from('adhd_1118_assessments')
-          .update({ status: 'parent_completed' })
-          .eq('id', assessmentId);
-      }
+      // ADHD 11-18 is a teen-only self-assessment (no parent input required)
+      // Mark as completed when teen finishes
+      await supabase
+        .from('adhd_1118_assessments')
+        .update({ status: 'teen_completed' })
+        .eq('id', assessmentId);
 
       setShowSuccess(true);
     } catch (error: any) {
@@ -300,28 +285,45 @@ export default function ADHD1118Assessment({ assessmentId: initialAssessmentId, 
             </div>
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Assessment Complete!</h2>
             <p className="text-lg text-gray-600 mb-6">
-              Thank you for completing the ADHD assessment for {teenInfo.name}.
+              Thank you for completing the ADHD assessment, {teenInfo.name}!
             </p>
-            {respondentType === 'teen' && (
-              <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-6 mb-6">
-                <p className="text-blue-900 font-medium mb-2">
-                  Next Step: Parent/Guardian Assessment
-                </p>
-                <p className="text-blue-700 text-sm">
-                  Your parent or guardian will also need to complete their assessment. Once both are finished, a comprehensive report will be generated.
-                </p>
+
+            <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-6 mb-6 text-left">
+              <div className="flex items-start gap-3 mb-4">
+                <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <Check className="w-4 h-4 text-white" />
+                </div>
+                <div>
+                  <p className="text-blue-900 font-semibold mb-1">
+                    Your Reports Are Being Prepared
+                  </p>
+                  <p className="text-blue-700 text-sm">
+                    Your comprehensive ADHD assessment report will be emailed to {respondentInfo.email} within 5-10 minutes.
+                  </p>
+                </div>
               </div>
-            )}
-            {respondentType === 'parent' && (
-              <div className="bg-purple-50 border-2 border-purple-200 rounded-xl p-6 mb-6">
-                <p className="text-purple-900 font-medium mb-2">
-                  Parent Assessment Complete
-                </p>
-                <p className="text-purple-700 text-sm">
-                  Thank you for completing your assessment. Once the teen has also completed their assessment, a comprehensive report will be generated.
-                </p>
+
+              <div className="flex items-start gap-3">
+                <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <Check className="w-4 h-4 text-white" />
+                </div>
+                <div>
+                  <p className="text-blue-900 font-semibold mb-1">
+                    Coach Report Sent
+                  </p>
+                  <p className="text-blue-700 text-sm">
+                    A detailed clinical report has been sent to your coach. They will contact you to schedule a debrief session.
+                  </p>
+                </div>
               </div>
-            )}
+            </div>
+
+            <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6">
+              <p className="text-amber-800 text-sm">
+                <strong>Note:</strong> Please check your spam folder if you don't see the email in your inbox.
+              </p>
+            </div>
+
             {onClose && (
               <button
                 onClick={onClose}
