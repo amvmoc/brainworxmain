@@ -5,7 +5,6 @@ import { NeuralImprintPatternsInfo } from './NeuralImprintPatternsInfo';
 import { SelfAssessmentQuestionnaire } from './SelfAssessmentQuestionnaire';
 import { CouponRedemption } from './CouponRedemption';
 import { CareerAssessment } from './CareerAssessment';
-import ADHDAssessment from './ADHDAssessment';
 import ADHD710Assessment from './ADHD710Assessment';
 import ADHD1118Assessment from './ADHD1118Assessment';
 import { supabase } from '../lib/supabase';
@@ -14,13 +13,13 @@ import { selfAssessmentTypes, SelfAssessmentType } from '../data/selfAssessmentQ
 interface GetStartedOptionsProps {
   onClose: () => void;
   franchiseCode?: string | null;
-  preselectedPaymentType?: 'tadhd' | 'pcadhd' | 'tcf' | null;
+  preselectedPaymentType?: 'tadhd' | 'tcf' | null;
   initialCouponCode?: string | null;
 }
 
 export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentType, initialCouponCode }: GetStartedOptionsProps) {
-  const [step, setStep] = useState<'options' | 'assessment_type' | 'coach_link' | 'email' | 'resume' | 'patterns_info' | 'questionnaire' | 'self_assessment' | 'career_assessment' | 'adhd_assessment' | 'adhd710_assessment' | 'adhd1118_assessment' | 'payment'>(preselectedPaymentType ? 'payment' : 'options');
-  const [selectedPaymentType, setSelectedPaymentType] = useState<'nipa' | 'tadhd' | 'pcadhd' | 'tcf' | null>(preselectedPaymentType || null);
+  const [step, setStep] = useState<'options' | 'assessment_type' | 'coach_link' | 'email' | 'resume' | 'patterns_info' | 'questionnaire' | 'self_assessment' | 'career_assessment' | 'adhd710_assessment' | 'adhd1118_assessment' | 'payment'>(preselectedPaymentType ? 'payment' : 'options');
+  const [selectedPaymentType, setSelectedPaymentType] = useState<'nipa' | 'tadhd' | 'tcf' | null>(preselectedPaymentType || null);
   const [coachLink, setCoachLink] = useState(franchiseCode || '');
   const [email, setEmail] = useState('');
   const [emailSent, setEmailSent] = useState(false);
@@ -154,7 +153,6 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
       'adhd-710-caregiver': 'adhd710',
       'nipa': 'nip3',
       'tadhd': 'adhd1118',
-      'pcadhd': 'adhd-caregiver',
       'tcf': 'teen-career'
     };
 
@@ -175,10 +173,6 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
       console.log('Navigating to Career Assessment');
       setShowCouponModal(false);
       setStep('career_assessment');
-    } else if (mappedType === 'adhd-caregiver') {
-      console.log('Navigating to ADHD Caregiver Assessment');
-      setShowCouponModal(false);
-      setStep('adhd_assessment');
     } else if (mappedType === 'adhd710') {
       console.log('Navigating to ADHD710 Assessment');
       setShowCouponModal(false);
@@ -255,25 +249,6 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
           customerName={customerName}
           franchiseOwnerId={franchiseOwnerId}
           couponId={couponId}
-        />
-      </div>
-    );
-  }
-
-  if (step === 'adhd_assessment') {
-    // Determine respondent type based on whether we have child info (caregiver) or not (parent)
-    const respondentType = adhdChildName ? 'caregiver' : 'parent';
-
-    return (
-      <div className="fixed inset-0 bg-white z-50 overflow-y-auto">
-        <ADHDAssessment
-          onClose={onClose}
-          respondentType={respondentType}
-          assessmentId={adhdAssessmentId || undefined}
-          prefilledChildName={adhdChildName || undefined}
-          prefilledChildAge={adhdChildAge || undefined}
-          prefilledChildGender={adhdChildGender || undefined}
-          prefilledRelationship={adhdCaregiverRelationship || undefined}
         />
       </div>
     );
@@ -368,25 +343,6 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
                   </div>
                   <div className="text-right">
                     <p className="text-lg font-bold text-[#3DB3E3]">R950</p>
-                  </div>
-                </div>
-              </button>
-
-              <button
-                onClick={() => {
-                  setSelectedPaymentType('pcadhd');
-                  setStep('payment');
-                }}
-                className="w-full p-4 border-2 border-emerald-500 rounded-lg hover:bg-emerald-500/10 transition-all text-left group"
-              >
-                <div className="flex items-center gap-3">
-                  <Baby className="text-emerald-500 group-hover:scale-110 transition-transform" size={24} />
-                  <div className="flex-1">
-                    <h3 className="font-bold text-[#0A2A5E]">ADHD Assessment (Ages 4-6)</h3>
-                    <p className="text-sm text-gray-600">50 questions per respondent • Parent + Caregiver</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-lg font-bold text-emerald-500">R850</p>
                   </div>
                 </div>
               </button>
@@ -653,7 +609,6 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
                 <p className="text-lg font-bold text-[#0A2A5E]">
                   {selectedPaymentType === 'nipa' && 'NIPA - Full Neural Imprint Assessment'}
                   {selectedPaymentType === 'tadhd' && 'TADHD - Teen ADHD-Linked Screener'}
-                  {selectedPaymentType === 'pcadhd' && 'PCADHD - Parent/Caregiver ADHD Screener'}
                   {selectedPaymentType === 'tcf' && 'TCF - Teen Career & Future Direction'}
                 </p>
               </div>
@@ -663,7 +618,6 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
                   <p className="text-2xl font-bold text-[#0A2A5E]">
                     {selectedPaymentType === 'nipa' && 'R950.00'}
                     {selectedPaymentType === 'tadhd' && 'R850.00'}
-                    {selectedPaymentType === 'pcadhd' && 'R850.00'}
                     {selectedPaymentType === 'tcf' && 'R850.00'}
                   </p>
                 </div>
@@ -744,32 +698,6 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
                   <input required type="hidden" name="amount" value="850" />
                   <input required type="hidden" name="item_name" maxLength={255} value="TADHD" />
                   <input type="hidden" name="item_description" maxLength={255} value="TADHD" />
-                  <button
-                    type="submit"
-                    className="w-full bg-gradient-to-r from-[#0A2A5E] to-[#3DB3E3] text-white py-4 px-6 rounded-lg font-semibold text-lg hover:shadow-lg transition-all duration-300 hover:scale-[1.02]"
-                  >
-                    {paymentCouponCode.trim() ? 'Proceed with Coupon' : 'Proceed to Payment'}
-                  </button>
-                </form>
-              )}
-
-              {selectedPaymentType === 'pcadhd' && (
-                <form
-                  name="PayFastPayNowForm"
-                  action="https://payment.payfast.io/eng/process"
-                  method="post"
-                  onSubmit={(e) => {
-                    if (paymentCouponCode.trim()) {
-                      e.preventDefault();
-                      setShowCouponModal(true);
-                    }
-                  }}
-                >
-                  <input required type="hidden" name="cmd" value="_paynow" />
-                  <input required type="hidden" name="receiver" pattern="[0-9]" value="32553329" />
-                  <input required type="hidden" name="amount" value="850" />
-                  <input required type="hidden" name="item_name" maxLength={255} value="PCADHD" />
-                  <input type="hidden" name="item_description" maxLength={255} value="PCADHD" />
                   <button
                     type="submit"
                     className="w-full bg-gradient-to-r from-[#0A2A5E] to-[#3DB3E3] text-white py-4 px-6 rounded-lg font-semibold text-lg hover:shadow-lg transition-all duration-300 hover:scale-[1.02]"

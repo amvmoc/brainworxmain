@@ -7,7 +7,6 @@ import { CouponManagement } from './CouponManagement';
 import { CalendarManagement } from './CalendarManagement';
 import { BookingManagement } from './BookingManagement';
 import { HomePage } from './HomePage';
-import { ADHDAssessmentsManagement } from './ADHDAssessmentsManagement';
 import { ADHD1118AssessmentsManagement } from './ADHD1118AssessmentsManagement';
 import { SelfAssessmentReport } from './SelfAssessmentReport';
 import CoachReport from './coach-report/CoachReport';
@@ -904,7 +903,10 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
             </div>
 
             {adhdTab === 'adhd-710' && (
-              <ADHDAssessmentsManagement franchiseOwnerId={franchiseOwnerId} isSuperAdmin={true} />
+              <div className="bg-white rounded-xl p-6 shadow-lg">
+                <h3 className="text-xl font-bold text-[#0A2A5E] mb-4">ADHD 7-10 Assessments</h3>
+                <p className="text-gray-600">ADHD 7-10 Parent/Teacher assessment management coming soon.</p>
+              </div>
             )}
 
             {adhdTab === 'adhd-1118' && (

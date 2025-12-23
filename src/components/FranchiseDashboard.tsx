@@ -7,7 +7,6 @@ import CoachReport from './coach-report/CoachReport';
 import { CalendarManagement } from './CalendarManagement';
 import { BookingManagement } from './BookingManagement';
 import { FranchiseBookingCalendar } from './FranchiseBookingCalendar';
-import { ADHDAssessmentsManagement } from './ADHDAssessmentsManagement';
 import { generateCoachReportData } from '../utils/coachReportGenerator';
 import { selfAssessmentTypes } from '../data/selfAssessmentQuestions';
 
@@ -251,7 +250,10 @@ export function FranchiseDashboard({
         {currentView === 'invoices' ? (
           <InvoicesPage franchiseOwnerId={franchiseOwnerId} />
         ) : currentView === 'adhd-assessments' ? (
-          <ADHDAssessmentsManagement franchiseOwnerId={franchiseOwnerId} isSuperAdmin={isSuperAdmin} />
+          <div className="bg-white rounded-xl p-6 shadow-lg">
+            <h2 className="text-2xl font-bold text-[#0A2A5E] mb-4">ADHD Assessments</h2>
+            <p className="text-gray-600">ADHD assessment management coming soon.</p>
+          </div>
         ) : currentView === 'calendar' ? (
           <div className="space-y-6">
             <div className="flex gap-4 mb-6">

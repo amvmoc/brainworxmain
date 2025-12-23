@@ -6,7 +6,6 @@ import { SelfAssessmentQuestionnaire } from './SelfAssessmentQuestionnaire';
 import NIP3Assessment from './NIP3Assessment';
 import { CouponRedemption } from './CouponRedemption';
 import { CareerAssessment } from './CareerAssessment';
-import ADHDAssessment from './ADHDAssessment';
 import ADHD710Assessment from './ADHD710Assessment';
 import ADHD1118Assessment from './ADHD1118Assessment';
 import { supabase } from '../lib/supabase';
@@ -45,11 +44,6 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
     customerName: string;
     franchiseOwnerId: string;
     couponId?: string;
-  } | null>(null);
-  const [startADHDAssessment, setStartADHDAssessment] = useState(false);
-  const [adhdAssessmentData, setADHDAssessmentData] = useState<{
-    assessmentId?: string;
-    respondentType: 'parent' | 'caregiver';
   } | null>(null);
   const [startADHD710Assessment, setStartADHD710Assessment] = useState(false);
   const [adhd710AssessmentData, setADHD710AssessmentData] = useState<{
@@ -109,11 +103,6 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
         couponId: couponId
       });
       setStartCareerAssessment(true);
-    } else if (assessmentId === 'adhd-caregiver') {
-      setADHDAssessmentData({
-        respondentType: 'parent'
-      });
-      setStartADHDAssessment(true);
     } else if (assessmentId === 'adhd710') {
       setADHD710AssessmentData({
         respondentType: 'parent'
@@ -343,17 +332,6 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
       ...adhd1118Card
     }
   ];
-
-  // Show ADHD assessment
-  if (startADHDAssessment && adhdAssessmentData) {
-    return (
-      <ADHDAssessment
-        assessmentId={adhdAssessmentData.assessmentId}
-        respondentType={adhdAssessmentData.respondentType}
-        onClose={onClose}
-      />
-    );
-  }
 
   // Show ADHD710 assessment
   if (startADHD710Assessment && adhd710AssessmentData) {
