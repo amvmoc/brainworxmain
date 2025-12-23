@@ -53,10 +53,11 @@ Deno.serve(async (req: Request) => {
     });
 
     const baseUrl = 'https://www.brainworx.co.za';
-    const redemptionLink = `${baseUrl}?coupon=${couponCode}`;
+    const redemptionLink = `${baseUrl}?coupon=${couponCode}&auto=true`;
 
     console.log('Sending coupon email to:', recipientEmail);
     console.log('Coupon code:', couponCode);
+    console.log('Direct access link:', redemptionLink);
 
     const emailBody = `
       <!DOCTYPE html>
@@ -182,33 +183,42 @@ Deno.serve(async (req: Request) => {
 
           <div class="content">
             <p>Hello ${recipientName || 'there'},</p>
-            <p>You have received a <strong>complimentary access code</strong> for the BrainWorx ${assessmentType}!</p>
-            
-            <div class="coupon-box">
-              <h2>Your Exclusive Coupon Code</h2>
-              <div class="coupon-code">${couponCode}</div>
-              <p style="margin: 15px 0 0 0; color: #666; font-size: 14px;">Use this code when starting your assessment</p>
-            </div>
+            <p>Thank you for your purchase! Your payment has been confirmed and your <strong>${assessmentType}</strong> is ready to begin.</p>
 
-            <p>This assessment will help you understand your cognitive strengths, identify areas for growth, and receive personalized recommendations.</p>
+            <p style="font-size: 18px; font-weight: 600; color: #0A2A5E; text-align: center; margin: 30px 0 20px 0;">
+              Your assessment is waiting for you!
+            </p>
 
             <div class="button-container">
-              <a href="${redemptionLink}" class="button">Start Assessment Now</a>
+              <a href="${redemptionLink}" class="button" style="font-size: 18px; padding: 20px 50px;">🚀 Start Your Assessment</a>
+            </div>
+
+            <p style="text-align: center; color: #666; margin: 20px 0;">
+              Click the button above to begin immediately.<br />
+              No additional steps required!
+            </p>
+
+            <div class="coupon-box">
+              <h2>Your Access Code (for reference)</h2>
+              <div class="coupon-code">${couponCode}</div>
+              <p style="margin: 15px 0 0 0; color: #666; font-size: 14px;">
+                Keep this code safe. You can use it to access your assessment anytime by visiting<br />
+                <a href="${baseUrl}" style="color: #3DB3E3;">${baseUrl}</a>
+              </p>
             </div>
 
             <div class="info-box">
-              <strong>How to Use Your Coupon:</strong>
-              <ol style="margin: 10px 0; padding-left: 20px;">
-                <li>Click the button above or visit BrainWorx</li>
-                <li>Select "Get Started"</li>
-                <li>Choose "Have a Coupon Code?"</li>
-                <li>Enter your code: <strong>${couponCode}</strong></li>
-                <li>Complete your assessment</li>
-              </ol>
+              <strong>💡 What to expect:</strong>
+              <ul style="margin: 10px 0; padding-left: 20px;">
+                <li>Complete your assessment at your own pace</li>
+                <li>Get personalized insights and recommendations</li>
+                <li>Access your results immediately upon completion</li>
+                <li>Resume anytime using your access code</li>
+              </ul>
             </div>
 
-            <p style="margin-top: 30px; padding: 20px; background: #FFF5E6; border-radius: 8px; border-left: 4px solid #FFB84D;">
-              <strong>Note:</strong> This is a complimentary assessment. No payment is required. Simply use your coupon code to get started.
+            <p style="margin-top: 30px; padding: 20px; background: #E6F7FF; border-radius: 8px; border-left: 4px solid #3DB3E3; text-align: center;">
+              <strong>Need help?</strong> Contact us at <a href="mailto:support@brainworx.co.za" style="color: #3DB3E3; text-decoration: none;">support@brainworx.co.za</a>
             </p>
           </div>
 
@@ -227,7 +237,7 @@ Deno.serve(async (req: Request) => {
     await transporter.sendMail({
       from: `BrainWorx <${GMAIL_USER}>`,
       to: recipientEmail,
-      subject: `Your BrainWorx Complimentary Assessment Code - ${couponCode}`,
+      subject: `Your BrainWorx Assessment is Ready - Start Now! 🧠`,
       html: emailBody,
     });
 

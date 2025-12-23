@@ -701,6 +701,10 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
                   <input type="hidden" name="email_address" value={email} />
                   <button
                     type="submit"
+                    onClick={() => {
+                      localStorage.setItem('payment_email', email);
+                      localStorage.setItem('payment_name', customerName);
+                    }}
                     className="w-full bg-gradient-to-r from-[#0A2A5E] to-[#3DB3E3] text-white py-4 px-6 rounded-lg font-semibold text-lg hover:shadow-lg transition-all duration-300 hover:scale-[1.02]"
                   >
                     {paymentCouponCode.trim() ? 'Proceed with Coupon' : 'Proceed to Payment'}
@@ -734,6 +738,10 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
                   <input type="hidden" name="email_address" value={email} />
                   <button
                     type="submit"
+                    onClick={() => {
+                      localStorage.setItem('payment_email', email);
+                      localStorage.setItem('payment_name', customerName);
+                    }}
                     className="w-full bg-gradient-to-r from-[#0A2A5E] to-[#3DB3E3] text-white py-4 px-6 rounded-lg font-semibold text-lg hover:shadow-lg transition-all duration-300 hover:scale-[1.02]"
                   >
                     {paymentCouponCode.trim() ? 'Proceed with Coupon' : 'Proceed to Payment'}
@@ -767,6 +775,10 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
                   <input type="hidden" name="email_address" value={email} />
                   <button
                     type="submit"
+                    onClick={() => {
+                      localStorage.setItem('payment_email', email);
+                      localStorage.setItem('payment_name', customerName);
+                    }}
                     className="w-full bg-gradient-to-r from-[#0A2A5E] to-[#3DB3E3] text-white py-4 px-6 rounded-lg font-semibold text-lg hover:shadow-lg transition-all duration-300 hover:scale-[1.02]"
                   >
                     {paymentCouponCode.trim() ? 'Proceed with Coupon' : 'Proceed to Payment'}

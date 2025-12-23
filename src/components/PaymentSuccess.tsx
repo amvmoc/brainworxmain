@@ -62,7 +62,13 @@ export function PaymentSuccess({ assessmentType }: PaymentSuccessProps) {
 
   const handleStartAssessment = () => {
     if (couponCode) {
-      window.location.href = `/?coupon=${couponCode}`;
+      // Auto-fill name and email to bypass manual entry
+      localStorage.setItem('coupon_prefill', JSON.stringify({
+        code: couponCode,
+        email: userEmail,
+        name: localStorage.getItem('payment_name') || ''
+      }));
+      window.location.href = `/?coupon=${couponCode}&auto=true`;
     } else {
       window.location.href = '/';
     }
@@ -93,16 +99,34 @@ export function PaymentSuccess({ assessmentType }: PaymentSuccessProps) {
 
             {couponCode ? (
               <>
-                <div className="bg-gradient-to-r from-[#0A2A5E] to-[#3DB3E3] rounded-2xl p-8 mb-8">
-                  <p className="text-white text-lg mb-4">Your Access Code:</p>
+                <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-2xl p-8 mb-8">
+                  <div className="flex items-center justify-center gap-3 mb-4">
+                    <CheckCircle className="w-8 h-8 text-white" />
+                    <p className="text-white text-2xl font-bold">You're all set!</p>
+                  </div>
+                  <p className="text-white text-lg text-center">
+                    Your payment has been confirmed and your assessment is ready to begin.
+                  </p>
+                </div>
+
+                <button
+                  onClick={handleStartAssessment}
+                  className="w-full bg-gradient-to-r from-[#0A2A5E] to-[#3DB3E3] text-white py-5 px-6 rounded-xl font-bold text-xl hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] flex items-center justify-center gap-3 group mb-8"
+                >
+                  Start Your Assessment Now
+                  <ArrowRight size={24} className="group-hover:translate-x-2 transition-transform" />
+                </button>
+
+                <div className="bg-gradient-to-r from-[#0A2A5E] to-[#3DB3E3] rounded-2xl p-8 mb-6">
+                  <p className="text-white text-sm mb-3 text-center">Your Access Code (for reference):</p>
                   <div className="bg-white rounded-xl p-6 mb-4">
-                    <p className="text-4xl font-bold text-[#0A2A5E] tracking-wider font-mono">
+                    <p className="text-3xl font-bold text-[#0A2A5E] tracking-wider font-mono text-center">
                       {couponCode}
                     </p>
                   </div>
                   <button
                     onClick={handleCopyCode}
-                    className="inline-flex items-center gap-2 bg-white text-[#0A2A5E] px-6 py-3 rounded-lg hover:bg-gray-100 transition-all font-medium"
+                    className="w-full inline-flex items-center justify-center gap-2 bg-white text-[#0A2A5E] px-6 py-3 rounded-lg hover:bg-gray-100 transition-all font-medium"
                   >
                     {copied ? (
                       <>
@@ -118,26 +142,27 @@ export function PaymentSuccess({ assessmentType }: PaymentSuccessProps) {
                   </button>
                 </div>
 
-                <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-8 text-left">
-                  <h3 className="font-bold text-[#0A2A5E] mb-3">Next Steps:</h3>
-                  <ol className="list-decimal list-inside space-y-2 text-gray-700">
-                    <li>Copy your access code above</li>
-                    <li>Click "Start Assessment" below</li>
-                    <li>Enter your code when prompted</li>
-                    <li>Complete your assessment at your own pace</li>
-                  </ol>
+                <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-6 text-left">
+                  <h3 className="font-bold text-[#0A2A5E] mb-3">What happens next:</h3>
+                  <ul className="space-y-2 text-gray-700">
+                    <li className="flex items-start gap-2">
+                      <CheckCircle size={18} className="text-green-600 mt-0.5 flex-shrink-0" />
+                      <span>Click the button above to start immediately</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle size={18} className="text-green-600 mt-0.5 flex-shrink-0" />
+                      <span>Complete your assessment at your own pace</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle size={18} className="text-green-600 mt-0.5 flex-shrink-0" />
+                      <span>Check your email for a direct link to resume anytime</span>
+                    </li>
+                  </ul>
                 </div>
 
-                <button
-                  onClick={handleStartAssessment}
-                  className="w-full bg-gradient-to-r from-[#0A2A5E] to-[#3DB3E3] text-white py-4 px-6 rounded-xl font-semibold text-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] flex items-center justify-center gap-2 group"
-                >
-                  Start Assessment Now
-                  <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-                </button>
-
-                <p className="text-sm text-gray-500 mt-6">
-                  A confirmation email with your access code has been sent to <strong>{userEmail}</strong>
+                <p className="text-sm text-gray-500 text-center">
+                  A confirmation email with your direct access link has been sent to<br />
+                  <strong className="text-[#0A2A5E]">{userEmail}</strong>
                 </p>
               </>
             ) : (

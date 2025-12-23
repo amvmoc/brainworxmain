@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Ticket, Check, X } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
@@ -20,16 +20,45 @@ interface CouponRedemptionProps {
 }
 
 export function CouponRedemption({ onRedemptionSuccess, onCancel, initialCouponCode }: CouponRedemptionProps) {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    code: initialCouponCode || ''
+  const [formData, setFormData] = useState(() => {
+    // Check for pre-filled data from payment
+    const prefill = localStorage.getItem('coupon_prefill');
+    if (prefill) {
+      try {
+        const data = JSON.parse(prefill);
+        localStorage.removeItem('coupon_prefill'); // Use once
+        return {
+          name: data.name || '',
+          email: data.email || '',
+          code: data.code || initialCouponCode || ''
+        };
+      } catch (e) {
+        // Ignore parse errors
+      }
+    }
+    return {
+      name: '',
+      email: '',
+      code: initialCouponCode || ''
+    };
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [autoSubmitted, setAutoSubmitted] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  // Auto-submit if coming from payment with pre-filled data
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const autoRedeem = urlParams.get('auto') === 'true';
+
+    if (autoRedeem && formData.code && formData.email && !autoSubmitted && !loading) {
+      setAutoSubmitted(true);
+      handleSubmit();
+    }
+  }, [formData, autoSubmitted, loading]);
+
+  const handleSubmit = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     setError('');
     setLoading(true);
 
