@@ -68,15 +68,23 @@ Deno.serve(async (req: Request) => {
       return new Response('Missing email', { status: 400, headers: corsHeaders });
     }
 
+    // Map item names to assessment type codes (used by the frontend)
     let assessmentType = '';
+    let assessmentDisplayName = '';
+
     if (itemName === 'NIP') {
-      assessmentType = 'Full Assessment (343 Questions)';
+      assessmentType = 'nipa';
+      assessmentDisplayName = 'Full Assessment (343 Questions)';
     } else if (itemName === 'ADHD Assessment') {
-      assessmentType = 'ADHD 11-18 Assessment (50 Questions)';
+      assessmentType = 'adhd1118';
+      assessmentDisplayName = 'ADHD 11-18 Assessment (50 Questions)';
     } else if (itemName === 'TCF') {
-      assessmentType = 'Teen Career & Future Direction';
+      assessmentType = 'tcf';
+      assessmentDisplayName = 'Teen Career & Future Direction';
     } else {
-      assessmentType = itemName;
+      // Try to extract type code from item name or use as-is
+      assessmentType = itemName.toLowerCase().replace(/[^a-z0-9]/g, '');
+      assessmentDisplayName = itemName;
     }
 
     const couponCode = Array.from({ length: 10 }, () =>
@@ -105,14 +113,40 @@ Deno.serve(async (req: Request) => {
 
     console.log('Coupon created:', couponCode, 'for', email);
 
-    await supabase.functions.invoke('send-coupon-email', {
-      body: {
-        recipientEmail: email,
-        recipientName: userName,
-        couponCode: couponCode,
-        assessmentType: assessmentType,
-      },
-    });
+    // Send coupon email with error handling
+    try {
+      const emailResult = await supabase.functions.invoke('send-coupon-email', {
+        body: {
+          recipientEmail: email,
+          recipientName: userName,
+          couponCode: couponCode,
+          assessmentType: assessmentDisplayName,
+        },
+      });
+
+      if (emailResult.error) {
+        console.error('Error sending coupon email:', emailResult.error);
+        // Update email_sent flag to false since it failed
+        await supabase
+          .from('coupon_codes')
+          .update({ email_sent: false })
+          .eq('code', couponCode);
+      } else {
+        console.log('✅ Coupon email sent successfully to:', email);
+        // Update email_sent flag to true
+        await supabase
+          .from('coupon_codes')
+          .update({ email_sent: true })
+          .eq('code', couponCode);
+      }
+    } catch (emailError) {
+      console.error('Exception sending coupon email:', emailError);
+      // Update email_sent flag to false since it failed
+      await supabase
+        .from('coupon_codes')
+        .update({ email_sent: false })
+        .eq('code', couponCode);
+    }
 
     return new Response('OK', { status: 200, headers: corsHeaders });
   } catch (error) {
