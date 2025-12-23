@@ -23,13 +23,14 @@ export function PaymentSuccess({ assessmentType }: PaymentSuccessProps) {
     const email = urlParams.get('email') || localStorage.getItem('payment_email') || '';
     setUserEmail(email);
 
-    fetchLatestCoupon(email);
+    // Poll for coupon with automatic redirect
+    pollForCoupon(email);
   }, []);
 
   const fetchLatestCoupon = async (email: string) => {
     if (!email) {
       setLoading(false);
-      return;
+      return null;
     }
 
     try {
@@ -43,13 +44,54 @@ export function PaymentSuccess({ assessmentType }: PaymentSuccessProps) {
         .maybeSingle();
 
       if (data && !error) {
-        setCouponCode(data.code);
+        return data.code;
       }
     } catch (err) {
       console.error('Error fetching coupon:', err);
-    } finally {
-      setLoading(false);
     }
+    return null;
+  };
+
+  const pollForCoupon = async (email: string) => {
+    if (!email) {
+      setLoading(false);
+      return;
+    }
+
+    let attempts = 0;
+    const maxAttempts = 20; // 20 attempts = 20 seconds
+    const pollInterval = 1000; // 1 second
+
+    const poll = async () => {
+      const code = await fetchLatestCoupon(email);
+
+      if (code) {
+        setCouponCode(code);
+        setLoading(false);
+
+        // Auto-redirect after 2 seconds
+        setTimeout(() => {
+          localStorage.setItem('coupon_prefill', JSON.stringify({
+            code: code,
+            email: email,
+            name: localStorage.getItem('payment_name') || ''
+          }));
+          window.location.href = `/?coupon=${code}&auto=true`;
+        }, 2000);
+
+        return;
+      }
+
+      attempts++;
+      if (attempts < maxAttempts) {
+        setTimeout(poll, pollInterval);
+      } else {
+        // Give up after 20 seconds
+        setLoading(false);
+      }
+    };
+
+    poll();
   };
 
   const handleCopyCode = () => {
@@ -79,10 +121,18 @@ export function PaymentSuccess({ assessmentType }: PaymentSuccessProps) {
       <div className="max-w-2xl w-full bg-white rounded-3xl shadow-2xl p-12">
         {loading ? (
           <div className="text-center">
-            <Loader2 className="w-16 h-16 text-[#3DB3E3] animate-spin mx-auto mb-4" />
-            <p className="text-xl text-gray-600">Processing your payment...</p>
+            <Loader2 className="w-16 h-16 text-[#3DB3E3] animate-spin mx-auto mb-6" />
+            <h2 className="text-2xl font-bold text-[#0A2A5E] mb-4">Processing Your Payment...</h2>
+            <p className="text-lg text-gray-600 mb-4">
+              Your payment was successful! We're setting up your assessment access.
+            </p>
+            <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mt-6">
+              <p className="text-sm text-gray-700">
+                This usually takes just a few seconds. You'll be redirected automatically.
+              </p>
+            </div>
           </div>
-        ) : (
+        ) : couponCode ? (
           <div className="text-center">
             <div className="inline-block bg-green-100 rounded-full p-6 mb-6">
               <CheckCircle className="w-16 h-16 text-green-600" />
@@ -97,84 +147,97 @@ export function PaymentSuccess({ assessmentType }: PaymentSuccessProps) {
               {assessmentNames[assessmentType]}
             </p>
 
-            {couponCode ? (
-              <>
-                <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-2xl p-8 mb-8">
-                  <div className="flex items-center justify-center gap-3 mb-4">
-                    <CheckCircle className="w-8 h-8 text-white" />
-                    <p className="text-white text-2xl font-bold">You're all set!</p>
-                  </div>
-                  <p className="text-white text-lg text-center">
-                    Your payment has been confirmed and your assessment is ready to begin.
-                  </p>
-                </div>
+            <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-2xl p-8 mb-8">
+              <div className="flex items-center justify-center gap-3 mb-4">
+                <CheckCircle className="w-8 h-8 text-white" />
+                <p className="text-white text-2xl font-bold">You're all set!</p>
+              </div>
+              <p className="text-white text-lg text-center mb-3">
+                Your payment has been confirmed and your assessment is ready to begin.
+              </p>
+              <p className="text-white text-sm text-center opacity-90">
+                Redirecting you automatically...
+              </p>
+            </div>
 
-                <button
-                  onClick={handleStartAssessment}
-                  className="w-full bg-gradient-to-r from-[#0A2A5E] to-[#3DB3E3] text-white py-5 px-6 rounded-xl font-bold text-xl hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] flex items-center justify-center gap-3 group mb-8"
-                >
-                  Start Your Assessment Now
-                  <ArrowRight size={24} className="group-hover:translate-x-2 transition-transform" />
-                </button>
+            <div className="bg-blue-50 border-2 border-blue-300 rounded-xl p-6 mb-8">
+              <p className="text-center text-gray-700 mb-3">
+                <strong>Can't wait?</strong> Click the button below to start immediately:
+              </p>
+              <button
+                onClick={handleStartAssessment}
+                className="w-full bg-gradient-to-r from-[#0A2A5E] to-[#3DB3E3] text-white py-5 px-6 rounded-xl font-bold text-xl hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] flex items-center justify-center gap-3 group"
+              >
+                Start Your Assessment Now
+                <ArrowRight size={24} className="group-hover:translate-x-2 transition-transform" />
+              </button>
+            </div>
 
-                <div className="bg-gradient-to-r from-[#0A2A5E] to-[#3DB3E3] rounded-2xl p-8 mb-6">
-                  <p className="text-white text-sm mb-3 text-center">Your Access Code (for reference):</p>
-                  <div className="bg-white rounded-xl p-6 mb-4">
-                    <p className="text-3xl font-bold text-[#0A2A5E] tracking-wider font-mono text-center">
-                      {couponCode}
-                    </p>
-                  </div>
-                  <button
-                    onClick={handleCopyCode}
-                    className="w-full inline-flex items-center justify-center gap-2 bg-white text-[#0A2A5E] px-6 py-3 rounded-lg hover:bg-gray-100 transition-all font-medium"
-                  >
-                    {copied ? (
-                      <>
-                        <CheckCircle size={20} />
-                        Copied!
-                      </>
-                    ) : (
-                      <>
-                        <Copy size={20} />
-                        Copy Code
-                      </>
-                    )}
-                  </button>
-                </div>
-
-                <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-6 text-left">
-                  <h3 className="font-bold text-[#0A2A5E] mb-3">What happens next:</h3>
-                  <ul className="space-y-2 text-gray-700">
-                    <li className="flex items-start gap-2">
-                      <CheckCircle size={18} className="text-green-600 mt-0.5 flex-shrink-0" />
-                      <span>Click the button above to start immediately</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle size={18} className="text-green-600 mt-0.5 flex-shrink-0" />
-                      <span>Complete your assessment at your own pace</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle size={18} className="text-green-600 mt-0.5 flex-shrink-0" />
-                      <span>Check your email for a direct link to resume anytime</span>
-                    </li>
-                  </ul>
-                </div>
-
-                <p className="text-sm text-gray-500 text-center">
-                  A confirmation email with your direct access link has been sent to<br />
-                  <strong className="text-[#0A2A5E]">{userEmail}</strong>
-                </p>
-              </>
-            ) : (
-              <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-6 mb-8">
-                <p className="text-gray-700 mb-4">
-                  Your payment has been received. Your access code will be generated shortly and sent to your email.
-                </p>
-                <p className="text-sm text-gray-600">
-                  If you don't receive it within 5 minutes, please check your spam folder or contact support.
+            <div className="bg-gradient-to-r from-[#0A2A5E] to-[#3DB3E3] rounded-2xl p-8 mb-6">
+              <p className="text-white text-sm mb-3 text-center">Your Access Code (for reference):</p>
+              <div className="bg-white rounded-xl p-6 mb-4">
+                <p className="text-3xl font-bold text-[#0A2A5E] tracking-wider font-mono text-center">
+                  {couponCode}
                 </p>
               </div>
-            )}
+              <button
+                onClick={handleCopyCode}
+                className="w-full inline-flex items-center justify-center gap-2 bg-white text-[#0A2A5E] px-6 py-3 rounded-lg hover:bg-gray-100 transition-all font-medium"
+              >
+                {copied ? (
+                  <>
+                    <CheckCircle size={20} />
+                    Copied!
+                  </>
+                ) : (
+                  <>
+                    <Copy size={20} />
+                    Copy Code
+                  </>
+                )}
+              </button>
+            </div>
+
+            <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-6 text-left">
+              <h3 className="font-bold text-[#0A2A5E] mb-3">What happens next:</h3>
+              <ul className="space-y-2 text-gray-700">
+                <li className="flex items-start gap-2">
+                  <CheckCircle size={18} className="text-green-600 mt-0.5 flex-shrink-0" />
+                  <span>Click the button above to start immediately</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle size={18} className="text-green-600 mt-0.5 flex-shrink-0" />
+                  <span>Complete your assessment at your own pace</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle size={18} className="text-green-600 mt-0.5 flex-shrink-0" />
+                  <span>Check your email for a direct link to resume anytime</span>
+                </li>
+              </ul>
+            </div>
+
+            <p className="text-sm text-gray-500 text-center">
+              A confirmation email with your direct access link has been sent to<br />
+              <strong className="text-[#0A2A5E]">{userEmail}</strong>
+            </p>
+          </div>
+        ) : (
+          <div className="text-center">
+            <div className="inline-block bg-yellow-100 rounded-full p-6 mb-6">
+              <Loader2 className="w-16 h-16 text-yellow-600 animate-spin" />
+            </div>
+            <h2 className="text-2xl font-bold text-[#0A2A5E] mb-4">Almost Ready!</h2>
+            <p className="text-gray-700 mb-4">
+              Your payment has been received. We're generating your access code now.
+            </p>
+            <p className="text-sm text-gray-600 mb-6">
+              This usually takes less than 10 seconds...
+            </p>
+            <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+              <p className="text-sm text-gray-700">
+                <strong>Note:</strong> If this takes longer than expected, check your email at <strong>{userEmail}</strong> for your access link.
+              </p>
+            </div>
           </div>
         )}
       </div>
