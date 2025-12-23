@@ -17,6 +17,7 @@ import NIP3Assessment from './components/NIP3Assessment';
 import ADHD710Assessment from './components/ADHD710Assessment';
 import ADHD710PublicResults from './components/ADHD710PublicResults';
 import ADHD1118Assessment from './components/ADHD1118Assessment';
+import { PaymentSuccess } from './components/PaymentSuccess';
 import { supabase } from './lib/supabase';
 
 function App() {
@@ -45,6 +46,12 @@ function App() {
 
   useEffect(() => {
     const currentPath = window.location.pathname;
+
+    // Check for payment success route
+    if (currentPath === '/payment-success') {
+      setLoading(false);
+      return;
+    }
 
     // Check for NIP3 route
     if (currentPath === '/nip3' || currentPath === '/nip3/') {
@@ -180,6 +187,28 @@ function App() {
 
   const urlParams = new URLSearchParams(window.location.search);
   const verifyToken = urlParams.get('verify_token');
+
+  // Handle payment success route
+  if (window.location.pathname === '/payment-success') {
+    const paymentType = urlParams.get('type') as 'nipa' | 'tadhd' | 'tcf';
+    if (paymentType) {
+      return <PaymentSuccess assessmentType={paymentType} />;
+    }
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100 p-6">
+        <div className="bg-white rounded-xl shadow-lg p-8 max-w-md text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Invalid Payment Link</h2>
+          <p className="text-gray-600 mb-6">This payment link appears to be incomplete.</p>
+          <a
+            href="/"
+            className="inline-block bg-[#3DB3E3] text-white px-6 py-3 rounded-lg hover:bg-[#1FAFA3] transition-colors"
+          >
+            Return to Home
+          </a>
+        </div>
+      </div>
+    );
+  }
 
   // Handle ADHD 7-10 routes
   if (adhd710Route) {

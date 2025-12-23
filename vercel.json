@@ -17,6 +17,10 @@
       "dest": "/index.html"
     },
     {
+      "src": "/payment-success",
+      "dest": "/index.html"
+    },
+    {
       "src": "/(.*)",
       "dest": "/$1"
     }

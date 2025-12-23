@@ -692,6 +692,13 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
                   <input required type="hidden" name="amount" value="5" />
                   <input required type="hidden" name="item_name" maxLength={255} value="NIP" />
                   <input type="hidden" name="item_description" maxLength={255} value="NIP - Full Neural Imprint Assessment" />
+                  <input type="hidden" name="return_url" value={`${window.location.origin}/payment-success?type=nipa&email=${encodeURIComponent(email)}`} />
+                  <input type="hidden" name="cancel_url" value={`${window.location.origin}/?payment_cancelled=true`} />
+                  <input type="hidden" name="notify_url" value={`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/payfast-notify`} />
+                  <input type="hidden" name="custom_str1" value={email} />
+                  <input type="hidden" name="name_first" value={customerName.split(' ')[0] || customerName} />
+                  <input type="hidden" name="name_last" value={customerName.split(' ').slice(1).join(' ') || ''} />
+                  <input type="hidden" name="email_address" value={email} />
                   <button
                     type="submit"
                     className="w-full bg-gradient-to-r from-[#0A2A5E] to-[#3DB3E3] text-white py-4 px-6 rounded-lg font-semibold text-lg hover:shadow-lg transition-all duration-300 hover:scale-[1.02]"
@@ -718,6 +725,13 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
                   <input required type="hidden" name="amount" value="5" />
                   <input required type="hidden" name="item_name" maxLength={255} value="ADHD Assessment" />
                   <input type="hidden" name="item_description" maxLength={255} value="ADHD Assessment" />
+                  <input type="hidden" name="return_url" value={`${window.location.origin}/payment-success?type=tadhd&email=${encodeURIComponent(email)}`} />
+                  <input type="hidden" name="cancel_url" value={`${window.location.origin}/?payment_cancelled=true`} />
+                  <input type="hidden" name="notify_url" value={`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/payfast-notify`} />
+                  <input type="hidden" name="custom_str1" value={email} />
+                  <input type="hidden" name="name_first" value={customerName.split(' ')[0] || customerName} />
+                  <input type="hidden" name="name_last" value={customerName.split(' ').slice(1).join(' ') || ''} />
+                  <input type="hidden" name="email_address" value={email} />
                   <button
                     type="submit"
                     className="w-full bg-gradient-to-r from-[#0A2A5E] to-[#3DB3E3] text-white py-4 px-6 rounded-lg font-semibold text-lg hover:shadow-lg transition-all duration-300 hover:scale-[1.02]"
@@ -744,6 +758,13 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
                   <input required type="hidden" name="amount" value="5" />
                   <input required type="hidden" name="item_name" maxLength={255} value="TCF" />
                   <input type="hidden" name="item_description" maxLength={255} value="TCF - Teen Career & Future Direction" />
+                  <input type="hidden" name="return_url" value={`${window.location.origin}/payment-success?type=tcf&email=${encodeURIComponent(email)}`} />
+                  <input type="hidden" name="cancel_url" value={`${window.location.origin}/?payment_cancelled=true`} />
+                  <input type="hidden" name="notify_url" value={`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/payfast-notify`} />
+                  <input type="hidden" name="custom_str1" value={email} />
+                  <input type="hidden" name="name_first" value={customerName.split(' ')[0] || customerName} />
+                  <input type="hidden" name="name_last" value={customerName.split(' ').slice(1).join(' ') || ''} />
+                  <input type="hidden" name="email_address" value={email} />
                   <button
                     type="submit"
                     className="w-full bg-gradient-to-r from-[#0A2A5E] to-[#3DB3E3] text-white py-4 px-6 rounded-lg font-semibold text-lg hover:shadow-lg transition-all duration-300 hover:scale-[1.02]"
