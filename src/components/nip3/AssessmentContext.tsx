@@ -355,7 +355,10 @@ export const AssessmentProvider: React.FC<AssessmentProviderProps> = ({
             body: {
               recipients: [email],
               results: results,
-              completedAt: new Date().toISOString()
+              completedAt: new Date().toISOString(),
+              customerName: customerName,
+              customerEmail: email,
+              isCoachReport: false
             }
           });
 
@@ -371,12 +374,40 @@ export const AssessmentProvider: React.FC<AssessmentProviderProps> = ({
         // Send comprehensive coach report email to franchise owner if applicable
         if (franchiseOwnerId) {
           try {
-            console.log('Sending comprehensive coach report to franchise owner...');
-            const { error: emailError } = await supabase.functions.invoke('send-comprehensive-coach-report', {
+            console.log('Fetching franchise owner email for coach report...');
+
+            // Fetch franchise owner's email
+            const { data: franchiseOwner, error: fetchError } = await supabase
+              .from('franchise_owners')
+              .select('email')
+              .eq('id', franchiseOwnerId)
+              .maybeSingle();
+
+            if (fetchError || !franchiseOwner) {
+              console.error('Error fetching franchise owner:', fetchError);
+              throw new Error('Could not fetch franchise owner email');
+            }
+
+            console.log('Sending comprehensive coach report to:', franchiseOwner.email);
+
+            const results = nipResults.map(nip => ({
+              code: nip.code,
+              shortName: nip.name,
+              percentage: Math.round(nip.percentage),
+              actualScore: nip.actualScore,
+              maxScore: nip.maxScore,
+              totalQuestions: nip.totalQuestions,
+              level: nip.percentage >= 70 ? 'Strongly Present' : nip.percentage >= 50 ? 'Moderately Present' : nip.percentage >= 30 ? 'Mild Pattern' : 'Minimal Pattern'
+            }));
+
+            const { error: emailError } = await supabase.functions.invoke('send-nip3-results', {
               body: {
-                responseId,
-                customerName,
-                customerEmail: email
+                recipients: [franchiseOwner.email],
+                results: results,
+                completedAt: new Date().toISOString(),
+                customerName: customerName,
+                customerEmail: email,
+                isCoachReport: true
               }
             });
 

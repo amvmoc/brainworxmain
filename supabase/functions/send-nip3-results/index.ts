@@ -16,7 +16,7 @@ Deno.serve(async (req: Request) => {
   }
 
   try {
-    const { recipients, results, completedAt, htmlReport } = await req.json();
+    const { recipients, results, completedAt, htmlReport, customerName, customerEmail, isCoachReport = false } = await req.json();
 
     if (!recipients || !Array.isArray(recipients) || recipients.length === 0) {
       throw new Error('Recipients array is required');
@@ -24,6 +24,14 @@ Deno.serve(async (req: Request) => {
 
     if (!results || !Array.isArray(results)) {
       throw new Error('Results array is required');
+    }
+
+    if (!customerName) {
+      throw new Error('Customer name is required');
+    }
+
+    if (!customerEmail) {
+      throw new Error('Customer email is required');
     }
 
     const topPatterns = results.filter((r: any) => r.percentage >= 50);
@@ -115,6 +123,10 @@ Deno.serve(async (req: Request) => {
 
     doc.setFont(undefined, 'normal');
     doc.setFontSize(11);
+    doc.text(`Client Name: ${customerName}`, 20, yPos);
+    yPos += 7;
+    doc.text(`Client Email: ${customerEmail}`, 20, yPos);
+    yPos += 7;
     doc.text(`Completion Date: ${completedAt || new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`, 20, yPos);
     yPos += 7;
     doc.text(`Overall Score: ${overallPercentage}%`, 20, yPos);
@@ -173,14 +185,20 @@ Deno.serve(async (req: Request) => {
 
     console.log('✓ NIP3 PDF generated successfully. Size:', pdfBuffer.length, 'bytes');
 
-    const pdfFilename = `BrainWorx_NIP3_Report.pdf`;
+    const sanitizedName = customerName.replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '_');
+    const pdfFilename = `BrainWorx_NIP3_Report_${sanitizedName}.pdf`;
 
     const emailPromises = recipients.map((email: string) => {
-      console.log('Sending NIP3 Coach Report with PDF attachment to:', email);
+      console.log('Sending NIP3 Report with PDF attachment to:', email);
+      const reportType = isCoachReport ? 'Comprehensive Coach Report' : 'Assessment Results';
+      const subject = isCoachReport
+        ? `NIP3 Coach Report - ${customerName} - Complete Assessment Results`
+        : `NIP3 Assessment Results - ${customerName}`;
+
       return transporter.sendMail({
         from: `BrainWorx Assessment <${GMAIL_USER}>`,
         to: email,
-        subject: 'NIP3 Comprehensive Coach Report - Complete Assessment Results',
+        subject: subject,
         html: `
           <!DOCTYPE html>
           <html>
@@ -213,6 +231,14 @@ Deno.serve(async (req: Request) => {
                   <div style="background: linear-gradient(135deg, #EFF6FF 0%, #F3E8FF 100%); padding: 24px; border-radius: 12px; margin: 0 0 40px 0; border: 1px solid #E0E7FF;">
                     <h3 style="color: #1E40AF; margin: 0 0 16px 0; font-size: 20px; font-weight: 700;">📊 Assessment Overview</h3>
                     <table style="width: 100%; border-collapse: collapse;">
+                      <tr>
+                        <td style="padding: 8px 0; color: #374151; font-size: 15px; font-weight: 600;">Client Name:</td>
+                        <td style="padding: 8px 0; color: #111827; font-size: 15px; font-weight: 700; text-align: right;">${customerName}</td>
+                      </tr>
+                      <tr>
+                        <td style="padding: 8px 0; color: #374151; font-size: 15px; font-weight: 600;">Client Email:</td>
+                        <td style="padding: 8px 0; color: #111827; font-size: 15px; font-weight: 700; text-align: right;">${customerEmail}</td>
+                      </tr>
                       <tr>
                         <td style="padding: 8px 0; color: #374151; font-size: 15px; font-weight: 600;">Questions Completed:</td>
                         <td style="padding: 8px 0; color: #111827; font-size: 15px; font-weight: 700; text-align: right;">343</td>
