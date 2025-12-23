@@ -37,7 +37,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [franchiseCode, setFranchiseCode] = useState<string | null>(null);
   const [bookingFranchiseCode, setBookingFranchiseCode] = useState<string | null>(null);
-  const [preselectedPaymentType, setPreselectedPaymentType] = useState<'tcf' | 'tadhd' | 'pcadhd' | 'nipa' | null>(null);
+  const [preselectedPaymentType, setPreselectedPaymentType] = useState<'tcf' | 'tadhd' | 'nipa' | null>(null);
   const [couponCode, setCouponCode] = useState<string | null>(null);
   const [shareToken, setShareToken] = useState<string | null>(null);
   const [adhd710Route, setAdhd710Route] = useState<{ type: 'assessment' | 'results', id: string, respondentType?: 'parent' | 'caregiver' } | null>(null);

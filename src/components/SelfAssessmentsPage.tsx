@@ -684,10 +684,8 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
                   </button>
                   <button
                     onClick={() => {
-                      const paymentTypeMap: Record<string, 'tadhd' | 'pcadhd' | 'tcf'> = {
+                      const paymentTypeMap: Record<string, 'tadhd' | 'tcf'> = {
                         'teen-adhd': 'tadhd',
-                        'child-adhd-4-6': 'pcadhd',
-                        'child-adhd-7-10': 'pcadhd',
                         'teen-career': 'tcf'
                       };
                       const paymentType = paymentTypeMap[selectedAssessment.id];
@@ -1389,11 +1387,6 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
                           {isNIPA && (
                             <span className="px-3 py-1 bg-white rounded-full text-sm font-bold text-[#0A2A5E] whitespace-nowrap">
                               Full Client Assessment
-                            </span>
-                          )}
-                          {isADHDCaregiver && (
-                            <span className="px-3 py-1 bg-white rounded-full text-sm font-bold text-emerald-700 whitespace-nowrap">
-                              Dual Assessment
                             </span>
                           )}
                           {isADHD710 && (
