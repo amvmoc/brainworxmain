@@ -477,7 +477,7 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
               }`}
             >
               <Users size={20} />
-              NIP3
+              NIP
             </button>
             <button
               onClick={() => setCurrentView('adhd-assessments')}
@@ -969,7 +969,7 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
                                       ? isNIP3 ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800'
                                       : 'bg-orange-100 text-orange-800'
                                   }`}>
-                                    {test.type === 'nipa' ? (isNIP3 ? 'NIP3 Full (343Q)' : 'NIPA Full') : test.assessment_type || 'Self Assessment'}
+                                    {test.type === 'nipa' ? (isNIP3 ? 'NIP Full (343Q)' : 'NIP Full') : test.assessment_type || 'Self Assessment'}
                                   </span>
                                 </td>
                                 <td className="px-6 py-4">

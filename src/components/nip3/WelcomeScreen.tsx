@@ -20,7 +20,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => {
           marginBottom: '16px',
           letterSpacing: '1px'
         }}>
-          NIP3 - VERSION 3.0
+          NIP
         </div>
         <h2>Welcome to the Neural Imprint Patterns Assessment</h2>
         
