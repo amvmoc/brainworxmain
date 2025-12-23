@@ -79,7 +79,17 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
     e.preventDefault();
     if (email.trim()) {
       setPreviousStep('email');
-      setStep('patterns_info');
+
+      // Route to appropriate assessment based on selected type
+      if (selectedPaymentType === 'nipa') {
+        setStep('patterns_info');
+      } else if (selectedPaymentType === 'tadhd') {
+        setStep('adhd710_assessment');
+      } else if (selectedPaymentType === 'tcf') {
+        setStep('career_assessment');
+      } else {
+        setStep('patterns_info');
+      }
     }
   };
 
@@ -331,7 +341,7 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
               <button
                 onClick={() => {
                   setSelectedPaymentType('nipa');
-                  setStep('payment');
+                  setStep('email');
                 }}
                 className="w-full p-4 border-2 border-[#3DB3E3] rounded-lg hover:bg-[#3DB3E3]/10 transition-all text-left group"
               >
@@ -350,7 +360,7 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
               <button
                 onClick={() => {
                   setSelectedPaymentType('tadhd');
-                  setStep('payment');
+                  setStep('email');
                 }}
                 className="w-full p-4 border-2 border-indigo-500 rounded-lg hover:bg-indigo-500/10 transition-all text-left group"
               >
@@ -369,7 +379,7 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
               <button
                 onClick={() => {
                   setSelectedPaymentType('tadhd');
-                  setStep('payment');
+                  setStep('email');
                 }}
                 className="w-full p-4 border-2 border-violet-500 rounded-lg hover:bg-violet-500/10 transition-all text-left group"
               >
@@ -388,7 +398,7 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
               <button
                 onClick={() => {
                   setSelectedPaymentType('tcf');
-                  setStep('payment');
+                  setStep('email');
                 }}
                 className="w-full p-4 border-2 border-amber-500 rounded-lg hover:bg-amber-500/10 transition-all text-left group"
               >
@@ -507,8 +517,22 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
 
         {step === 'email' && !emailSent && (
           <div className="pt-4">
-            <h2 className="text-2xl font-bold text-[#0A2A5E] mb-4">Verify Your Email</h2>
+            <h2 className="text-2xl font-bold text-[#0A2A5E] mb-4">Enter Your Details</h2>
             <form onSubmit={handleEmailSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Your Name
+                </label>
+                <input
+                  type="text"
+                  value={customerName}
+                  onChange={(e) => setCustomerName(e.target.value)}
+                  placeholder="Enter your full name"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#3DB3E3] focus:border-transparent"
+                  required
+                />
+              </div>
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Email Address
@@ -523,16 +547,12 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
                 />
               </div>
 
-              <p className="text-sm text-gray-600 bg-[#E6E9EF] p-3 rounded-lg">
-                We'll send you a verification link to confirm your email and access the assessment.
-              </p>
-
               <button
                 type="submit"
-                disabled={!email.trim()}
+                disabled={!email.trim() || !customerName.trim()}
                 className="w-full bg-[#0A2A5E] text-white py-3 rounded-lg hover:bg-[#3DB3E3] disabled:opacity-50 transition-colors font-medium"
               >
-                Send Verification Link
+                Start Assessment
               </button>
             </form>
           </div>
