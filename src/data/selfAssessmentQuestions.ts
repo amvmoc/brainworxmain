@@ -25,7 +25,7 @@ export interface SelfAssessmentType {
 export const careerAssessment: SelfAssessmentType = {
   id: 'teen-career',
   name: 'Teen Career & Future Direction',
-  description: 'This comprehensive assessment combines Neural Imprint Patterns, RIASEC career interests, and real workplace scenarios to give you a clear picture of where you fit and how you function best in study and work environments. Includes a FREE 30-minute professional debrief session.',
+  description: 'This comprehensive assessment combines Neural Imprint Patterns, RIASEC career interests, and real workplace scenarios to give you a clear picture of where you fit and how you function best in study and work environments. Includes a <strong>FREE</strong> 30-minute professional debrief session.',
   instructions: `How to answer:
 • This is about YOU, not what others expect.
 • There are no right or wrong answers.

@@ -12,13 +12,12 @@ import { supabase } from '../lib/supabase';
 
 interface SelfAssessmentsPageProps {
   onClose: () => void;
-  onStartPayment?: (paymentType: 'nipa' | 'tcf' | 'tadhd' | 'pcadhd') => void;
+  onStartPayment?: (paymentType: 'nipa' | 'tcf' | 'tadhd') => void;
 }
 
 export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessmentsPageProps) {
   const [selectedAssessment, setSelectedAssessment] = useState<typeof selfAssessmentTypes[0] | null>(null);
   const [selectedNIPA, setSelectedNIPA] = useState(false);
-  const [selectedADHD, setSelectedADHD] = useState(false);
   const [showCouponModal, setShowCouponModal] = useState(false);
   const [showChoiceModal, setShowChoiceModal] = useState(false);
   const [showResumeModal, setShowResumeModal] = useState(false);
@@ -72,14 +71,11 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
       'Full Assessment (343 Questions)': 'nipa',
       'Full ADHD Assessment (128 Questions)': 'nipa',
       'Teen Career & Future Direction': 'teen-career',
-      'ADHD Caregiver Assessment (Parent & Caregiver)': 'adhd-caregiver',
-      'ADHD Caregiver Assessment (50 Questions)': 'adhd-caregiver',
       'ADHD 7-10 Assessment (80 Questions)': 'adhd710',
       'Parent/Caregiver ADHD 7-10 Assessment (80 Questions)': 'adhd710',
       'ADHD 11-18 Assessment (50 Questions)': 'adhd1118',
       'nipa': 'nipa',
       'tadhd': 'adhd1118',
-      'pcadhd': 'adhd-caregiver',
       'tcf': 'teen-career'
     };
 
@@ -197,7 +193,7 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
   const nipaCard = {
     id: 'nipa',
     name: 'NIP3 - Full Neural Imprint Assessment',
-    description: 'This is our comprehensive client assessment with 344 in-depth questions. NIP3 provides a complete analysis of your cognitive patterns, emotional responses, behavioral tendencies, and life experiences across all 20 Neural Imprint Patterns. This flagship assessment includes a FREE professional 45-minute debrief session to help you understand and apply your results.',
+    description: 'This is our comprehensive client assessment with 344 in-depth questions. NIP3 provides a complete analysis of your cognitive patterns, emotional responses, behavioral tendencies, and life experiences across all 20 Neural Imprint Patterns. This flagship assessment includes a <strong>FREE</strong> professional 45-minute debrief session to help you understand and apply your results.',
     icon: Brain,
     color: 'from-[#0A2A5E] to-[#3DB3E3]',
     iconColor: 'text-[#0A2A5E]',
@@ -209,7 +205,7 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
     assessmentType: 'Full Client Assessment',
     features: [
       'Full 344-question comprehensive assessment (NIP3)',
-      'FREE professional 45-minute debrief session',
+      '<strong>FREE</strong> professional 45-minute debrief session',
       'Complete profile across all 20 patterns',
       'Two-round assessment process',
       'Detailed personalized recommendations',
@@ -219,36 +215,10 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
     disclaimer: 'This is a self-reflection and coaching tool, not a clinical diagnostic instrument. It is designed to support personal growth and self-awareness through professional guidance.'
   };
 
-  const adhdCaregiverCard = {
-    id: 'adhd-caregiver',
-    name: 'ADHD Caregiver Assessment',
-    description: 'A comprehensive ADHD assessment that requires BOTH parent/guardian AND teacher/caregiver input. This dual-perspective approach provides a complete picture of behaviors across home and school settings, essential for accurate ADHD evaluation. Each respondent completes their own questionnaire and receives an individual report, while the franchise owner receives a comprehensive combined analysis.',
-    icon: UserCheck,
-    color: 'from-emerald-500 to-teal-500',
-    iconColor: 'text-emerald-500',
-    borderColor: 'border-emerald-500',
-    bgColor: 'bg-emerald-50',
-    targetAudience: 'Children (Ages 4-18)',
-    questionCount: 50,
-    assessmentType: 'ADHD Dual Assessment',
-    features: [
-      'Dual-respondent system (parent + teacher/caregiver)',
-      '50 questions per respondent covering 8 behavioral categories',
-      'Individual reports for each respondent',
-      'Comprehensive combined report with comparison analysis',
-      'Visual charts showing behavior patterns across settings',
-      'Areas of agreement and discrepancy highlighted',
-      'Severity scoring and intervention recommendations',
-      'Shareable results via secure links'
-    ],
-    instructions: 'This assessment requires TWO separate completions: one by a parent/guardian and one by a teacher/caregiver. Each person rates the child\'s behaviors based on their observations in their specific setting. Both assessments must be completed to generate the full comprehensive report. Each assessment takes approximately 15-20 minutes.',
-    disclaimer: 'This is a screening tool for identifying ADHD-related concerns. It does NOT constitute a clinical diagnosis. Only qualified healthcare professionals can diagnose ADHD through comprehensive clinical evaluation.'
-  };
-
   const adhd710Card = {
     id: 'adhd710',
     name: 'Parent/Caregiver ADHD 7-10 Assessment',
-    description: 'Advanced dual-respondent ADHD assessment for children aged 7-10 using Neural Imprint Pattern (NIPP) analysis. Requires input from BOTH parent AND teacher to provide comprehensive behavioral analysis across 10 distinct patterns covering attention, hyperactivity, impulsivity, executive function, emotional regulation, social skills, academic performance, and daily functioning. Includes a FREE 30-minute professional assessment.',
+    description: 'Advanced dual-respondent ADHD assessment for children aged 7-10 using Neural Imprint Pattern (NIPP) analysis. Requires input from BOTH parent AND teacher to provide comprehensive behavioral analysis across 10 distinct patterns covering attention, hyperactivity, impulsivity, executive function, emotional regulation, social skills, academic performance, and daily functioning. Includes a <strong>FREE</strong> 30-minute professional assessment.',
     icon: GraduationCap,
     color: 'from-indigo-500 to-purple-600',
     iconColor: 'text-indigo-600',
@@ -263,7 +233,7 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
       '80 comprehensive questions across 10 NIPP patterns',
       'Individual reports with pattern-specific analysis',
       'Comprehensive combined report with NIPP scoring',
-      'FREE 30-minute professional assessment',
+      '<strong>FREE</strong> 30-minute professional assessment',
       'Severity ratings per neural imprint pattern',
       'Pattern-based intervention recommendations',
       'Home vs. school behavior comparison charts',
@@ -276,7 +246,7 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
   const adhd1118Card = {
     id: 'adhd1118',
     name: 'ADHD 11-18 Assessment',
-    description: 'A comprehensive ADHD self-assessment for teens aged 11-18 years. This evaluation uses 10 Neural Imprint Patterns to identify core ADHD symptoms (focus, organization, hyperactivity, impulsivity) and emotional impact patterns (anger, self-perception, resistance, burnout). The teen completes this assessment themselves, reflecting on their own experiences and behaviors. Includes a FREE 30-minute professional assessment.',
+    description: 'A comprehensive ADHD self-assessment for teens aged 11-18 years. This evaluation uses 10 Neural Imprint Patterns to identify core ADHD symptoms (focus, organization, hyperactivity, impulsivity) and emotional impact patterns (anger, self-perception, resistance, burnout). The teen completes this assessment themselves, reflecting on their own experiences and behaviors. Includes a <strong>FREE</strong> 30-minute professional assessment.',
     icon: UserPlus,
     color: 'from-violet-500 to-fuchsia-600',
     iconColor: 'text-violet-600',
@@ -292,7 +262,7 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
       'Core ADHD patterns analysis',
       'Emotional impact patterns identified',
       'Personalized report with pattern-specific insights',
-      'FREE 30-minute professional assessment',
+      '<strong>FREE</strong> 30-minute professional assessment',
       'Age-appropriate language for teens',
       'Severity ratings per neural imprint pattern',
       'Actionable recommendations for support'
@@ -320,13 +290,9 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
         'Real workplace scenario questions',
         '360° view of career fit',
         'Detailed client & coach reports',
-        'FREE 30-minute professional debrief session',
+        '<strong>FREE</strong> 30-minute professional debrief session',
         'Study & career path guidance'
       ]
-    },
-    {
-      type: 'adhd-caregiver',
-      ...adhdCaregiverCard
     },
     {
       type: 'adhd710',
@@ -443,9 +409,10 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
 
             <div className="bg-white rounded-3xl shadow-xl p-8 mb-8">
               <h2 className="text-2xl font-bold text-[#0A2A5E] mb-4">About This Assessment</h2>
-              <p className="text-gray-700 text-lg leading-relaxed mb-6">
-                {nipaCard.description}
-              </p>
+              <p
+                className="text-gray-700 text-lg leading-relaxed mb-6"
+                dangerouslySetInnerHTML={{ __html: nipaCard.description }}
+              />
 
               <div className="bg-gradient-to-r from-[#0A2A5E]/10 to-[#3DB3E3]/10 border-2 border-[#0A2A5E]/30 rounded-xl p-6 mb-6">
                 <h3 className="font-bold text-[#0A2A5E] mb-2 flex items-center gap-2">
@@ -466,7 +433,7 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
                   {nipaCard.features.map((feature, idx) => (
                     <li key={idx} className="flex items-start gap-2 text-gray-700">
                       <span className="text-[#1FAFA3] mt-1">•</span>
-                      <span>{feature}</span>
+                      <span dangerouslySetInnerHTML={{ __html: feature }} />
                     </li>
                   ))}
                 </ul>
@@ -673,9 +640,10 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
 
             <div className="bg-white rounded-3xl shadow-xl p-8 mb-8">
               <h2 className="text-2xl font-bold text-[#0A2A5E] mb-4">About This Assessment</h2>
-              <p className="text-gray-700 text-lg leading-relaxed mb-6">
-                {selectedAssessment.description}
-              </p>
+              <p
+                className="text-gray-700 text-lg leading-relaxed mb-6"
+                dangerouslySetInnerHTML={{ __html: selectedAssessment.description }}
+              />
 
               <div className={`${card.bgColor} border ${card.borderColor} rounded-xl p-6 mb-6`}>
                 <h3 className="font-bold text-[#0A2A5E] mb-3 flex items-center gap-2">
@@ -686,7 +654,7 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
                   {card.features.map((feature, idx) => (
                     <li key={idx} className="flex items-start gap-2 text-gray-700">
                       <span className="text-[#1FAFA3] mt-1">•</span>
-                      <span>{feature}</span>
+                      <span dangerouslySetInnerHTML={{ __html: feature }} />
                     </li>
                   ))}
                 </ul>
@@ -924,7 +892,7 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
                   {adhd710Card.features.map((feature, idx) => (
                     <li key={idx} className="flex items-start gap-2 text-gray-700">
                       <span className="text-indigo-600 mt-1">•</span>
-                      <span>{feature}</span>
+                      <span dangerouslySetInnerHTML={{ __html: feature }} />
                     </li>
                   ))}
                 </ul>
@@ -1181,7 +1149,7 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
                   {adhd1118Card.features.map((feature, idx) => (
                     <li key={idx} className="flex items-start gap-2 text-gray-700">
                       <span className="text-violet-600 mt-1">•</span>
-                      <span>{feature}</span>
+                      <span dangerouslySetInnerHTML={{ __html: feature }} />
                     </li>
                   ))}
                 </ul>
@@ -1371,263 +1339,6 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
     );
   }
 
-  // Show detailed ADHD assessment info page
-  if (selectedADHD) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-[#E6E9EF] via-white to-[#E6E9EF]">
-        <div className="container mx-auto px-6 py-12">
-          <button
-            onClick={() => setSelectedADHD(false)}
-            className="fixed top-4 right-4 z-50 bg-white text-gray-600 hover:text-gray-900 rounded-full p-3 shadow-lg"
-          >
-            <X size={24} />
-          </button>
-
-          <div className="max-w-4xl mx-auto">
-            <div className={`bg-gradient-to-r ${adhdCaregiverCard.color} rounded-3xl p-8 text-white mb-8`}>
-              <div className="flex items-center gap-4 mb-4">
-                <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-4">
-                  <adhdCaregiverCard.icon size={48} className="text-white" />
-                </div>
-                <div>
-                  <h1 className="text-4xl font-bold">{adhdCaregiverCard.name}</h1>
-                  <div className="flex items-center gap-2 mt-2 flex-wrap">
-                    <span className="px-3 py-1 bg-white rounded-full text-sm font-bold text-emerald-700">
-                      Dual Assessment
-                    </span>
-                    <span className="flex items-center gap-1 text-white/90">
-                      <Clock size={16} />
-                      {adhdCaregiverCard.questionCount} questions per respondent
-                    </span>
-                    <span className="px-3 py-1 bg-white/20 rounded-full text-sm font-medium">
-                      {adhdCaregiverCard.targetAudience}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-3xl shadow-xl p-8 mb-8">
-              <h2 className="text-2xl font-bold text-emerald-700 mb-4">About This Assessment</h2>
-              <p className="text-gray-700 text-lg leading-relaxed mb-6">
-                {adhdCaregiverCard.description}
-              </p>
-
-              <div className="bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border-2 border-emerald-500/30 rounded-xl p-6 mb-6">
-                <h3 className="font-bold text-emerald-700 mb-2 flex items-center gap-2">
-                  <Heart size={20} className="text-emerald-700" />
-                  What Makes This Assessment Different?
-                </h3>
-                <p className="text-gray-700 leading-relaxed">
-                  <strong>This is a dual-respondent ADHD assessment</strong> — requiring input from BOTH a parent/guardian AND a teacher/caregiver. Unlike single-perspective assessments, this comprehensive approach captures how the child behaves across different settings (home vs. school), providing crucial context for accurate evaluation. Both respondents complete the same 50 questions from their unique perspective, and the system generates comparative analysis showing areas of agreement and discrepancy.
-                </p>
-              </div>
-
-              <div className={`${adhdCaregiverCard.bgColor} border ${adhdCaregiverCard.borderColor} rounded-xl p-6 mb-6`}>
-                <h3 className="font-bold text-emerald-700 mb-3 flex items-center gap-2">
-                  <CheckCircle size={20} className="text-emerald-600" />
-                  What You'll Discover:
-                </h3>
-                <ul className="grid md:grid-cols-1 gap-3">
-                  {adhdCaregiverCard.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-start gap-2 text-gray-700">
-                      <span className="text-emerald-600 mt-1">•</span>
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-6">
-                <h3 className="font-bold text-emerald-700 mb-3">How It Works</h3>
-                <div className="text-gray-700 space-y-3">
-                  <div className="flex gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-emerald-600 text-white rounded-full flex items-center justify-center font-bold">1</div>
-                    <div>
-                      <strong>Parent/Guardian starts:</strong> Enter child information and complete 50 questions based on home observations
-                    </div>
-                  </div>
-                  <div className="flex gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-emerald-600 text-white rounded-full flex items-center justify-center font-bold">2</div>
-                    <div>
-                      <strong>Invite caregiver:</strong> Provide teacher/caregiver contact info and we'll send them a unique access code
-                    </div>
-                  </div>
-                  <div className="flex gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-emerald-600 text-white rounded-full flex items-center justify-center font-bold">3</div>
-                    <div>
-                      <strong>Caregiver completes:</strong> Teacher/caregiver answers the same 50 questions from their perspective
-                    </div>
-                  </div>
-                  <div className="flex gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-emerald-600 text-white rounded-full flex items-center justify-center font-bold">4</div>
-                    <div>
-                      <strong>Get comprehensive report:</strong> View individual reports plus combined analysis comparing both perspectives
-                    </div>
-                  </div>
-                  <p className="text-sm text-gray-600 italic mt-4">
-                    {adhdCaregiverCard.instructions}
-                  </p>
-                </div>
-              </div>
-
-              <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-6 mb-6">
-                <h3 className="font-bold text-emerald-700 mb-3">Important Disclaimer</h3>
-                <p className="text-gray-700">
-                  {adhdCaregiverCard.disclaimer}
-                </p>
-              </div>
-
-              <div className="space-y-4">
-                <div className="flex gap-4">
-                  <button
-                    onClick={() => setSelectedADHD(false)}
-                    className="flex-1 bg-gray-200 text-gray-700 px-8 py-4 rounded-xl hover:bg-gray-300 transition-all duration-300 font-bold text-lg"
-                  >
-                    Back to Assessments
-                  </button>
-                  <button
-                    onClick={() => {
-                      if (onStartPayment) {
-                        onStartPayment('tadhd');
-                      }
-                    }}
-                    className={`flex-1 bg-gradient-to-r ${adhdCaregiverCard.color} text-white px-8 py-4 rounded-xl hover:shadow-xl transition-all duration-300 font-bold text-lg flex items-center justify-center gap-2 group`}
-                  >
-                    Proceed to Payment
-                    <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-                  </button>
-                </div>
-                <button
-                  onClick={() => setShowChoiceModal(true)}
-                  className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white px-8 py-4 rounded-xl hover:shadow-xl transition-all duration-300 font-bold text-lg flex items-center justify-center gap-2 group"
-                >
-                  <Ticket size={20} />
-                  Have a Coupon Code? / Resume My Test
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {showChoiceModal && (
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative">
-              <button
-                onClick={() => setShowChoiceModal(false)}
-                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
-              >
-                <X size={24} />
-              </button>
-
-              <div className="pt-4">
-                <h2 className="text-3xl font-bold text-emerald-700 mb-2">Choose an Option</h2>
-                <p className="text-gray-600 mb-6">
-                  Select what you'd like to do
-                </p>
-
-                <div className="space-y-4">
-                  <button
-                    onClick={() => {
-                      setShowChoiceModal(false);
-                      setShowCouponModal(true);
-                    }}
-                    className="w-full p-4 border-2 border-green-500 rounded-lg hover:bg-green-500/10 transition-all text-left group"
-                  >
-                    <div className="flex items-center gap-3">
-                      <Ticket className="text-green-500 group-hover:scale-110 transition-transform" size={24} />
-                      <div>
-                        <h3 className="font-bold text-emerald-700">Redeem Coupon Code</h3>
-                        <p className="text-sm text-gray-600">Enter your free access code</p>
-                      </div>
-                    </div>
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      setShowChoiceModal(false);
-                      setShowResumeModal(true);
-                    }}
-                    className="w-full p-4 border-2 border-orange-500 rounded-lg hover:bg-orange-500/10 transition-all text-left group"
-                  >
-                    <div className="flex items-center gap-3">
-                      <RotateCcw className="text-orange-500 group-hover:scale-110 transition-transform" size={24} />
-                      <div>
-                        <h3 className="font-bold text-emerald-700">Resume My Test</h3>
-                        <p className="text-sm text-gray-600">Continue from where you left off</p>
-                      </div>
-                    </div>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {showResumeModal && (
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative">
-              <button
-                onClick={() => {
-                  setShowResumeModal(false);
-                  setNoProgressFound(false);
-                  setResumeEmail('');
-                }}
-                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
-              >
-                <X size={24} />
-              </button>
-
-              <div className="pt-4">
-                <h2 className="text-3xl font-bold text-emerald-700 mb-2">Resume ADHD Assessment</h2>
-                <p className="text-gray-600 mb-6">
-                  Enter your email to find your saved assessment
-                </p>
-
-                <form onSubmit={handleResumeSubmit} className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
-                      value={resumeEmail}
-                      onChange={(e) => setResumeEmail(e.target.value)}
-                      placeholder="your.email@example.com"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-                      required
-                    />
-                  </div>
-
-                  {noProgressFound && (
-                    <div className="bg-orange-50 border border-orange-200 text-orange-800 p-3 rounded-lg text-sm">
-                      No in-progress ADHD assessment found for this email. Please start a new assessment.
-                    </div>
-                  )}
-
-                  <button
-                    type="submit"
-                    disabled={!resumeEmail.trim() || checkingProgress}
-                    className="w-full bg-emerald-600 text-white py-3 rounded-lg hover:bg-emerald-700 disabled:opacity-50 transition-colors font-medium"
-                  >
-                    {checkingProgress ? 'Checking...' : 'Find My Assessment'}
-                  </button>
-                </form>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {showCouponModal && (
-          <CouponRedemption
-            onRedemptionSuccess={handleCouponRedemption}
-            onCancel={() => setShowCouponModal(false)}
-          />
-        )}
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#E6E9EF] via-white to-[#E6E9EF]">
       <div className="container mx-auto px-6 py-12">
@@ -1655,10 +1366,9 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
           <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
             {assessmentCards.map((card, index) => {
               const isNIPA = card.type === 'nipa';
-              const isADHDCaregiver = card.type === 'adhd-caregiver';
               const isADHD710 = card.type === 'adhd710';
               const isADHD1118 = card.type === 'adhd1118';
-              const isSpecialType = isNIPA || isADHDCaregiver || isADHD710 || isADHD1118;
+              const isSpecialType = isNIPA || isADHD710 || isADHD1118;
               const cardData = isSpecialType ? card : { ...card, type: card.type as typeof selfAssessmentTypes[0] };
 
               return (
@@ -1715,9 +1425,12 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
 
                   <div className="p-8 flex-1 flex flex-col">
                     <div className="mb-6">
-                      <p className="text-gray-700 text-lg leading-relaxed min-h-[120px]">
-                        {isSpecialType ? card.description : (typeof card.type === 'object' ? card.type.description : '')}
-                      </p>
+                      <p
+                        className="text-gray-700 text-lg leading-relaxed min-h-[120px]"
+                        dangerouslySetInnerHTML={{
+                          __html: isSpecialType ? card.description : (typeof card.type === 'object' ? card.type.description : '')
+                        }}
+                      />
                     </div>
 
                     <div className={`${card.bgColor} border ${card.borderColor} rounded-xl p-6 mb-6 flex-1`}>
@@ -1729,7 +1442,7 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
                         {card.features.map((feature, idx) => (
                           <li key={idx} className="flex items-start gap-2 text-gray-700">
                             <span className="text-[#1FAFA3] mt-1">•</span>
-                            <span>{feature}</span>
+                            <span dangerouslySetInnerHTML={{ __html: feature }} />
                           </li>
                         ))}
                       </ul>
@@ -1745,8 +1458,6 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
                       onClick={() => {
                         if (isNIPA) {
                           setSelectedNIPA(true);
-                        } else if (isADHDCaregiver) {
-                          setSelectedADHD(true);
                         } else if (card.type === 'adhd710') {
                           setSelectedADHD710(true);
                         } else if (card.type === 'adhd1118') {
