@@ -71,6 +71,7 @@ Deno.serve(async (req: Request) => {
     // Map item names to assessment type codes (used by the frontend)
     let assessmentType = '';
     let assessmentDisplayName = '';
+    let amount = parseFloat(itnData.amount_gross || '0');
 
     if (itemName === 'NIP') {
       assessmentType = 'nipa';
@@ -89,6 +90,8 @@ Deno.serve(async (req: Request) => {
       assessmentType = itemName.toLowerCase().replace(/[^a-z0-9]/g, '');
       assessmentDisplayName = itemName;
     }
+
+    console.log('Payment amount:', amount, 'Assessment type:', assessmentType);
 
     const couponCode = Array.from({ length: 10 }, () =>
       'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[Math.floor(Math.random() * 32)]
@@ -115,6 +118,47 @@ Deno.serve(async (req: Request) => {
     }
 
     console.log('Coupon created:', couponCode, 'for', email);
+
+    // Create or update sales_log entry with payment amount
+    try {
+      // Try to find existing sales_log by email and assessment type
+      const { data: existingSalesLog } = await supabase
+        .from('sales_log')
+        .select('id')
+        .eq('customer_email', email)
+        .eq('assessment_type', assessmentDisplayName)
+        .eq('status', 'in_progress')
+        .maybeSingle();
+
+      if (existingSalesLog) {
+        // Update existing sales log
+        await supabase
+          .from('sales_log')
+          .update({
+            amount: amount,
+            status: 'paid'
+          })
+          .eq('id', existingSalesLog.id);
+        console.log('Updated sales_log with amount:', amount);
+      } else {
+        // Create new sales log entry (for direct payments without prior assessment)
+        await supabase
+          .from('sales_log')
+          .insert({
+            franchise_owner_id: '099a2a33-ea78-4b2e-ba0d-ca39ae31c90e', // Super Admin ID as default
+            customer_name: userName,
+            customer_email: email,
+            assessment_type: assessmentDisplayName,
+            amount: amount,
+            status: 'paid',
+            referral_source: 'direct_payment'
+          });
+        console.log('Created sales_log with amount:', amount);
+      }
+    } catch (salesLogError) {
+      console.error('Error creating/updating sales_log:', salesLogError);
+      // Don't fail the whole process if sales log fails
+    }
 
     // Send coupon email with error handling
     try {
@@ -149,6 +193,39 @@ Deno.serve(async (req: Request) => {
         .from('coupon_codes')
         .update({ email_sent: false })
         .eq('code', couponCode);
+    }
+
+    // Send invoice email notification
+    try {
+      const invoiceNumber = `INV-${Date.now()}`;
+      const invoiceResult = await supabase.functions.invoke('send-invoice-email', {
+        body: {
+          invoiceNumber: invoiceNumber,
+          customerName: userName,
+          customerEmail: email,
+          amount: amount,
+          currency: 'ZAR',
+          items: [
+            {
+              description: assessmentDisplayName,
+              quantity: 1,
+              unitPrice: amount,
+              total: amount
+            }
+          ],
+          paymentMethod: 'PayFast',
+          paidAt: new Date().toISOString()
+        }
+      });
+
+      if (invoiceResult.error) {
+        console.error('Error sending invoice email:', invoiceResult.error);
+      } else {
+        console.log('✅ Invoice email sent successfully to:', email);
+      }
+    } catch (invoiceError) {
+      console.error('Exception sending invoice email:', invoiceError);
+      // Don't fail the whole process if invoice email fails
     }
 
     return new Response('OK', { status: 200, headers: corsHeaders });
