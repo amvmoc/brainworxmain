@@ -11,6 +11,8 @@ export function PaymentSuccess({ assessmentType }: PaymentSuccessProps) {
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
   const [userEmail, setUserEmail] = useState('');
+  const [manualCouponCode, setManualCouponCode] = useState('');
+  const [checkingCoupon, setCheckingCoupon] = useState(false);
 
   const assessmentNames = {
     nipa: 'NIP - Full Neural Imprint Assessment',
@@ -59,7 +61,7 @@ export function PaymentSuccess({ assessmentType }: PaymentSuccessProps) {
     }
 
     let attempts = 0;
-    const maxAttempts = 10; // 10 attempts = 10 seconds (reduced from 20)
+    const maxAttempts = 30; // 30 attempts = 30 seconds (increased for PayFast webhook)
     const pollInterval = 1000; // 1 second
 
     const poll = async () => {
@@ -113,6 +115,35 @@ export function PaymentSuccess({ assessmentType }: PaymentSuccessProps) {
       window.location.href = `/?coupon=${couponCode}&auto=true`;
     } else {
       window.location.href = '/';
+    }
+  };
+
+  const handleCheckAgain = async () => {
+    setCheckingCoupon(true);
+    const code = await fetchLatestCoupon(userEmail);
+    if (code) {
+      setCouponCode(code);
+      // Auto-redirect after finding coupon
+      setTimeout(() => {
+        localStorage.setItem('coupon_prefill', JSON.stringify({
+          code: code,
+          email: userEmail,
+          name: localStorage.getItem('payment_name') || ''
+        }));
+        window.location.href = `/?coupon=${code}&auto=true`;
+      }, 1000);
+    }
+    setCheckingCoupon(false);
+  };
+
+  const handleManualCouponSubmit = () => {
+    if (manualCouponCode.trim()) {
+      localStorage.setItem('coupon_prefill', JSON.stringify({
+        code: manualCouponCode.trim(),
+        email: userEmail,
+        name: localStorage.getItem('payment_name') || ''
+      }));
+      window.location.href = `/?coupon=${manualCouponCode.trim()}&auto=true`;
     }
   };
 
@@ -242,7 +273,7 @@ export function PaymentSuccess({ assessmentType }: PaymentSuccessProps) {
               </p>
             </div>
 
-            <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4">
+            <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6">
               <p className="text-sm text-gray-700">
                 <strong>Don't see the email?</strong>
               </p>
@@ -253,12 +284,50 @@ export function PaymentSuccess({ assessmentType }: PaymentSuccessProps) {
               </ul>
             </div>
 
-            <button
-              onClick={() => window.location.href = '/'}
-              className="w-full bg-gradient-to-r from-[#0A2A5E] to-[#3DB3E3] text-white py-4 px-6 rounded-xl font-bold text-lg hover:shadow-2xl transition-all duration-300 hover:scale-[1.02]"
-            >
-              Return to Home
-            </button>
+            <div className="space-y-4 mb-6">
+              <button
+                onClick={handleCheckAgain}
+                disabled={checkingCoupon}
+                className="w-full bg-gradient-to-r from-[#0A2A5E] to-[#3DB3E3] text-white py-4 px-6 rounded-xl font-bold text-lg hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              >
+                {checkingCoupon ? (
+                  <>
+                    <Loader2 className="animate-spin" size={20} />
+                    Checking...
+                  </>
+                ) : (
+                  <>
+                    <ArrowRight size={20} />
+                    Check for Access Code & Start Assessment
+                  </>
+                )}
+              </button>
+
+              <div className="text-center text-gray-500 text-sm">OR</div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Have your access code from email? Enter it here:
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={manualCouponCode}
+                    onChange={(e) => setManualCouponCode(e.target.value.toUpperCase())}
+                    placeholder="Enter your access code"
+                    className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#3DB3E3] focus:border-transparent uppercase"
+                    onKeyPress={(e) => e.key === 'Enter' && handleManualCouponSubmit()}
+                  />
+                  <button
+                    onClick={handleManualCouponSubmit}
+                    disabled={!manualCouponCode.trim()}
+                    className="bg-[#0A2A5E] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#3DB3E3] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Go
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </div>
