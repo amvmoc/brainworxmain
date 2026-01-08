@@ -14,13 +14,13 @@ import { selfAssessmentTypes, SelfAssessmentType } from '../data/selfAssessmentQ
 interface GetStartedOptionsProps {
   onClose: () => void;
   franchiseCode?: string | null;
-  preselectedPaymentType?: 'tadhd' | 'tcf' | null;
+  preselectedPaymentType?: 'tadhd' | 'tcf' | 'trauma-scan' | null;
   initialCouponCode?: string | null;
 }
 
 export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentType, initialCouponCode }: GetStartedOptionsProps) {
   const [step, setStep] = useState<'options' | 'assessment_type' | 'coach_link' | 'email' | 'resume' | 'patterns_info' | 'questionnaire' | 'self_assessment' | 'career_assessment' | 'adhd710_assessment' | 'adhd1118_assessment' | 'trauma_scan_assessment' | 'payment'>(preselectedPaymentType ? 'payment' : 'options');
-  const [selectedPaymentType, setSelectedPaymentType] = useState<'nipa' | 'tadhd' | 'tcf' | null>(preselectedPaymentType || null);
+  const [selectedPaymentType, setSelectedPaymentType] = useState<'nipa' | 'tadhd' | 'tcf' | 'trauma-scan' | null>(preselectedPaymentType || null);
   const [coachLink, setCoachLink] = useState(franchiseCode || '');
   const [email, setEmail] = useState('');
   const [emailSent, setEmailSent] = useState(false);
@@ -436,6 +436,25 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
               </button>
 
               <button
+                onClick={() => {
+                  setSelectedPaymentType('trauma-scan');
+                  setStep('email');
+                }}
+                className="w-full p-4 border-2 border-teal-500 rounded-lg hover:bg-teal-500/10 transition-all text-left group"
+              >
+                <div className="flex items-center gap-3">
+                  <Shield className="text-teal-500 group-hover:scale-110 transition-transform" size={24} />
+                  <div className="flex-1">
+                    <h3 className="font-bold text-[#0A2A5E]">Trauma & Loss Impact Assessment</h3>
+                    <p className="text-sm text-gray-600">50 questions • Adult 15+ trauma recovery support</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-lg font-bold text-teal-500">R5</p>
+                  </div>
+                </div>
+              </button>
+
+              <button
                 onClick={() => setStep('resume')}
                 className="w-full p-4 border-2 border-orange-500 rounded-lg hover:bg-orange-500/10 transition-all text-left group"
               >
@@ -651,6 +670,7 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
                   {selectedPaymentType === 'nipa' && 'NIP - Full Neural Imprint Assessment'}
                   {selectedPaymentType === 'tadhd' && 'ADHD Assessment'}
                   {selectedPaymentType === 'tcf' && 'TCF - Teen Career & Future Direction'}
+                  {selectedPaymentType === 'trauma-scan' && 'Trauma & Loss Impact Assessment (Adult 15+)'}
                 </p>
               </div>
               <div className="border-t border-gray-300 pt-4">
@@ -660,6 +680,7 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
                     {selectedPaymentType === 'nipa' && 'R5'}
                     {selectedPaymentType === 'tadhd' && 'R5'}
                     {selectedPaymentType === 'tcf' && 'R5'}
+                    {selectedPaymentType === 'trauma-scan' && 'R5'}
                   </p>
                 </div>
               </div>
@@ -788,6 +809,43 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
                   <input required type="hidden" name="item_name" maxLength={255} value="TCF" />
                   <input type="hidden" name="item_description" maxLength={255} value="TCF - Teen Career & Future Direction" />
                   <input type="hidden" name="return_url" value={`${window.location.origin}/payment-success?type=tcf&email=${encodeURIComponent(email)}`} />
+                  <input type="hidden" name="cancel_url" value={`${window.location.origin}/?payment_cancelled=true`} />
+                  <input type="hidden" name="notify_url" value={`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/payfast-notify`} />
+                  <input type="hidden" name="custom_str1" value={email} />
+                  <input type="hidden" name="name_first" value={customerName.split(' ')[0] || customerName} />
+                  <input type="hidden" name="name_last" value={customerName.split(' ').slice(1).join(' ') || ''} />
+                  <input type="hidden" name="email_address" value={email} />
+                  <button
+                    type="submit"
+                    onClick={() => {
+                      localStorage.setItem('payment_email', email);
+                      localStorage.setItem('payment_name', customerName);
+                    }}
+                    className="w-full bg-gradient-to-r from-[#0A2A5E] to-[#3DB3E3] text-white py-4 px-6 rounded-lg font-semibold text-lg hover:shadow-lg transition-all duration-300 hover:scale-[1.02]"
+                  >
+                    {paymentCouponCode.trim() ? 'Proceed with Coupon' : 'Proceed to Payment'}
+                  </button>
+                </form>
+              )}
+
+              {selectedPaymentType === 'trauma-scan' && (
+                <form
+                  name="PayFastPayNowForm"
+                  action="https://payment.payfast.io/eng/process"
+                  method="post"
+                  onSubmit={(e) => {
+                    if (paymentCouponCode.trim()) {
+                      e.preventDefault();
+                      setShowCouponModal(true);
+                    }
+                  }}
+                >
+                  <input required type="hidden" name="cmd" value="_paynow" />
+                  <input required type="hidden" name="receiver" pattern="[0-9]" value="32553329" />
+                  <input required type="hidden" name="amount" value="5" />
+                  <input required type="hidden" name="item_name" maxLength={255} value="trauma-scan" />
+                  <input type="hidden" name="item_description" maxLength={255} value="Trauma & Loss Impact Assessment (Adult 15+)" />
+                  <input type="hidden" name="return_url" value={`${window.location.origin}/payment-success?type=trauma-scan&email=${encodeURIComponent(email)}`} />
                   <input type="hidden" name="cancel_url" value={`${window.location.origin}/?payment_cancelled=true`} />
                   <input type="hidden" name="notify_url" value={`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/payfast-notify`} />
                   <input type="hidden" name="custom_str1" value={email} />
