@@ -1399,6 +1399,155 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
     );
   }
 
+  // Show detailed Trauma Scan assessment info page
+  if (selectedTraumaScan) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-[#E6E9EF] via-white to-[#E6E9EF]">
+        <div className="container mx-auto px-6 py-12">
+          <button
+            onClick={() => setSelectedTraumaScan(false)}
+            className="fixed top-4 right-4 z-50 bg-white text-gray-600 hover:text-gray-900 rounded-full p-3 shadow-lg"
+          >
+            <X size={24} />
+          </button>
+
+          <div className="max-w-4xl mx-auto">
+            <div className={`bg-gradient-to-r ${traumaScanCard.color} rounded-3xl p-8 text-white mb-8`}>
+              <div className="flex items-center gap-4 mb-4">
+                <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-4">
+                  <traumaScanCard.icon size={48} className="text-white" />
+                </div>
+                <div>
+                  <h1 className="text-4xl font-bold">{traumaScanCard.name}</h1>
+                  <div className="flex items-center gap-2 mt-2 flex-wrap">
+                    <span className="px-3 py-1 bg-white rounded-full text-sm font-bold text-teal-700">
+                      {traumaScanCard.assessmentType}
+                    </span>
+                    <span className="flex items-center gap-1 text-white/90">
+                      <Clock size={16} />
+                      {traumaScanCard.questionCount} questions
+                    </span>
+                    <span className="px-3 py-1 bg-white/20 rounded-full text-sm font-medium">
+                      {traumaScanCard.targetAudience}
+                    </span>
+                    <span className="px-3 py-1 bg-white rounded-full text-sm font-bold text-teal-700">
+                      {traumaScanCard.price}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-3xl shadow-xl p-8 mb-8">
+              <h2 className="text-2xl font-bold text-teal-700 mb-4">About This Assessment</h2>
+              <p className="text-gray-700 text-lg leading-relaxed mb-6">
+                {traumaScanCard.description}
+              </p>
+
+              <div className="bg-gradient-to-r from-teal-500/10 to-cyan-500/10 border-2 border-teal-500/30 rounded-xl p-6 mb-6">
+                <h3 className="font-bold text-teal-700 mb-2 flex items-center gap-2">
+                  <Heart size={20} className="text-teal-700" />
+                  When to Use This Assessment
+                </h3>
+                <p className="text-gray-700 leading-relaxed">
+                  <strong>For Post-Trauma Support & Recovery</strong> — This assessment is designed for individuals who have experienced a traumatic event, significant loss, or major life crisis. It uses 20 specialized patterns to identify how stress, grief, and trauma may be affecting your daily functioning, emotional regulation, and overall well-being. This is a coaching tool to support your recovery journey, not a clinical diagnostic instrument.
+                </p>
+              </div>
+
+              <div className={`${traumaScanCard.bgColor} border ${traumaScanCard.borderColor} rounded-xl p-6 mb-6`}>
+                <h3 className="font-bold text-teal-700 mb-3 flex items-center gap-2">
+                  <CheckCircle size={20} className="text-teal-600" />
+                  What You'll Discover:
+                </h3>
+                <ul className="grid md:grid-cols-1 gap-3">
+                  {traumaScanCard.features.map((feature, idx) => (
+                    <li key={idx} className="flex items-start gap-2 text-gray-700">
+                      <span className="text-teal-600 mt-1">•</span>
+                      <span dangerouslySetInnerHTML={{ __html: feature }} />
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-6">
+                <h3 className="font-bold text-teal-700 mb-3">How It Works</h3>
+                <div className="text-gray-700 space-y-3">
+                  <div className="flex gap-3">
+                    <div className="flex-shrink-0 w-8 h-8 bg-teal-600 text-white rounded-full flex items-center justify-center font-bold">1</div>
+                    <div>
+                      <strong>Complete the 50-question assessment:</strong> Answer questions about your experiences over the past 2 weeks or since the traumatic event
+                    </div>
+                  </div>
+                  <div className="flex gap-3">
+                    <div className="flex-shrink-0 w-8 h-8 bg-teal-600 text-white rounded-full flex items-center justify-center font-bold">2</div>
+                    <div>
+                      <strong>Covers 20 trauma/loss patterns:</strong> Questions assess stress response, emotional regulation, sleep, relationships, coping mechanisms, and daily functioning
+                    </div>
+                  </div>
+                  <div className="flex gap-3">
+                    <div className="flex-shrink-0 w-8 h-8 bg-teal-600 text-white rounded-full flex items-center justify-center font-bold">3</div>
+                    <div>
+                      <strong>Safety flag system:</strong> High distress indicators are automatically flagged for immediate attention
+                    </div>
+                  </div>
+                  <div className="flex gap-3">
+                    <div className="flex-shrink-0 w-8 h-8 bg-teal-600 text-white rounded-full flex items-center justify-center font-bold">4</div>
+                    <div>
+                      <strong>Receive comprehensive reports:</strong> Client report shows your top 5 patterns; coach report includes detailed intervention guidance
+                    </div>
+                  </div>
+                  <p className="text-sm text-gray-600 italic mt-4">
+                    {traumaScanCard.instructions}
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-red-50 border border-red-200 rounded-xl p-6 mb-6">
+                <h3 className="font-bold text-red-700 mb-3 flex items-center gap-2">
+                  <Shield size={20} className="text-red-600" />
+                  Important Disclaimer
+                </h3>
+                <p className="text-gray-700 mb-3">
+                  {traumaScanCard.disclaimer}
+                </p>
+                <div className="bg-red-100 border border-red-300 rounded-lg p-4 mt-3">
+                  <p className="text-red-900 font-semibold">
+                    Crisis Support: If you are experiencing severe distress, thoughts of self-harm, or a mental health emergency, please contact a crisis helpline or emergency services immediately. This assessment is not a substitute for emergency care.
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div className="flex gap-4">
+                  <button
+                    onClick={() => setSelectedTraumaScan(false)}
+                    className="flex-1 bg-gray-200 text-gray-700 px-8 py-4 rounded-xl hover:bg-gray-300 transition-all duration-300 font-bold text-lg"
+                  >
+                    Back to Assessments
+                  </button>
+                  <button
+                    onClick={() => setShowCouponModal(true)}
+                    className={`flex-1 bg-gradient-to-r ${traumaScanCard.color} text-white px-8 py-4 rounded-xl hover:shadow-xl transition-all duration-300 font-bold text-lg flex items-center justify-center gap-2 group`}
+                  >
+                    Get Started
+                    <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {showCouponModal && (
+          <CouponRedemption
+            onRedemptionSuccess={handleCouponRedemption}
+            onCancel={() => setShowCouponModal(false)}
+          />
+        )}
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#E6E9EF] via-white to-[#E6E9EF]">
       <div className="container mx-auto px-6 py-12">
@@ -1428,7 +1577,8 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
               const isNIPA = card.type === 'nipa';
               const isADHD710 = card.type === 'adhd710';
               const isADHD1118 = card.type === 'adhd1118';
-              const isSpecialType = isNIPA || isADHD710 || isADHD1118;
+              const isTraumaScan = card.type === 'trauma-scan';
+              const isSpecialType = isNIPA || isADHD710 || isADHD1118 || isTraumaScan;
               const cardData = isSpecialType ? card : { ...card, type: card.type as typeof selfAssessmentTypes[0] };
 
               return (
@@ -1459,6 +1609,11 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
                           {isADHD1118 && (
                             <span className="px-3 py-1 bg-white rounded-full text-sm font-bold text-violet-700 whitespace-nowrap">
                               Teen Self-Assessment
+                            </span>
+                          )}
+                          {isTraumaScan && (
+                            <span className="px-3 py-1 bg-white rounded-full text-sm font-bold text-teal-700 whitespace-nowrap">
+                              Trauma & Loss Impact
                             </span>
                           )}
                           <span className="flex items-center gap-1 text-white/90 whitespace-nowrap">
@@ -1517,6 +1672,8 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
                           setSelectedADHD710(true);
                         } else if (card.type === 'adhd1118') {
                           setSelectedADHD1118(true);
+                        } else if (card.type === 'trauma-scan') {
+                          setSelectedTraumaScan(true);
                         } else if (typeof card.type === 'object') {
                           setSelectedAssessment(card.type);
                         }
