@@ -7,6 +7,7 @@ import { CouponRedemption } from './CouponRedemption';
 import { CareerAssessment } from './CareerAssessment';
 import ADHD710Assessment from './ADHD710Assessment';
 import ADHD1118Assessment from './ADHD1118Assessment';
+import TraumaScanAssessment from './TraumaScanAssessment';
 import { supabase } from '../lib/supabase';
 import { selfAssessmentTypes, SelfAssessmentType } from '../data/selfAssessmentQuestions';
 
@@ -18,7 +19,7 @@ interface GetStartedOptionsProps {
 }
 
 export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentType, initialCouponCode }: GetStartedOptionsProps) {
-  const [step, setStep] = useState<'options' | 'assessment_type' | 'coach_link' | 'email' | 'resume' | 'patterns_info' | 'questionnaire' | 'self_assessment' | 'career_assessment' | 'adhd710_assessment' | 'adhd1118_assessment' | 'payment'>(preselectedPaymentType ? 'payment' : 'options');
+  const [step, setStep] = useState<'options' | 'assessment_type' | 'coach_link' | 'email' | 'resume' | 'patterns_info' | 'questionnaire' | 'self_assessment' | 'career_assessment' | 'adhd710_assessment' | 'adhd1118_assessment' | 'trauma_scan_assessment' | 'payment'>(preselectedPaymentType ? 'payment' : 'options');
   const [selectedPaymentType, setSelectedPaymentType] = useState<'nipa' | 'tadhd' | 'tcf' | null>(preselectedPaymentType || null);
   const [coachLink, setCoachLink] = useState(franchiseCode || '');
   const [email, setEmail] = useState('');
@@ -160,10 +161,12 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
       'Parent/Caregiver ADHD 7-10 Assessment (80 Questions)': 'adhd710',
       'ADHD 11-18 Assessment (50 Questions)': 'adhd1118',
       'Teen Career & Future Direction': 'teen-career',
+      'Trauma & Loss Impact Assessment (Adult 15+)': 'trauma-scan',
       'adhd-710-caregiver': 'adhd710',
       'nipa': 'nip3',
       'tadhd': 'adhd1118',
-      'tcf': 'teen-career'
+      'tcf': 'teen-career',
+      'trauma-scan': 'trauma-scan'
     };
 
     // Dynamically add all self-assessments from the data file
@@ -191,6 +194,10 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
       console.log('Navigating to ADHD 11-18 Assessment');
       setShowCouponModal(false);
       setStep('adhd1118_assessment');
+    } else if (mappedType === 'trauma-scan') {
+      console.log('Navigating to Trauma Scan Assessment');
+      setShowCouponModal(false);
+      setStep('trauma_scan_assessment');
     } else {
       const selectedAssessment = selfAssessmentTypes.find(type => type.id === mappedType);
       console.log('Found self-assessment:', selectedAssessment);
@@ -291,6 +298,20 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
           onClose={() => {
             setStep('options');
             onClose();
+          }}
+        />
+      </div>
+    );
+  }
+
+  if (step === 'trauma_scan_assessment') {
+    return (
+      <div className="fixed inset-0 bg-white z-50 overflow-y-auto">
+        <TraumaScanAssessment
+          couponCode={couponId || undefined}
+          prefillData={{
+            name: customerName,
+            email: email
           }}
         />
       </div>

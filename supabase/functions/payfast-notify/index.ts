@@ -85,6 +85,9 @@ Deno.serve(async (req: Request) => {
     } else if (itemName === 'TCF') {
       assessmentType = 'tcf';
       assessmentDisplayName = 'Teen Career & Future Direction';
+    } else if (itemName === 'Trauma Scan' || itemName.includes('Trauma')) {
+      assessmentType = 'trauma-scan';
+      assessmentDisplayName = 'Trauma & Loss Impact Assessment (Adult 15+)';
     } else {
       // Try to extract type code from item name or use as-is
       assessmentType = itemName.toLowerCase().replace(/[^a-z0-9]/g, '');
