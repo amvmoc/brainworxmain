@@ -1526,17 +1526,136 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
                     Back to Assessments
                   </button>
                   <button
-                    onClick={() => setShowCouponModal(true)}
-                    className={`flex-1 bg-gradient-to-r ${traumaScanCard.color} text-white px-8 py-4 rounded-xl hover:shadow-xl transition-all duration-300 font-bold text-lg flex items-center justify-center gap-2 group`}
+                    onClick={() => {
+                      if (onStartPayment) {
+                        onStartPayment('trauma-scan' as any);
+                      }
+                    }}
+                    className="flex-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-8 py-4 rounded-xl hover:shadow-xl transition-all duration-300 font-bold text-lg flex items-center justify-center gap-2 group"
                   >
-                    Get Started
+                    Proceed to Payment
                     <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                  </button>
+                </div>
+                <button
+                  onClick={() => setShowChoiceModal(true)}
+                  className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white px-8 py-4 rounded-xl hover:shadow-xl transition-all duration-300 font-bold text-lg flex items-center justify-center gap-2 group"
+                >
+                  <Ticket size={20} />
+                  Have a Coupon Code? / Resume My Test
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {showChoiceModal && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative">
+              <button
+                onClick={() => setShowChoiceModal(false)}
+                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+              >
+                <X size={24} />
+              </button>
+
+              <div className="pt-4">
+                <h2 className="text-3xl font-bold text-teal-700 mb-2">Choose an Option</h2>
+                <p className="text-gray-600 mb-6">
+                  Select what you'd like to do
+                </p>
+
+                <div className="space-y-4">
+                  <button
+                    onClick={() => {
+                      setShowChoiceModal(false);
+                      setShowCouponModal(true);
+                    }}
+                    className="w-full p-4 border-2 border-green-500 rounded-lg hover:bg-green-500/10 transition-all text-left group"
+                  >
+                    <div className="flex items-center gap-3">
+                      <Ticket className="text-green-500 group-hover:scale-110 transition-transform" size={24} />
+                      <div>
+                        <h3 className="font-bold text-teal-700">Redeem Coupon Code</h3>
+                        <p className="text-sm text-gray-600">Enter your free access code</p>
+                      </div>
+                    </div>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setShowChoiceModal(false);
+                      setShowResumeModal(true);
+                    }}
+                    className="w-full p-4 border-2 border-orange-500 rounded-lg hover:bg-orange-500/10 transition-all text-left group"
+                  >
+                    <div className="flex items-center gap-3">
+                      <RotateCcw className="text-orange-500 group-hover:scale-110 transition-transform" size={24} />
+                      <div>
+                        <h3 className="font-bold text-teal-700">Resume My Test</h3>
+                        <p className="text-sm text-gray-600">Continue from where you left off</p>
+                      </div>
+                    </div>
                   </button>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
+
+        {showResumeModal && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative">
+              <button
+                onClick={() => {
+                  setShowResumeModal(false);
+                  setNoProgressFound(false);
+                  setResumeEmail('');
+                }}
+                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+              >
+                <X size={24} />
+              </button>
+
+              <div className="pt-4">
+                <h2 className="text-3xl font-bold text-teal-700 mb-2">Resume Trauma Scan Assessment</h2>
+                <p className="text-gray-600 mb-6">
+                  Enter your email to find your saved assessment
+                </p>
+
+                <form onSubmit={handleResumeSubmit} className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Email Address
+                    </label>
+                    <input
+                      type="email"
+                      value={resumeEmail}
+                      onChange={(e) => setResumeEmail(e.target.value)}
+                      placeholder="your.email@example.com"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                      required
+                    />
+                  </div>
+
+                  {noProgressFound && (
+                    <div className="bg-orange-50 border border-orange-200 text-orange-800 p-3 rounded-lg text-sm">
+                      No in-progress Trauma Scan assessment found for this email. Please start a new assessment.
+                    </div>
+                  )}
+
+                  <button
+                    type="submit"
+                    disabled={!resumeEmail.trim() || checkingProgress}
+                    className="w-full bg-teal-600 text-white py-3 rounded-lg hover:bg-teal-700 disabled:opacity-50 transition-colors font-medium"
+                  >
+                    {checkingProgress ? 'Checking...' : 'Find My Assessment'}
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        )}
 
         {showCouponModal && (
           <CouponRedemption
