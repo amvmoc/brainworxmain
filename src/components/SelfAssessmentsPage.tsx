@@ -1,6 +1,6 @@
 // Self-assessments with mandatory payment gateway
 import { useState } from 'react';
-import { Briefcase, Users, Brain, Heart, ArrowRight, X, CheckCircle, Clock, Ticket, RotateCcw, UserCheck, GraduationCap, UserPlus } from 'lucide-react';
+import { Briefcase, Users, Brain, Heart, ArrowRight, X, CheckCircle, Clock, Ticket, RotateCcw, UserCheck, GraduationCap, UserPlus, Shield } from 'lucide-react';
 import { selfAssessmentTypes } from '../data/selfAssessmentQuestions';
 import { SelfAssessmentQuestionnaire } from './SelfAssessmentQuestionnaire';
 import NIP3Assessment from './NIP3Assessment';
@@ -8,6 +8,7 @@ import { CouponRedemption } from './CouponRedemption';
 import { CareerAssessment } from './CareerAssessment';
 import ADHD710Assessment from './ADHD710Assessment';
 import ADHD1118Assessment from './ADHD1118Assessment';
+import TraumaScanAssessment from './TraumaScanAssessment';
 import { supabase } from '../lib/supabase';
 
 interface SelfAssessmentsPageProps {
@@ -56,6 +57,13 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
     assessmentId?: string;
     respondentType: 'teen';
   } | null>(null);
+  const [selectedTraumaScan, setSelectedTraumaScan] = useState(false);
+  const [startTraumaScanAssessment, setStartTraumaScanAssessment] = useState(false);
+  const [traumaScanAssessmentData, setTraumaScanAssessmentData] = useState<{
+    email: string;
+    customerName: string;
+    couponId?: string;
+  } | null>(null);
 
   const handleCouponRedemption = (
     assessmentType: string,
@@ -74,9 +82,11 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
       'ADHD 7-10 Assessment (80 Questions)': 'adhd710',
       'Parent/Caregiver ADHD 7-10 Assessment (80 Questions)': 'adhd710',
       'ADHD 11-18 Assessment (50 Questions)': 'adhd1118',
+      'Trauma & Loss Impact Assessment (Adult 15+)': 'trauma-scan',
       'nipa': 'nipa',
       'tadhd': 'adhd1118',
-      'tcf': 'teen-career'
+      'tcf': 'teen-career',
+      'trauma-scan': 'trauma-scan'
     };
 
     // Dynamically add all self-assessments from the data file
@@ -109,6 +119,13 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
         respondentType: 'teen'
       });
       setStartADHD1118Assessment(true);
+    } else if (assessmentId === 'trauma-scan') {
+      setTraumaScanAssessmentData({
+        email: userEmail,
+        customerName: userName,
+        couponId: couponId
+      });
+      setStartTraumaScanAssessment(true);
     } else {
       const selectedAssessment = selfAssessmentTypes.find(type => type.id === assessmentId);
 
@@ -271,6 +288,34 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
     disclaimer: 'This is a screening tool using Neural Imprint Pattern analysis for identifying ADHD-related behavioral patterns in teens. It does NOT constitute a clinical diagnosis. Only qualified healthcare professionals can diagnose ADHD through comprehensive clinical evaluation.'
   };
 
+  const traumaScanCard = {
+    id: 'trauma-scan',
+    name: 'Trauma & Loss Impact Assessment',
+    description: 'A comprehensive self-assessment for adults (15+) experiencing the impact of trauma or significant loss. This evaluation uses 20 specialized patterns to identify stress responses, emotional regulation challenges, and coping mechanisms. Designed for coaching and support planning after difficult life events. Includes detailed client and coach reports with actionable next steps.',
+    icon: Shield,
+    color: 'from-teal-500 to-cyan-600',
+    iconColor: 'text-teal-600',
+    borderColor: 'border-teal-500',
+    bgColor: 'bg-teal-50',
+    targetAudience: 'Adults (Ages 15+)',
+    questionCount: 50,
+    price: 'R5',
+    assessmentType: 'Trauma & Loss Impact',
+    features: [
+      'Self-assessment for post-trauma support',
+      '50 questions across 20 trauma/loss response patterns',
+      'Safety flag system for high distress detection',
+      'Zone-based scoring (Green/Amber/Red)',
+      'Comprehensive client report with top 5 patterns',
+      'Detailed coach report with intervention guidance',
+      'Non-diagnostic coaching tool',
+      'Pattern-specific next steps and recommendations',
+      'Suitable after loss, crisis, or difficult life events'
+    ],
+    instructions: 'This assessment helps identify patterns that may be affecting you after a traumatic event or significant loss. You will answer 50 questions about your experiences based on the past 2 weeks or since the incident. The assessment takes approximately 15-20 minutes. Be honest in your responses for accurate results. You will receive a client report immediately and a comprehensive coach report will be sent to your support team.',
+    disclaimer: 'This is a self-reflection tool for coaching and support planning, NOT a clinical diagnostic instrument. It does not replace professional mental health care. If you are experiencing severe distress, please seek immediate professional help.'
+  };
+
   const assessmentCards = [
     {
       type: 'nipa',
@@ -301,6 +346,10 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
     {
       type: 'adhd1118',
       ...adhd1118Card
+    },
+    {
+      type: 'trauma-scan',
+      ...traumaScanCard
     }
   ];
 
@@ -327,6 +376,19 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
         onComplete={() => {
           setStartADHD1118Assessment(false);
           setADHD1118AssessmentData(null);
+        }}
+      />
+    );
+  }
+
+  // Show Trauma Scan assessment
+  if (startTraumaScanAssessment && traumaScanAssessmentData) {
+    return (
+      <TraumaScanAssessment
+        couponCode={traumaScanAssessmentData.couponId}
+        prefillData={{
+          name: traumaScanAssessmentData.customerName,
+          email: traumaScanAssessmentData.email
         }}
       />
     );

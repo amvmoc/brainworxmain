@@ -3,7 +3,7 @@ import { CheckCircle, Copy, ArrowRight, Loader2 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
 interface PaymentSuccessProps {
-  assessmentType: 'nipa' | 'tadhd' | 'tcf';
+  assessmentType: 'nipa' | 'tadhd' | 'tcf' | 'trauma-scan';
 }
 
 export function PaymentSuccess({ assessmentType }: PaymentSuccessProps) {
@@ -17,7 +17,8 @@ export function PaymentSuccess({ assessmentType }: PaymentSuccessProps) {
   const assessmentNames = {
     nipa: 'NIP - Full Neural Imprint Assessment',
     tadhd: 'ADHD Assessment (Ages 7-10 or 11-18)',
-    tcf: 'Teen Career & Future Direction'
+    tcf: 'Teen Career & Future Direction',
+    'trauma-scan': 'Trauma & Loss Impact Assessment (Adult 15+)'
   };
 
   useEffect(() => {
