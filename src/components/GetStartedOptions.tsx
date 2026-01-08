@@ -19,7 +19,7 @@ interface GetStartedOptionsProps {
 }
 
 export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentType, initialCouponCode }: GetStartedOptionsProps) {
-  const [step, setStep] = useState<'options' | 'assessment_type' | 'coach_link' | 'email' | 'resume' | 'patterns_info' | 'questionnaire' | 'self_assessment' | 'career_assessment' | 'adhd710_assessment' | 'adhd1118_assessment' | 'trauma_scan_assessment' | 'payment'>(preselectedPaymentType ? 'payment' : 'options');
+  const [step, setStep] = useState<'options' | 'assessment_type' | 'coach_link' | 'email' | 'resume' | 'patterns_info' | 'questionnaire' | 'self_assessment' | 'career_assessment' | 'adhd710_assessment' | 'adhd1118_assessment' | 'trauma_scan_assessment' | 'payment'>(preselectedPaymentType ? 'email' : 'options');
   const [selectedPaymentType, setSelectedPaymentType] = useState<'nipa' | 'tadhd' | 'tcf' | 'trauma-scan' | null>(preselectedPaymentType || null);
   const [coachLink, setCoachLink] = useState(franchiseCode || '');
   const [email, setEmail] = useState('');
