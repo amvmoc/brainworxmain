@@ -1,5 +1,5 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { createTransport } from "npm:nodemailer@6.9.7";
+import { Resend } from "npm:resend@2.0.0";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -35,19 +35,13 @@ Deno.serve(async (req: Request) => {
 
   try {
     const emailData: InvoiceEmailRequest = await req.json();
-    
-    const GMAIL_USER = "payments@brainworx.co.za";
-    const GMAIL_PASSWORD = "Bra14604";
 
-    const transporter = createTransport({
-      host: "smtp.gmail.com",
-      port: 587,
-      secure: false,
-      auth: {
-        user: GMAIL_USER,
-        pass: GMAIL_PASSWORD,
-      },
-    });
+    const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+    if (!RESEND_API_KEY) {
+      throw new Error("RESEND_API_KEY is not configured");
+    }
+
+    const resend = new Resend(RESEND_API_KEY);
 
     const formatCurrency = (amount: number, currency: string) => {
       return new Intl.NumberFormat('en-ZA', {
@@ -224,8 +218,8 @@ Deno.serve(async (req: Request) => {
     const emailPromises = [];
 
     emailPromises.push(
-      transporter.sendMail({
-        from: `BrainWorx <${GMAIL_USER}>`,
+      resend.emails.send({
+        from: 'BrainWorx <payments@brainworx.co.za>',
         to: emailData.customerEmail,
         subject: `Payment Confirmed - Invoice ${emailData.invoiceNumber}`,
         html: customerEmailHtml,
@@ -233,9 +227,9 @@ Deno.serve(async (req: Request) => {
     );
 
     emailPromises.push(
-      transporter.sendMail({
-        from: `BrainWorx <${GMAIL_USER}>`,
-        to: GMAIL_USER,
+      resend.emails.send({
+        from: 'BrainWorx <payments@brainworx.co.za>',
+        to: 'payments@brainworx.co.za',
         subject: `New Payment Received - ${emailData.invoiceNumber} - ${formatCurrency(emailData.amount, emailData.currency)}`,
         html: adminEmailHtml,
       })
@@ -243,8 +237,8 @@ Deno.serve(async (req: Request) => {
 
     if (emailData.franchiseOwnerEmail) {
       emailPromises.push(
-        transporter.sendMail({
-          from: `BrainWorx <${GMAIL_USER}>`,
+        resend.emails.send({
+          from: 'BrainWorx <payments@brainworx.co.za>',
           to: emailData.franchiseOwnerEmail,
           subject: `Payment Received from Your Client - ${emailData.invoiceNumber}`,
           html: adminEmailHtml,
@@ -252,11 +246,17 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    await Promise.all(emailPromises);
+    const results = await Promise.all(emailPromises);
+
+    for (const result of results) {
+      if (result.error) {
+        throw new Error(`Failed to send email: ${result.error.message}`);
+      }
+    }
 
     console.log('✅ Invoice payment emails sent successfully');
     console.log('- Customer:', emailData.customerEmail);
-    console.log('- Admin:', GMAIL_USER);
+    console.log('- Admin: payments@brainworx.co.za');
     if (emailData.franchiseOwnerEmail) {
       console.log('- Franchise Owner:', emailData.franchiseOwnerEmail);
     }
@@ -267,7 +267,7 @@ Deno.serve(async (req: Request) => {
         message: 'Invoice payment confirmation emails sent successfully',
         recipients: {
           customer: emailData.customerEmail,
-          admin: GMAIL_USER,
+          admin: 'payments@brainworx.co.za',
           franchiseOwner: emailData.franchiseOwnerEmail || null,
         }
       }),

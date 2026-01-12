@@ -1,5 +1,5 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { createTransport } from "npm:nodemailer@6.9.7";
+import { Resend } from "npm:resend@2.0.0";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -42,18 +42,13 @@ Deno.serve(async (req: Request) => {
     }
 
     // Setup Gmail transporter
-    const GMAIL_USER = "payments@brainworx.co.za";
-    const GMAIL_PASSWORD = "iuhzjjhughbnwsvf";
+    const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+    if (!RESEND_API_KEY) {
+      throw new Error("RESEND_API_KEY is not configured");
+    }
 
-    const transporter = createTransport({
-      host: "smtp.gmail.com",
-      port: 587,
-      secure: false,
-      auth: {
-        user: GMAIL_USER,
-        pass: GMAIL_PASSWORD,
-      },
-    });
+    const resend = new Resend(RESEND_API_KEY);
+
 
     // Use the provided assessment URL, or build a default one
     const assessmentLink = assessmentUrl || `${new URL(req.url).origin}?assessment=${assessmentId}&respondent=caregiver&coupon=${couponCode || ''}`;
@@ -215,8 +210,8 @@ Deno.serve(async (req: Request) => {
     `;
 
     // Send email via Gmail
-    await transporter.sendMail({
-      from: `BrainWorx Assessments <${GMAIL_USER}>`,
+    await resend.emails.send({
+      from: 'BrainWorx Assessments <payments@brainworx.co.za>',
       to: teacherEmail,
       subject: `Teacher Assessment Request for ${childName} - BrainWorx ADHD Screen`,
       html: htmlContent,

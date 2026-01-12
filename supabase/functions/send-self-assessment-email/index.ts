@@ -1,5 +1,5 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { createTransport } from "npm:nodemailer@6.9.7";
+import { Resend } from "npm:resend@2.0.0";
 import { jsPDF } from "npm:jspdf@2.5.2";
 
 const corsHeaders = {
@@ -94,8 +94,12 @@ async function sendClientReport(
   responseId: string,
   franchiseOwnerId?: string
 ) {
-  const GMAIL_USER = "payments@brainworx.co.za";
-  const GMAIL_PASSWORD = "iuhzjjhughbnwsvf";
+  const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+    if (!RESEND_API_KEY) {
+      throw new Error("RESEND_API_KEY is not configured");
+    }
+
+    const resend = new Resend(RESEND_API_KEY);
   const SITE_URL = Deno.env.get('SITE_URL') || 'https://brainworx.co.za';
 
   const topImprintsHtml = topImprints.slice(0, 5)
@@ -190,18 +194,9 @@ async function sendClientReport(
     </html>
   `;
 
-  const transporter = createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false,
-    auth: {
-      user: GMAIL_USER,
-      pass: GMAIL_PASSWORD,
-    },
-  });
 
-  await transporter.sendMail({
-    from: `BrainWorx <${GMAIL_USER}>`,
+  await resend.emails.send({
+    from: 'BrainWorx <payments@brainworx.co.za>',
     to: customerEmail,
     subject: `Your ${assessmentType} Results`,
     html: htmlContent,
@@ -232,8 +227,12 @@ async function sendCoachReport(
   analysisResults: any,
   responseId: string
 ) {
-  const GMAIL_USER = "payments@brainworx.co.za";
-  const GMAIL_PASSWORD = "iuhzjjhughbnwsvf";
+  const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+    if (!RESEND_API_KEY) {
+      throw new Error("RESEND_API_KEY is not configured");
+    }
+
+    const resend = new Resend(RESEND_API_KEY);
 
   const allImprintsHtml = topImprints
     .map((imprint, idx) => `
@@ -329,18 +328,9 @@ async function sendCoachReport(
     </html>
   `;
 
-  const transporter = createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false,
-    auth: {
-      user: GMAIL_USER,
-      pass: GMAIL_PASSWORD,
-    },
-  });
 
-  await transporter.sendMail({
-    from: `BrainWorx <${GMAIL_USER}>`,
+  await resend.emails.send({
+    from: 'BrainWorx <payments@brainworx.co.za>',
     to: coachEmail,
     subject: `Coach Report: ${customerName} - ${assessmentType}`,
     html: htmlContent,
@@ -567,18 +557,13 @@ Deno.serve(async (req: Request) => {
     }
 
     const BRAINWORX_EMAIL = 'info@brainworx.co.za';
-    const GMAIL_USER = "payments@brainworx.co.za";
-    const GMAIL_PASSWORD = "iuhzjjhughbnwsvf";
+    const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+    if (!RESEND_API_KEY) {
+      throw new Error("RESEND_API_KEY is not configured");
+    }
 
-    const transporter = createTransport({
-      host: "smtp.gmail.com",
-      port: 587,
-      secure: false,
-      auth: {
-        user: GMAIL_USER,
-        pass: GMAIL_PASSWORD,
-      },
-    });
+    const resend = new Resend(RESEND_API_KEY);
+
 
     // CRITICAL: Generate PDF report - this MUST always be included in the customer email
     console.log('Generating Self-Assessment PDF report for:', customerName);
@@ -671,8 +656,8 @@ Deno.serve(async (req: Request) => {
     const pdfFilename = `BrainWorx_Self_Assessment_${customerName.replace(/\s+/g, '_')}.pdf`;
     console.log('Sending customer email with PDF attachment:', pdfFilename);
 
-    await transporter.sendMail({
-      from: `BrainWorx <${GMAIL_USER}>`,
+    await resend.emails.send({
+      from: 'BrainWorx <payments@brainworx.co.za>',
       to: customerEmail,
       subject: `Your ${assessmentType} Results - BrainWorx`,
       html: htmlContent,
@@ -720,8 +705,8 @@ Deno.serve(async (req: Request) => {
     `;
 
     if (franchiseOwnerEmail) {
-      await transporter.sendMail({
-        from: `BrainWorx <${GMAIL_USER}>`,
+      await resend.emails.send({
+        from: 'BrainWorx <payments@brainworx.co.za>',
         to: franchiseOwnerEmail,
         subject: `New Self-Assessment Completed - ${customerName}`,
         html: franchiseEmailContent,
@@ -730,8 +715,8 @@ Deno.serve(async (req: Request) => {
       console.log('✓ Franchise owner email sent to:', franchiseOwnerEmail);
     }
 
-    await transporter.sendMail({
-      from: `BrainWorx <${GMAIL_USER}>`,
+    await resend.emails.send({
+      from: 'BrainWorx <payments@brainworx.co.za>',
       to: BRAINWORX_EMAIL,
       subject: `New Self-Assessment Completed - ${customerName}`,
       html: franchiseEmailContent,
@@ -739,8 +724,8 @@ Deno.serve(async (req: Request) => {
 
     console.log('✓ Admin email sent to:', BRAINWORX_EMAIL);
 
-    await transporter.sendMail({
-      from: `BrainWorx <${GMAIL_USER}>`,
+    await resend.emails.send({
+      from: 'BrainWorx <payments@brainworx.co.za>',
       to: 'kobus@brainworx.co.za',
       subject: `New Self-Assessment Completed - ${customerName}`,
       html: franchiseEmailContent,

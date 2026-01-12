@@ -1,6 +1,6 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "jsr:@supabase/supabase-js@2";
-import { createTransport } from "npm:nodemailer@6.9.7";
+import { Resend } from "npm:resend@2.0.0";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -12,8 +12,12 @@ interface RequestBody {
   assessmentId: string;
 }
 
-const GMAIL_USER = "payments@brainworx.co.za";
-const GMAIL_PASSWORD = "Bra14604";
+const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+    if (!RESEND_API_KEY) {
+      throw new Error("RESEND_API_KEY is not configured");
+    }
+
+    const resend = new Resend(RESEND_API_KEY);
 
 const ZONE_COLORS = {
   Green: "#10b981",
@@ -66,32 +70,26 @@ Deno.serve(async (req: Request) => {
       safetyFlag
     );
 
-    const transporter = createTransport({
-      host: "smtp.gmail.com",
-      port: 587,
-      secure: false,
-      auth: { user: GMAIL_USER, pass: GMAIL_PASSWORD },
-    });
 
     // Send client report
-    await transporter.sendMail({
-      from: `BrainWorx <${GMAIL_USER}>`,
+    await resend.emails.send({
+      from: 'BrainWorx <payments@brainworx.co.za>',
       to: assessment.customer_email,
       subject: `Your Trauma & Loss Impact Assessment Results`,
       html: clientReportHtml,
     });
 
     // Send coach report to admin
-    await transporter.sendMail({
-      from: `BrainWorx <${GMAIL_USER}>`,
-      to: GMAIL_USER,
+    await resend.emails.send({
+      from: 'BrainWorx <payments@brainworx.co.za>',
+      to: 'payments@brainworx.co.za',
       subject: `Trauma Scan Coach Report - ${participantInfo.name || 'Participant'}`,
       html: coachReportHtml,
     });
 
     console.log('✅ Trauma scan reports sent successfully');
     console.log('- Client:', assessment.customer_email);
-    console.log('- Coach:', GMAIL_USER);
+    console.log('- Coach: payments@brainworx.co.za');
 
     return new Response(
       JSON.stringify({ success: true, message: 'Reports sent successfully' }),

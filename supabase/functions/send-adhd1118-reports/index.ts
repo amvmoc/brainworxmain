@@ -1,6 +1,6 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "jsr:@supabase/supabase-js@2";
-import { createTransport } from "npm:nodemailer@6.9.7";
+import { Resend } from "npm:resend@2.0.0";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -664,18 +664,12 @@ Deno.serve(async (req: Request) => {
       throw new Error("Required environment variables are not configured");
     }
 
-    const GMAIL_USER = "payments@brainworx.co.za";
-    const GMAIL_PASSWORD = "iuhzjjhughbnwsvf";
+    const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+    if (!RESEND_API_KEY) {
+      throw new Error("RESEND_API_KEY is not configured");
+    }
 
-    const transporter = createTransport({
-      host: "smtp.gmail.com",
-      port: 587,
-      secure: false,
-      auth: {
-        user: GMAIL_USER,
-        pass: GMAIL_PASSWORD,
-      },
-    });
+    const resend = new Resend(RESEND_API_KEY);
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
     const body: RequestBody = await req.json();
@@ -763,8 +757,8 @@ Deno.serve(async (req: Request) => {
     const teenClientHtml = generateTeenClientReport(assessment, teenResponse, patterns, baseUrl);
 
     const emailPromises = [
-      transporter.sendMail({
-        from: `BrainWorx NIPP <${GMAIL_USER}>`,
+      resend.emails.send({
+        from: 'BrainWorx NIPP <payments@brainworx.co.za>',
         to: teenResponse.respondent_email,
         subject: `Your ADHD Assessment Results - BrainWorx NIPP`,
         html: teenClientHtml,
@@ -780,8 +774,8 @@ Deno.serve(async (req: Request) => {
       );
 
       emailPromises.push(
-        transporter.sendMail({
-          from: `BrainWorx NIPP <${GMAIL_USER}>`,
+        resend.emails.send({
+          from: 'BrainWorx NIPP <payments@brainworx.co.za>',
           to: franchiseOwnerEmail,
           subject: `New Teen ADHD Assessment Complete: ${assessment.teen_name} - Comprehensive Coach Report`,
           html: coachReportHtml,
@@ -789,7 +783,13 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    await Promise.all(emailPromises);
+    const results = await Promise.all(emailPromises);
+
+    for (const result of results) {
+      if (result.error) {
+        throw new Error(`Failed to send email: ${result.error.message}`);
+      }
+    }
 
     return new Response(
       JSON.stringify({

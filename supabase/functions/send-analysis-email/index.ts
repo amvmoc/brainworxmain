@@ -1,5 +1,5 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { createTransport } from "npm:nodemailer@6.9.7";
+import { Resend } from "npm:resend@2.0.0";
 import { generateComprehensiveCoachReport } from "./comprehensive-coach-report.ts";
 import { generateClientReport } from "./client-report.ts";
 import { generateAdvancedPDF } from "./pdf-generator.ts";
@@ -143,18 +143,13 @@ Deno.serve(async (req: Request) => {
 
     console.log('✓ PDF generated successfully. Size:', pdfBuffer.length, 'bytes');
 
-    const GMAIL_USER = "payments@brainworx.co.za";
-    const GMAIL_PASSWORD = "iuhzjjhughbnwsvf";
+    const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+    if (!RESEND_API_KEY) {
+      throw new Error("RESEND_API_KEY is not configured");
+    }
 
-    const transporter = createTransport({
-      host: "smtp.gmail.com",
-      port: 587,
-      secure: false,
-      auth: {
-        user: GMAIL_USER,
-        pass: GMAIL_PASSWORD,
-      },
-    });
+    const resend = new Resend(RESEND_API_KEY);
+
 
     const emailResults = {
       customer: { sent: false, error: null as string | null },
@@ -169,8 +164,8 @@ Deno.serve(async (req: Request) => {
       const emailTo = recipientEmail || customerEmail; // Use custom recipient if provided
       console.log('Sending customer email with PDF attachment:', pdfFilename, 'to:', emailTo);
 
-      await transporter.sendMail({
-        from: `BrainWorx <${GMAIL_USER}>`,
+      await resend.emails.send({
+        from: 'BrainWorx <payments@brainworx.co.za>',
         to: emailTo,
         subject: "Your BrainWorx Neural Imprint Patterns Assessment Results",
         html: customerEmailBody,
@@ -211,8 +206,8 @@ Deno.serve(async (req: Request) => {
     // Send FH report (no PDF) to franchise holder only
     if (franchiseOwnerEmail) {
       try {
-        await transporter.sendMail({
-          from: `BrainWorx <${GMAIL_USER}>`,
+        await resend.emails.send({
+          from: 'BrainWorx <payments@brainworx.co.za>',
           to: franchiseOwnerEmail,
           subject: `NIP Assessment Report - ${customerName} - Comprehensive Coach Analysis`,
           html: franchiseEmailBody,

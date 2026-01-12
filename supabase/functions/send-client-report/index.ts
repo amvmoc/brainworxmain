@@ -1,5 +1,5 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { createTransport } from "npm:nodemailer@6.9.7";
+import { Resend } from "npm:resend@2.0.0";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -136,21 +136,16 @@ async function sendCareerClientReport(reportData: CareerReportData, recipientEma
     </html>
   `;
 
-  const GMAIL_USER = "payments@brainworx.co.za";
-  const GMAIL_PASSWORD = "iuhzjjhughbnwsvf";
+  const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+    if (!RESEND_API_KEY) {
+      throw new Error("RESEND_API_KEY is not configured");
+    }
 
-  const transporter = createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false,
-    auth: {
-      user: GMAIL_USER,
-      pass: GMAIL_PASSWORD,
-    },
-  });
+    const resend = new Resend(RESEND_API_KEY);
 
-  await transporter.sendMail({
-    from: `BrainWorx <${GMAIL_USER}>`,
+
+  await resend.emails.send({
+    from: 'BrainWorx <payments@brainworx.co.za>',
     to: recipientEmail,
     subject: `Your Career Direction Results - ${riaSecCode} Profile`,
     html: htmlContent,
@@ -634,21 +629,10 @@ Deno.serve(async (req: Request) => {
       </html>
     `;
 
-    const GMAIL_USER = "info@brainworx.co.za";
-    const GMAIL_PASSWORD = "wpgy kfmt camw ehmk";
 
-    const transporter = createTransport({
-      host: "smtp.gmail.com",
-      port: 587,
-      secure: false,
-      auth: {
-        user: GMAIL_USER,
-        pass: GMAIL_PASSWORD,
-      },
-    });
 
-    await transporter.sendMail({
-      from: `BrainWorx <${GMAIL_USER}>`,
+    await resend.emails.send({
+      from: 'BrainWorx <payments@brainworx.co.za>',
       to: customerEmail,
       subject: `Your Neural Imprint Assessment Results - ${customerName}`,
       html: customerEmailBody,

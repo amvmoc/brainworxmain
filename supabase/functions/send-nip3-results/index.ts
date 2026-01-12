@@ -1,4 +1,4 @@
-import { createTransport } from "npm:nodemailer@6.9.7";
+import { Resend } from "npm:resend@2.0.0";
 import { jsPDF } from "npm:jspdf@2.5.2";
 
 const corsHeaders = {
@@ -76,18 +76,12 @@ Deno.serve(async (req: Request) => {
       `;
     });
 
-    const GMAIL_USER = "payments@brainworx.co.za";
-    const GMAIL_PASSWORD = "iuhzjjhughbnwsvf";
+    const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+    if (!RESEND_API_KEY) {
+      throw new Error("RESEND_API_KEY is not configured");
+    }
 
-    const transporter = createTransport({
-      host: "smtp.gmail.com",
-      port: 587,
-      secure: false,
-      auth: {
-        user: GMAIL_USER,
-        pass: GMAIL_PASSWORD,
-      },
-    });
+    const resend = new Resend(RESEND_API_KEY);
 
     // CRITICAL: Generate PDF report - this MUST always be included in customer emails
     console.log('Generating NIP3 PDF report');
@@ -195,8 +189,8 @@ Deno.serve(async (req: Request) => {
         ? `NIP3 Coach Report - ${customerName} - Complete Assessment Results`
         : `NIP3 Assessment Results - ${customerName}`;
 
-      return transporter.sendMail({
-        from: `BrainWorx Assessment <${GMAIL_USER}>`,
+      return resend.emails.send({
+        from: 'BrainWorx Assessment <payments@brainworx.co.za>',
         to: email,
         subject: subject,
         html: `
@@ -310,7 +304,13 @@ Deno.serve(async (req: Request) => {
       });
     });
 
-    await Promise.all(emailPromises);
+    const results = await Promise.all(emailPromises);
+
+    for (const result of results) {
+      if (result.error) {
+        throw new Error(`Failed to send email: ${result.error.message}`);
+      }
+    }
 
     console.log('✓ Emails sent successfully to:', recipients.join(', '));
 
