@@ -246,6 +246,39 @@ export default function ADHD710Assessment({ assessmentId: initialAssessmentId, r
       console.log('Assessment saved successfully! Showing success screen...');
       setShowSuccess(true);
       console.log('showSuccess set to true');
+
+      // Check if both assessments are now complete and send reports
+      const { data: allResponses } = await supabase
+        .from('adhd_assessment_responses')
+        .select('*')
+        .eq('assessment_id', assessmentId);
+
+      if (allResponses && allResponses.length === 2 && allResponses.every(r => r.completed)) {
+        console.log('Both assessments complete - sending reports automatically');
+
+        // Send reports to parent and coach
+        try {
+          const reportResponse = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-adhd710-reports`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
+            },
+            body: JSON.stringify({ assessmentId })
+          });
+
+          if (!reportResponse.ok) {
+            const errorText = await reportResponse.text();
+            console.error('Failed to send reports:', errorText);
+          } else {
+            console.log('✅ ADHD710 reports sent successfully to parent and coach');
+          }
+        } catch (emailError) {
+          console.error('Error sending ADHD710 reports:', emailError);
+        }
+      } else {
+        console.log('Waiting for both assessments to complete before sending reports');
+      }
     } catch (err: any) {
       console.error('Error in handleComplete:', err);
       setError(err.message || 'An error occurred while saving your assessment. Please try again.');

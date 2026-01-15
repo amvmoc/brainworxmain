@@ -70,27 +70,34 @@ export const AssessmentProvider: React.FC<AssessmentProviderProps> = ({
         setHasInitialized(true);
 
         try {
-          const { data: existingResponse, error: fetchError } = await supabase
-            .from('responses')
-            .select('*')
-            .eq('customer_email', email)
-            .eq('status', 'in_progress')
-            .is('parent_response_id', null)
-            .order('last_activity_at', { ascending: false })
-            .limit(1)
-            .maybeSingle();
+          // Skip resume check if user just paid (has couponId) - they should start fresh
+          const shouldCheckExisting = !couponId;
 
-          if (fetchError) {
-            console.error('Error fetching existing response:', fetchError);
-          }
+          if (shouldCheckExisting) {
+            const { data: existingResponse, error: fetchError } = await supabase
+              .from('responses')
+              .select('*')
+              .eq('customer_email', email)
+              .eq('status', 'in_progress')
+              .is('parent_response_id', null)
+              .order('last_activity_at', { ascending: false })
+              .limit(1)
+              .maybeSingle();
 
-          if (existingResponse) {
-            console.log('Found existing in-progress assessment:', existingResponse.id);
-            setExistingResponseData(existingResponse);
-            setShowResumePrompt(true);
-            return; // Wait for user decision
+            if (fetchError) {
+              console.error('Error fetching existing response:', fetchError);
+            }
+
+            if (existingResponse) {
+              console.log('Found existing in-progress assessment:', existingResponse.id);
+              setExistingResponseData(existingResponse);
+              setShowResumePrompt(true);
+              return; // Wait for user decision
+            } else {
+              console.log('No existing in-progress assessment found');
+            }
           } else {
-            console.log('No existing in-progress assessment found');
+            console.log('Skipping resume check - user has couponId (just paid)');
           }
 
           console.log('Creating new assessment response');

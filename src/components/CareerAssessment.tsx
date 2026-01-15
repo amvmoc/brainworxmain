@@ -243,7 +243,8 @@ function getRiaSecCode(scores: ScaleScores): string {
 function generateCareerClientReport(
   customerName: string,
   scores: ScaleScores,
-  riaSecCode: string
+  riaSecCode: string,
+  franchiseOwnerCode?: string
 ) {
   // Convert scores to array and get top interests
   const scoresArray = Object.entries(scores).map(([scaleId, scoreData]) => {
@@ -283,7 +284,8 @@ function generateCareerClientReport(
       'Explore educational pathways for your top career interests',
       'Consider internships or volunteer opportunities in related fields',
       'Schedule a follow-up coaching session to create your career action plan'
-    ]
+    ],
+    franchiseOwnerCode
   };
 }
 
@@ -546,33 +548,20 @@ export function CareerAssessment({
           .eq('id', couponId);
       }
 
-      // Send client report to customer
-      try {
-        const clientReportData = generateCareerClientReport(customerInfo.name, scores, riaSecCode);
-
-        await supabase.functions.invoke('send-client-report', {
-          body: {
-            recipientEmail: customerInfo.email,
-            recipientName: customerInfo.name,
-            reportData: clientReportData
-          }
-        });
-
-        console.log('Client report email sent to customer');
-      } catch (emailError) {
-        console.error('Error sending client report email:', emailError);
-      }
-
-      // Send comprehensive coach report to franchise owner/coach
+      // Get franchise owner code for booking link
+      let franchiseOwnerCode: string | undefined;
       if (franchiseOwnerId) {
         try {
           const { data: franchiseOwner } = await supabase
             .from('franchise_owners')
-            .select('email, name')
+            .select('email, name, unique_link_code')
             .eq('id', franchiseOwnerId)
             .maybeSingle();
 
           if (franchiseOwner) {
+            franchiseOwnerCode = franchiseOwner.unique_link_code;
+
+            // Send comprehensive coach report to franchise owner/coach
             const coachReportData = generateCareerCoachReport(customerInfo.name, answers, scores, riaSecCode, new Date());
 
             await supabase.functions.invoke('send-comprehensive-coach-report', {
@@ -588,6 +577,23 @@ export function CareerAssessment({
         } catch (emailError) {
           console.error('Error sending coach report email:', emailError);
         }
+      }
+
+      // Send client report to customer with booking link
+      try {
+        const clientReportData = generateCareerClientReport(customerInfo.name, scores, riaSecCode, franchiseOwnerCode);
+
+        await supabase.functions.invoke('send-client-report', {
+          body: {
+            recipientEmail: customerInfo.email,
+            recipientName: customerInfo.name,
+            reportData: clientReportData
+          }
+        });
+
+        console.log('Client report email sent to customer');
+      } catch (emailError) {
+        console.error('Error sending client report email:', emailError);
       }
 
       setRiaSecCode(riaSecCode);

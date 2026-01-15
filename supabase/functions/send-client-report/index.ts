@@ -20,6 +20,7 @@ interface CareerReportData {
   topInterests: Array<{ code: string; name: string; score: number }>;
   summary: string;
   nextSteps: string[];
+  franchiseOwnerCode?: string;
 }
 
 interface ClientReportRequest {
@@ -37,7 +38,7 @@ interface ClientReportRequest {
 }
 
 async function sendCareerClientReport(reportData: CareerReportData, recipientEmail: string, recipientName: string) {
-  const { customerName, riaSecCode, riaSecExplanation, topInterests, summary, nextSteps } = reportData;
+  const { customerName, riaSecCode, riaSecExplanation, topInterests, summary, nextSteps, franchiseOwnerCode } = reportData;
 
   const topInterestsHtml = topInterests.map((interest, idx) => `
     <tr>
@@ -117,9 +118,26 @@ async function sendCareerClientReport(reportData: CareerReportData, recipientEma
             ${nextStepsHtml}
           </ul>
 
-          <div style="background-color: #fff5e6; border-left: 4px solid #667eea; padding: 15px; margin-top: 30px; border-radius: 4px;">
-            <h3 style="color: #0A2A5E; margin-top: 0;">Ready to Explore Further?</h3>
-            <p style="margin-bottom: 0;">Book a career coaching session to create your personalized action plan and explore education pathways that align with your interests and goals.</p>
+          <div style="background: linear-gradient(to right, #fef3c7, #fef9c3); border: 4px solid #f59e0b; border-radius: 16px; padding: 32px; text-align: center; margin-top: 30px;">
+            <h3 style="color: #92400e; font-size: 24px; margin: 0 0 16px 0;">🎁 Ready to Explore Further?</h3>
+            <p style="color: #92400e; font-size: 16px; margin: 0 0 16px 0;">
+              Book a <strong>FREE 45-Minute Career Coaching Session</strong> to:<br>
+              ✓ Create your personalized action plan<br>
+              ✓ Explore education pathways aligned with your interests<br>
+              ✓ Discuss career options and next steps<br>
+              ✓ Get expert guidance on your career journey
+            </p>
+            ${franchiseOwnerCode ? `
+            <a href="${Deno.env.get('SITE_URL') || 'https://brainworx.co.za'}?book=${franchiseOwnerCode}"
+               style="display: inline-block; margin-top: 16px; padding: 16px 32px; border-radius: 9999px; font-size: 18px; font-weight: 600; color: white; background: linear-gradient(to right, #10b981, #14b8a6); text-decoration: none;">
+              Book Your FREE Session Now
+            </a>
+            ` : `
+            <a href="mailto:info@brainworx.co.za?subject=FREE Career Coaching Session - ${riaSecCode} Profile"
+               style="display: inline-block; margin-top: 16px; padding: 16px 32px; border-radius: 9999px; font-size: 18px; font-weight: 600; color: white; background: linear-gradient(to right, #10b981, #14b8a6); text-decoration: none;">
+              Schedule Your FREE Session
+            </a>
+            `}
           </div>
 
           <div style="background-color: #fef2f2; border-left: 4px solid #ef4444; padding: 15px; margin-top: 20px; border-radius: 4px;">

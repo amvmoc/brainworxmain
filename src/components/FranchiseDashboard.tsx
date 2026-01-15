@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { LogOut, Users, TrendingUp, Copy, Share2, Eye, EyeOff, FileText, LayoutDashboard, Mail, FileCheck, Calendar, Brain } from 'lucide-react';
+import { LogOut, Users, TrendingUp, Copy, Share2, Eye, EyeOff, FileText, LayoutDashboard, Mail, FileCheck, Calendar, Brain, BarChart3 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { InvoicesPage } from './InvoicesPage';
 import { SelfAssessmentReport } from './SelfAssessmentReport';
@@ -60,7 +60,7 @@ export function FranchiseDashboard({
   const [loading, setLoading] = useState(true);
   const [selectedResponse, setSelectedResponse] = useState<Response | null>(null);
   const [copied, setCopied] = useState(false);
-  const [currentView, setCurrentView] = useState<'dashboard' | 'invoices' | 'calendar' | 'adhd-assessments'>('dashboard');
+  const [currentView, setCurrentView] = useState<'dashboard' | 'invoices' | 'calendar' | 'adhd-assessments' | 'reports'>('dashboard');
   const [calendarTab, setCalendarTab] = useState<'availability' | 'bookings'>('bookings');
   const [showCoachReport, setShowCoachReport] = useState(false);
   const [coachReportData, setCoachReportData] = useState<any>(null);
@@ -242,6 +242,17 @@ export function FranchiseDashboard({
               <Brain size={20} />
               ADHD Assessments
             </button>
+            <button
+              onClick={() => setCurrentView('reports')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
+                currentView === 'reports'
+                  ? 'bg-white text-[#0A2A5E] font-semibold'
+                  : 'bg-white/20 text-white hover:bg-white/30'
+              }`}
+            >
+              <BarChart3 size={20} />
+              Reports
+            </button>
           </div>
         </div>
       </nav>
@@ -249,6 +260,109 @@ export function FranchiseDashboard({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {currentView === 'invoices' ? (
           <InvoicesPage franchiseOwnerId={franchiseOwnerId} />
+        ) : currentView === 'reports' ? (
+          <div className="bg-white rounded-xl p-6 shadow-lg">
+            <h2 className="text-2xl font-bold text-[#0A2A5E] mb-6">Assessment Reports</h2>
+            <p className="text-gray-600 mb-8">View and download comprehensive reports for all your client assessments.</p>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                    <Brain className="text-purple-600" size={24} />
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900">NIP3 Assessment</h3>
+                </div>
+                <p className="text-sm text-gray-600 mb-4">Full Neural Imprint Patterns assessment (343 questions)</p>
+                <button
+                  onClick={() => setCurrentView('dashboard')}
+                  className="w-full px-4 py-2 bg-[#0A2A5E] text-white rounded-lg hover:bg-[#3DB3E3] transition-colors"
+                >
+                  View Reports
+                </button>
+              </div>
+
+              <div className="border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <Brain className="text-blue-600" size={24} />
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900">ADHD 7-10</h3>
+                </div>
+                <p className="text-sm text-gray-600 mb-4">ADHD assessment for ages 7-10 (Parent & Teacher)</p>
+                <button
+                  onClick={() => setCurrentView('adhd-assessments')}
+                  className="w-full px-4 py-2 bg-[#0A2A5E] text-white rounded-lg hover:bg-[#3DB3E3] transition-colors"
+                >
+                  View Reports
+                </button>
+              </div>
+
+              <div className="border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center">
+                    <Brain className="text-indigo-600" size={24} />
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900">ADHD 11-18</h3>
+                </div>
+                <p className="text-sm text-gray-600 mb-4">Teen ADHD self-assessment (50 questions)</p>
+                <button
+                  onClick={() => setCurrentView('adhd-assessments')}
+                  className="w-full px-4 py-2 bg-[#0A2A5E] text-white rounded-lg hover:bg-[#3DB3E3] transition-colors"
+                >
+                  View Reports
+                </button>
+              </div>
+
+              <div className="border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                    <TrendingUp className="text-green-600" size={24} />
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900">Career Assessment</h3>
+                </div>
+                <p className="text-sm text-gray-600 mb-4">Teen Career & Future Direction (132 questions)</p>
+                <button
+                  onClick={() => setCurrentView('dashboard')}
+                  className="w-full px-4 py-2 bg-[#0A2A5E] text-white rounded-lg hover:bg-[#3DB3E3] transition-colors"
+                >
+                  View Reports
+                </button>
+              </div>
+
+              <div className="border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                    <FileCheck className="text-red-600" size={24} />
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900">Trauma Scan</h3>
+                </div>
+                <p className="text-sm text-gray-600 mb-4">Trauma & Loss Impact Assessment (50 questions)</p>
+                <button
+                  onClick={() => setCurrentView('dashboard')}
+                  className="w-full px-4 py-2 bg-[#0A2A5E] text-white rounded-lg hover:bg-[#3DB3E3] transition-colors"
+                >
+                  View Reports
+                </button>
+              </div>
+
+              <div className="border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+                    <FileText className="text-yellow-600" size={24} />
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900">Other Assessments</h3>
+                </div>
+                <p className="text-sm text-gray-600 mb-4">Self-assessment questionnaires and more</p>
+                <button
+                  onClick={() => setCurrentView('dashboard')}
+                  className="w-full px-4 py-2 bg-[#0A2A5E] text-white rounded-lg hover:bg-[#3DB3E3] transition-colors"
+                >
+                  View Reports
+                </button>
+              </div>
+            </div>
+          </div>
         ) : currentView === 'adhd-assessments' ? (
           <div className="bg-white rounded-xl p-6 shadow-lg">
             <h2 className="text-2xl font-bold text-[#0A2A5E] mb-4">ADHD Assessments</h2>

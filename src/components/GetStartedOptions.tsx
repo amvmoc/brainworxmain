@@ -81,14 +81,11 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
     if (email.trim()) {
       setPreviousStep('email');
 
-      // Route to appropriate assessment based on selected type
-      if (selectedPaymentType === 'nipa') {
-        setStep('patterns_info');
-      } else if (selectedPaymentType === 'tadhd') {
-        setStep('adhd710_assessment');
-      } else if (selectedPaymentType === 'tcf') {
-        setStep('career_assessment');
+      // All assessments must go through payment first (unless they came from a coupon)
+      if (selectedPaymentType) {
+        setStep('payment');
       } else {
+        // Default to NIP patterns info if no payment type selected
         setStep('patterns_info');
       }
     }
