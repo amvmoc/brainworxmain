@@ -49,7 +49,7 @@ Deno.serve(async (req: Request) => {
     });
 
     const emailToFranchiseOwner = {
-      from: "BrainWorx <info@brainworx.co.za>",
+      from: "BrainWorx <payments@brainworx.co.za>",
       to: franchiseOwnerEmail,
       subject: `New Booking Confirmed: ${customerName} on ${formattedDate}`,
       html: `
@@ -123,7 +123,7 @@ Deno.serve(async (req: Request) => {
     };
 
     const emailToCustomer = {
-      from: "BrainWorx <info@brainworx.co.za>",
+      from: "BrainWorx <payments@brainworx.co.za>",
       to: customerEmail,
       subject: `Booking Confirmation: ${formattedDate} at ${startTime}`,
       html: `
@@ -193,7 +193,7 @@ Deno.serve(async (req: Request) => {
     };
 
     const emailToBrainworxInfo = {
-      from: "BrainWorx <info@brainworx.co.za>",
+      from: "BrainWorx <payments@brainworx.co.za>",
       to: "info@brainworx.co.za",
       subject: `New Booking Alert: ${customerName} with ${franchiseOwnerName}`,
       html: `
