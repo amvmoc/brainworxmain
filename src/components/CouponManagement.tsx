@@ -26,7 +26,7 @@ interface Redemption {
 // Convert human-readable assessment names to database identifiers
 const getAssessmentDatabaseId = (displayName: string): string => {
   const mapping: Record<string, string> = {
-    'Full Assessment (343 Questions)': 'nipa',
+    'Full Assessment (344 Questions)': 'nipa',
     'Parent/Caregiver ADHD 7-10 Assessment (80 Questions)': 'adhd710',
     'ADHD 11-18 Assessment (50 Questions)': 'adhd1118',
     'Teen Career & Future Direction': 'teen-career'
@@ -38,7 +38,7 @@ const getAssessmentDatabaseId = (displayName: string): string => {
 // Assessment options matching the dashboard assessments tabs order
 const getAssessmentOptions = () => {
   const options = [
-    { value: 'Full Assessment (343 Questions)', label: 'Full Assessment (343 Questions)' },
+    { value: 'Full Assessment (344 Questions)', label: 'Full Assessment (344 Questions)' },
     { value: 'Parent/Caregiver ADHD 7-10 Assessment (80 Questions)', label: 'Parent/Caregiver ADHD 7-10 Assessment (80 Questions)' },
     { value: 'ADHD 11-18 Assessment (50 Questions)', label: 'ADHD 11-18 Assessment (50 Questions)' },
     { value: 'Teen Career & Future Direction', label: 'Teen Career & Future Direction' },
@@ -190,7 +190,7 @@ export function CouponManagement() {
           code: '',
           name: '',
           email: '',
-          assessmentType: 'Full Assessment (343 Questions)',
+          assessmentType: 'Full Assessment (344 Questions)',
           maxUses: 1
         });
         loadCoupons();

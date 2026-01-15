@@ -76,7 +76,7 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
 
     // Build dynamic mapping from assessment names to IDs
     const assessmentNameMap: Record<string, string> = {
-      'Full Assessment (343 Questions)': 'nipa',
+      'Full Assessment (344 Questions)': 'nipa',
       'Full ADHD Assessment (128 Questions)': 'nipa',
       'Teen Career & Future Direction': 'teen-career',
       'ADHD 7-10 Assessment (80 Questions)': 'adhd710',
@@ -228,7 +228,7 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
       'Detailed personalized recommendations',
       'In-depth cognitive & emotional insights'
     ],
-    instructions: 'This is a comprehensive two-round assessment. Round 1 includes 343 questions covering all aspects of your neural imprint patterns. Round 2 focuses on deeper analysis. The full assessment typically takes 60-90 minutes. You can save your progress and return at any time. After completion, you will receive a detailed report and a FREE (45-minute) On-Line debrief with a qualified practitioner.',
+    instructions: 'This is a comprehensive two-round assessment. Round 1 includes 344 questions covering all aspects of your neural imprint patterns. Round 2 focuses on deeper analysis. The full assessment typically takes 60-90 minutes. You can save your progress and return at any time. After completion, you will receive a detailed report and a FREE (45-minute) On-Line debrief with a qualified practitioner.',
     disclaimer: 'This is a self-reflection and coaching tool, not a clinical diagnostic instrument. It is designed to support personal growth and self-awareness through professional guidance.'
   };
 

@@ -122,7 +122,7 @@ export function EmailVerification({ token }: EmailVerificationProps) {
               <div className="bg-[#E6E9EF] p-4 rounded-lg">
                 <h3 className="font-semibold text-[#0A2A5E] mb-2">What's Next?</h3>
                 <ul className="text-sm text-gray-700 space-y-1">
-                  <li>• Complete 343-question assessment</li>
+                  <li>• Complete 344-question assessment</li>
                   <li>• Receive comprehensive brain analysis</li>
                   <li>• Get personalized recommendations</li>
                   <li>• Booking link for consultation</li>

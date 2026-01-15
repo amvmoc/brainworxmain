@@ -604,6 +604,29 @@ function App() {
           </div>
         </section>
 
+        <section className="py-20 px-6 bg-gradient-to-br from-[#1a4a7e] to-[#0A2A5E]">
+          <div className="container mx-auto max-w-5xl">
+            <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-8 md:p-12 border border-white/20">
+              <h2 className="text-4xl md:text-5xl font-bold text-white text-center mb-8">What is NIPA?</h2>
+              <p className="text-lg text-[#E6E9EF] leading-relaxed mb-6">
+                The Neural Imprint Patterns Assessment (NIPA) is a powerful self-reflection and coaching tool that helps people:
+              </p>
+              <ul className="space-y-3 text-[#E6E9EF] ml-6 list-disc mb-6">
+                <li>Identify habitual thought, emotion, and behaviour patterns ("neural imprints")</li>
+                <li>Explore how family, culture, work, finances, and beliefs have shaped these patterns</li>
+                <li>Highlight strengths, resilience, and growth potential</li>
+                <li>Flag areas where extra support, coaching, or therapeutic input may be helpful</li>
+              </ul>
+              <p className="text-white text-lg font-semibold mb-4">
+                NIPA does not label, shame, or diagnose.
+              </p>
+              <p className="text-[#E6E9EF] text-lg leading-relaxed">
+                It creates a safe, structured and respectful conversation about how a person's brain, story, and environment work together – and where change is possible.
+              </p>
+            </div>
+          </div>
+        </section>
+
         <section id="franchise" className="py-20 px-6 bg-gradient-to-br from-[#0A2A5E] via-[#1a4a7e] to-[#3DB3E3]">
           <div className="container mx-auto">
             <div className="text-center mb-12">
@@ -622,29 +645,7 @@ function App() {
               <div className="space-y-8 text-white">
                 <div>
                   <p className="text-lg leading-relaxed mb-6">
-                    Become a <strong className="text-[#1FAFA3]">Neural Imprint Patterns Assessment (NIPA)</strong> Franchisee and be part of an exciting movement that helps individuals, Churches, Schools, Social Workers and Companies understand how the brain, experiences, and environment shape everyday life.
-                  </p>
-                </div>
-
-                <div className="bg-white/10 rounded-2xl p-6 border border-white/20">
-                  <h3 className="text-2xl font-bold mb-4 text-[#1FAFA3]">What is NIPA?</h3>
-                  <p className="text-[#E6E9EF] mb-4">
-                    The Neural Imprint Patterns Assessment (NIPA) is a powerful self-reflection and coaching tool that helps people:
-                  </p>
-                  <ul className="space-y-2 text-[#E6E9EF] ml-6 list-disc">
-                    <li>Identify habitual thought, emotion, and behaviour patterns ("neural imprints")</li>
-                    <li>Explore how family, culture, work, finances, and beliefs have shaped these patterns</li>
-                    <li>Highlight strengths, resilience, and growth potential</li>
-                    <li>Flag areas where extra support, coaching, or therapeutic input may be helpful</li>
-                  </ul>
-                  <p className="text-white mt-4 font-semibold">
-                    NIPA does not label, shame, or diagnose.
-                  </p>
-                  <p className="text-[#E6E9EF] mt-2">
-                    It creates a safe, structured and respectful conversation about how a person's brain, story, and environment work together – and where change is possible.
-                  </p>
-                  <p className="text-white mt-4">
-                    As a franchisee, you bring this powerful tool into your community… and build a business around it.
+                    Become a <strong className="text-[#1FAFA3]">Neural Imprint Patterns Assessment (NIPA)</strong> Franchisee and be part of an exciting movement that helps individuals, Churches, Schools, Social Workers and Companies understand how the brain, experiences, and environment shape everyday life. As a franchisee, you bring this powerful tool into your community and build a business around it.
                   </p>
                 </div>
 

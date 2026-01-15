@@ -20,7 +20,7 @@ const sampleAssessmentResults: AssessmentResults = {
   client: {
     name: "John Smith",
     date: "December 4, 2024",
-    totalQuestions: 343,
+    totalQuestions: 344,
   },
   patterns: {
     "Mind In Distress": {

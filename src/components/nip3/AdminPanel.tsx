@@ -136,7 +136,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
           <h3>System Info</h3>
           <div className="system-info">
             <p><strong>Version:</strong> 1.0.0</p>
-            <p><strong>Total Questions:</strong> 343</p>
+            <p><strong>Total Questions:</strong> 344</p>
             <p><strong>NIP Patterns:</strong> 20</p>
             <p><strong>Storage:</strong> LocalStorage</p>
           </div>

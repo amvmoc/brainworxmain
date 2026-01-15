@@ -273,7 +273,7 @@ export function FranchiseDashboard({
                   </div>
                   <h3 className="text-lg font-semibold text-gray-900">NIP3 Assessment</h3>
                 </div>
-                <p className="text-sm text-gray-600 mb-4">Full Neural Imprint Patterns assessment (343 questions)</p>
+                <p className="text-sm text-gray-600 mb-4">Full Neural Imprint Patterns assessment (344 questions)</p>
                 <button
                   onClick={() => setCurrentView('dashboard')}
                   className="w-full px-4 py-2 bg-[#0A2A5E] text-white rounded-lg hover:bg-[#3DB3E3] transition-colors"
@@ -575,7 +575,7 @@ export function FranchiseDashboard({
               {selectedResponse.customer_name} - Assessment Results
             </h2>
             <p className="text-sm text-gray-600 mb-6">
-              {selectedResponse.response_type === 'nipa' ? 'NIPA Full Assessment (343 Questions)' : `Self Assessment: ${selectedResponse.assessment_type || 'Unknown'}`}
+              {selectedResponse.response_type === 'nipa' ? 'NIPA Full Assessment (344 Questions)' : `Self Assessment: ${selectedResponse.assessment_type || 'Unknown'}`}
             </p>
 
             <div className="space-y-6">

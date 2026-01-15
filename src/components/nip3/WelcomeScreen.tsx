@@ -26,7 +26,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => {
         
         <div className="intro-section">
           <p className="intro-text">
-            This comprehensive 343-question assessment will help you understand the unconscious patterns 
+            This comprehensive 344-question assessment will help you understand the unconscious patterns 
             that shape your thoughts, feelings, and behaviors. Your results will provide personalized 
             insights and recommendations for growth.
           </p>
@@ -41,7 +41,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => {
 
           <div className="info-card">
             <div className="info-icon">📊</div>
-            <h3>343 Questions</h3>
+            <h3>344 Questions</h3>
             <p>Covering 20 Neural Imprint Patterns</p>
           </div>
 

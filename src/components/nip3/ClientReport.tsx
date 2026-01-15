@@ -74,7 +74,7 @@ const ClientReport: React.FC<ClientReportProps> = ({
           <p className="report-subtitle">Personal Assessment Report</p>
           <div className="header-stats">
             <div className="stat-card">
-              <div className="stat-value">343</div>
+              <div className="stat-value">344</div>
               <div className="stat-label">Questions Completed</div>
             </div>
             <div className="stat-card">

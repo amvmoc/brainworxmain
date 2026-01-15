@@ -152,7 +152,7 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
 
     // Build dynamic mapping from assessment names to IDs
     const assessmentTypeMap: Record<string, string> = {
-      'Full Assessment (343 Questions)': 'nip3',
+      'Full Assessment (344 Questions)': 'nip3',
       'Full ADHD Assessment (128 Questions)': 'nip3',
       'ADHD 7-10 Assessment (80 Questions)': 'adhd710',
       'Parent/Caregiver ADHD 7-10 Assessment (80 Questions)': 'adhd710',
@@ -367,7 +367,7 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
                   <Brain className="text-[#3DB3E3] group-hover:scale-110 transition-transform" size={24} />
                   <div className="flex-1">
                     <h3 className="font-bold text-[#0A2A5E]">NIP - Full Assessment</h3>
-                    <p className="text-sm text-gray-600">343 questions • Comprehensive neural imprint profile</p>
+                    <p className="text-sm text-gray-600">344 questions • Comprehensive neural imprint profile</p>
                   </div>
                   <div className="text-right">
                     <p className="text-lg font-bold text-[#3DB3E3]">R5</p>

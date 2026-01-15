@@ -109,8 +109,8 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
 
     setShareLoading(true);
     try {
-      // Check if this is a NIP3 assessment (343 questions)
-      const isNIP3 = shareTest.analysis_results?.totalQuestions === 343;
+      // Check if this is a NIP3 assessment (344 questions)
+      const isNIP3 = shareTest.analysis_results?.totalQuestions === 344;
 
       if (isNIP3) {
         // Use NIP3 email function
@@ -955,7 +955,7 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
                           .sort((a, b) => new Date(b.completed_at).getTime() - new Date(a.completed_at).getTime())
                           .map((test) => {
                             const franchiseOwner = franchiseUsers.find(f => f.id === test.franchise_owner_id);
-                            const isNIP3 = test.type === 'nipa' && test.analysis_results?.totalQuestions === 343;
+                            const isNIP3 = test.type === 'nipa' && test.analysis_results?.totalQuestions === 344;
                             return (
                               <tr key={`${test.type}-${test.id}`} className="border-b hover:bg-gray-50">
                                 <td className="px-6 py-4 font-medium text-[#0A2A5E]">{test.customer_name}</td>
@@ -969,7 +969,7 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
                                       ? isNIP3 ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800'
                                       : 'bg-orange-100 text-orange-800'
                                   }`}>
-                                    {test.type === 'nipa' ? (isNIP3 ? 'NIP Full (343Q)' : 'NIP Full') : test.assessment_type || 'Self Assessment'}
+                                    {test.type === 'nipa' ? (isNIP3 ? 'NIP Full (344Q)' : 'NIP Full') : test.assessment_type || 'Self Assessment'}
                                   </span>
                                 </td>
                                 <td className="px-6 py-4">
@@ -1436,7 +1436,7 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
                   <span className="font-semibold">Client:</span> {shareTest.customer_name}
                 </p>
                 <p className="text-sm text-gray-700">
-                  <span className="font-semibold">Assessment Type:</span> {shareTest.type === 'nipa' ? 'Full NIP Assessment (343 Questions)' : shareTest.assessment_type}
+                  <span className="font-semibold">Assessment Type:</span> {shareTest.type === 'nipa' ? 'Full NIP Assessment (344 Questions)' : shareTest.assessment_type}
                 </p>
               </div>
             </div>

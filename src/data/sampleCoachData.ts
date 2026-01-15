@@ -24,7 +24,7 @@ const clientPatterns = [
 ];
 
 function generateTestScores(): PatternScore[] {
-  const totalQuestions = 343;
+  const totalQuestions = 344;
   const pattern = [2, 3, 4];
   const answers: Record<number, number> = {};
 
@@ -169,7 +169,7 @@ export const sampleCoachData: CoachReportData = {
     practitionerId: "NIP-12345"
   },
   assessmentDate: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
-  profileOverview: "This comprehensive assessment reveals a complex neural imprint profile with multiple patterns operating at moderate levels. The test simulation uses a repeating pattern (2, 3, 4 on a 5-point scale) across all 343 questions, resulting in uniform 60% scores across all 20 neural imprint patterns. This controlled data demonstrates the report structure and scoring methodology.",
+  profileOverview: "This comprehensive assessment reveals a complex neural imprint profile with multiple patterns operating at moderate levels. The test simulation uses a repeating pattern (2, 3, 4 on a 5-point scale) across all 344 questions, resulting in uniform 60% scores across all 20 neural imprint patterns. This controlled data demonstrates the report structure and scoring methodology.",
   keyStrengths: [
     "Demonstrates awareness of internal states",
     "Willing to engage in assessment process",
@@ -356,7 +356,7 @@ export const sampleCoachData: CoachReportData = {
     {
       date: new Date().toLocaleDateString(),
       practitioner: "Dr. Jane Smith, NIP-12345",
-      observation: "Initial assessment completed using standardized NIPA protocol. Client engaged cooperatively throughout 343-question assessment. Test data shows uniform pattern (2-3-4 repeating) for demonstration purposes.",
+      observation: "Initial assessment completed using standardized NIPA protocol. Client engaged cooperatively throughout 344-question assessment. Test data shows uniform pattern (2-3-4 repeating) for demonstration purposes.",
       recommendation: "For actual client implementation: Complete comprehensive clinical interview to contextualize assessment results. Develop individualized intervention plan based on highest-priority patterns and client goals."
     }
   ],
