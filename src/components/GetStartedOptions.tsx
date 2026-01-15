@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ArrowLeft, Mail, Link2, RotateCcw, Briefcase, Users, Brain, Baby, UserCheck, Ticket } from 'lucide-react';
+import { ArrowLeft, Mail, Link2, RotateCcw, Briefcase, Users, Brain, Baby, UserCheck, Ticket, Shield } from 'lucide-react';
 import NIP3Assessment from './NIP3Assessment';
 import { NeuralImprintPatternsInfo } from './NeuralImprintPatternsInfo';
 import { SelfAssessmentQuestionnaire } from './SelfAssessmentQuestionnaire';

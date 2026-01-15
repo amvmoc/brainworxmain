@@ -930,9 +930,10 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
 
             <div className="bg-white rounded-3xl shadow-xl p-8 mb-8">
               <h2 className="text-2xl font-bold text-indigo-700 mb-4">About This Assessment</h2>
-              <p className="text-gray-700 text-lg leading-relaxed mb-6">
-                {adhd710Card.description}
-              </p>
+              <p
+                className="text-gray-700 text-lg leading-relaxed mb-6"
+                dangerouslySetInnerHTML={{ __html: adhd710Card.description }}
+              />
 
               <div className="bg-gradient-to-r from-indigo-500/10 to-purple-500/10 border-2 border-indigo-500/30 rounded-xl p-6 mb-6">
                 <h3 className="font-bold text-indigo-700 mb-2 flex items-center gap-2">
@@ -986,9 +987,10 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
                       <strong>Get comprehensive report:</strong> View individual reports plus combined NIPP analysis comparing both perspectives
                     </div>
                   </div>
-                  <p className="text-sm text-gray-600 italic mt-4">
-                    {adhd710Card.instructions}
-                  </p>
+                  <p
+                    className="text-sm text-gray-600 italic mt-4"
+                    dangerouslySetInnerHTML={{ __html: adhd710Card.instructions }}
+                  />
                 </div>
               </div>
 
@@ -1187,9 +1189,10 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
 
             <div className="bg-white rounded-3xl shadow-xl p-8 mb-8">
               <h2 className="text-2xl font-bold text-violet-700 mb-4">About This Assessment</h2>
-              <p className="text-gray-700 text-lg leading-relaxed mb-6">
-                {adhd1118Card.description}
-              </p>
+              <p
+                className="text-gray-700 text-lg leading-relaxed mb-6"
+                dangerouslySetInnerHTML={{ __html: adhd1118Card.description }}
+              />
 
               <div className="bg-gradient-to-r from-violet-500/10 to-fuchsia-500/10 border-2 border-violet-500/30 rounded-xl p-6 mb-6">
                 <h3 className="font-bold text-violet-700 mb-2 flex items-center gap-2">
@@ -1237,9 +1240,10 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
                       <strong>Get your personal report:</strong> Receive detailed analysis with severity ratings and recommendations
                     </div>
                   </div>
-                  <p className="text-sm text-gray-600 italic mt-4">
-                    {adhd1118Card.instructions}
-                  </p>
+                  <p
+                    className="text-sm text-gray-600 italic mt-4"
+                    dangerouslySetInnerHTML={{ __html: adhd1118Card.instructions }}
+                  />
                 </div>
               </div>
 
