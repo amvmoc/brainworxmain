@@ -47,15 +47,28 @@ export function CouponRedemption({ onRedemptionSuccess, onCancel, initialCouponC
   const [autoSubmitted, setAutoSubmitted] = useState(false);
 
   // Auto-submit if coming from payment with pre-filled data
+  // Only runs ONCE on mount to prevent triggering on every keystroke
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const autoRedeem = urlParams.get('auto') === 'true';
 
-    if (autoRedeem && formData.code && formData.email && !autoSubmitted && !loading) {
+    // Only auto-submit if ALL required fields are properly filled
+    const isFormComplete =
+      formData.code &&
+      formData.code.length >= 6 &&
+      formData.email &&
+      formData.email.includes('@') &&
+      formData.name &&
+      formData.name.trim().length > 0;
+
+    console.log('Auto-submit check:', { autoRedeem, isFormComplete, formData });
+
+    if (autoRedeem && isFormComplete && !autoSubmitted) {
+      console.log('Auto-submitting coupon redemption...');
       setAutoSubmitted(true);
       handleSubmit();
     }
-  }, [formData, autoSubmitted, loading]);
+  }, []); // Empty dependency array - only runs once on mount
 
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
