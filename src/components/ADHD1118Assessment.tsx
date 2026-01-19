@@ -15,17 +15,29 @@ interface ADHD1118AssessmentProps {
   assessmentId?: string;
   respondentType: 'teen' | 'parent';
   onClose?: () => void;
+  couponId?: string | null;
+  franchiseOwnerId?: string | null;
+  prefillName?: string;
+  prefillEmail?: string;
 }
 
-export default function ADHD1118Assessment({ assessmentId: initialAssessmentId, respondentType, onClose }: ADHD1118AssessmentProps) {
+export default function ADHD1118Assessment({
+  assessmentId: initialAssessmentId,
+  respondentType,
+  onClose,
+  couponId,
+  franchiseOwnerId,
+  prefillName,
+  prefillEmail
+}: ADHD1118AssessmentProps) {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [assessment, setAssessment] = useState<any>(null);
   const [assessmentId, setAssessmentId] = useState<string | undefined>(initialAssessmentId);
   const [responses, setResponses] = useState<Record<string, number>>({});
   const [respondentInfo, setRespondentInfo] = useState({
-    name: '',
-    email: ''
+    name: prefillName || '',
+    email: prefillEmail || ''
   });
   const [teenInfo, setTeenInfo] = useState({
     name: '',
@@ -116,7 +128,9 @@ export default function ADHD1118Assessment({ assessmentId: initialAssessmentId, 
             teen_age: parseInt(teenInfo.age),
             teen_gender: teenInfo.gender,
             created_by_email: respondentInfo.email,
-            status: 'pending'
+            status: 'pending',
+            coupon_id: couponId || null,
+            franchise_owner_id: franchiseOwnerId || null
           })
           .select()
           .single();

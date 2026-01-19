@@ -295,6 +295,10 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
         <ADHD1118Assessment
           assessmentId={adhdAssessmentId || undefined}
           respondentType="teen"
+          couponId={couponId}
+          franchiseOwnerId={franchiseOwnerId}
+          prefillName={customerName}
+          prefillEmail={email}
           onClose={() => {
             setStep('options');
             onClose();
