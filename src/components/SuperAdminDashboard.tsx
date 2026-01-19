@@ -1114,10 +1114,9 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
                       <thead className="bg-[#E6E9EF] border-b-2 border-[#0A2A5E]">
                         <tr>
                           <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Child Name</th>
+                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Email</th>
                           <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Age</th>
-                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Parent Email</th>
-                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Status</th>
-                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Created</th>
+                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Completed</th>
                           <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Actions</th>
                         </tr>
                       </thead>
@@ -1127,36 +1126,32 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
                           .map((assessment) => (
                             <tr key={assessment.id} className="border-b hover:bg-gray-50">
                               <td className="px-6 py-4 font-medium text-[#0A2A5E]">{assessment.child_name}</td>
-                              <td className="px-6 py-4 text-gray-600">{assessment.child_age}</td>
                               <td className="px-6 py-4 text-gray-600">{assessment.created_by_email}</td>
-                              <td className="px-6 py-4">
-                                <span className="px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-800">
-                                  {assessment.status.replace('_', ' ')}
-                                </span>
-                              </td>
+                              <td className="px-6 py-4 text-gray-600">{assessment.child_age}</td>
                               <td className="px-6 py-4 text-sm text-gray-600">
                                 {new Date(assessment.created_at).toLocaleDateString()}
                               </td>
                               <td className="px-6 py-4">
-                                <div className="flex gap-2">
-                                  <button
-                                    onClick={async () => {
-                                      try {
-                                        const { error } = await supabase.functions.invoke('send-adhd710-reports', {
-                                          body: { assessmentId: assessment.id }
-                                        });
-                                        if (error) throw error;
-                                        alert('Reports sent successfully!');
-                                      } catch (error: any) {
-                                        alert('Failed to send reports: ' + error.message);
-                                      }
-                                    }}
-                                    className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors font-medium flex items-center gap-2"
-                                  >
-                                    <Send size={16} />
-                                    Send Reports
-                                  </button>
-                                </div>
+                                <button
+                                  onClick={async () => {
+                                    if (!confirm('Are you sure you want to delete this assessment?')) return;
+                                    try {
+                                      const { error } = await supabase
+                                        .from('adhd_710_assessments')
+                                        .delete()
+                                        .eq('id', assessment.id);
+                                      if (error) throw error;
+                                      setAdhd710Assessments(adhd710Assessments.filter(a => a.id !== assessment.id));
+                                      alert('Assessment deleted successfully!');
+                                    } catch (error: any) {
+                                      alert('Failed to delete assessment: ' + error.message);
+                                    }
+                                  }}
+                                  className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors font-medium flex items-center gap-2"
+                                >
+                                  <Trash2 size={16} />
+                                  Delete
+                                </button>
                               </td>
                             </tr>
                           ))}
@@ -1171,10 +1166,10 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
             {testResultsTab === 'adhd-1118' && (
               <div className="bg-white rounded-xl p-6 shadow-lg">
                 <h2 className="text-2xl font-bold text-[#0A2A5E] mb-6">ADHD 11-18 Assessments</h2>
-                {adhd1118Assessments.length === 0 ? (
+                {adhd1118Assessments.filter(a => a.status === 'both_completed').length === 0 ? (
                   <div className="text-center py-8">
                     <Brain className="mx-auto text-gray-300 mb-2" size={48} />
-                    <p className="text-gray-600">No ADHD 11-18 assessments yet</p>
+                    <p className="text-gray-600">No completed ADHD 11-18 assessments yet</p>
                   </div>
                 ) : (
                   <div className="overflow-x-auto">
@@ -1182,67 +1177,47 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
                       <thead className="bg-[#E6E9EF] border-b-2 border-[#0A2A5E]">
                         <tr>
                           <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Teen Name</th>
+                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Email</th>
                           <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Age</th>
-                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Parent Email</th>
-                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Status</th>
-                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Created</th>
+                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Completed</th>
                           <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Actions</th>
                         </tr>
                       </thead>
                       <tbody>
                         {adhd1118Assessments
-                          .map((assessment) => {
-                            const isBothCompleted = assessment.status === 'both_completed';
-                            const statusColors = {
-                              'both_completed': 'bg-green-100 text-green-800',
-                              'teen_completed': 'bg-yellow-100 text-yellow-800',
-                              'parent_invited': 'bg-blue-100 text-blue-800',
-                              'started': 'bg-gray-100 text-gray-800'
-                            };
-
-                            return (
-                              <tr key={assessment.id} className="border-b hover:bg-gray-50">
-                                <td className="px-6 py-4 font-medium text-[#0A2A5E]">{assessment.teen_name}</td>
-                                <td className="px-6 py-4 text-gray-600">{assessment.teen_age}</td>
-                                <td className="px-6 py-4 text-gray-600">{assessment.created_by_email}</td>
-                                <td className="px-6 py-4">
-                                  <span className={`px-3 py-1 rounded-full text-xs font-bold ${statusColors[assessment.status] || 'bg-gray-100 text-gray-800'}`}>
-                                    {assessment.status.replace(/_/g, ' ')}
-                                  </span>
-                                </td>
-                                <td className="px-6 py-4 text-sm text-gray-600">
-                                  {new Date(assessment.created_at).toLocaleDateString()}
-                                </td>
-                                <td className="px-6 py-4">
-                                  <div className="flex gap-2">
-                                    {isBothCompleted ? (
-                                      <button
-                                        onClick={async () => {
-                                          try {
-                                            const { error } = await supabase.functions.invoke('send-adhd1118-reports', {
-                                              body: { assessmentId: assessment.id }
-                                            });
-                                            if (error) throw error;
-                                            alert('Reports sent successfully!');
-                                          } catch (error: any) {
-                                            alert('Failed to send reports: ' + error.message);
-                                          }
-                                        }}
-                                        className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors font-medium flex items-center gap-2"
-                                      >
-                                        <Send size={16} />
-                                        Send Reports
-                                      </button>
-                                    ) : (
-                                      <span className="text-sm text-gray-500 italic">
-                                        Waiting for {assessment.status === 'teen_completed' ? 'parent' : 'teen'} response
-                                      </span>
-                                    )}
-                                  </div>
-                                </td>
-                              </tr>
-                            );
-                          })}
+                          .filter(a => a.status === 'both_completed')
+                          .map((assessment) => (
+                            <tr key={assessment.id} className="border-b hover:bg-gray-50">
+                              <td className="px-6 py-4 font-medium text-[#0A2A5E]">{assessment.teen_name}</td>
+                              <td className="px-6 py-4 text-gray-600">{assessment.created_by_email}</td>
+                              <td className="px-6 py-4 text-gray-600">{assessment.teen_age}</td>
+                              <td className="px-6 py-4 text-sm text-gray-600">
+                                {new Date(assessment.created_at).toLocaleDateString()}
+                              </td>
+                              <td className="px-6 py-4">
+                                <button
+                                  onClick={async () => {
+                                    if (!confirm('Are you sure you want to delete this assessment?')) return;
+                                    try {
+                                      const { error } = await supabase
+                                        .from('adhd_1118_assessments')
+                                        .delete()
+                                        .eq('id', assessment.id);
+                                      if (error) throw error;
+                                      setAdhd1118Assessments(adhd1118Assessments.filter(a => a.id !== assessment.id));
+                                      alert('Assessment deleted successfully!');
+                                    } catch (error: any) {
+                                      alert('Failed to delete assessment: ' + error.message);
+                                    }
+                                  }}
+                                  className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors font-medium flex items-center gap-2"
+                                >
+                                  <Trash2 size={16} />
+                                  Delete
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
                       </tbody>
                     </table>
                   </div>
