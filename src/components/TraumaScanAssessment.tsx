@@ -138,6 +138,7 @@ export default function TraumaScanAssessment({ couponCode, prefillData }: Trauma
   });
   const [assessmentId, setAssessmentId] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string>("");
+  const scrollContainerRef = React.useRef<HTMLDivElement>(null);
 
   const totalAnswered = useMemo(
     () => QUESTIONS.filter((q) => answers[q.id] !== undefined).length,
@@ -182,7 +183,17 @@ export default function TraumaScanAssessment({ couponCode, prefillData }: Trauma
   }, [answers]);
 
   function setAnswer(qid: string, v: AnswerValue) {
+    // Preserve scroll position before updating state
+    const scrollTop = scrollContainerRef.current?.scrollTop || 0;
+
     setAnswers((prev) => ({ ...prev, [qid]: v }));
+
+    // Restore scroll position after render
+    requestAnimationFrame(() => {
+      if (scrollContainerRef.current) {
+        scrollContainerRef.current.scrollTop = scrollTop;
+      }
+    });
   }
 
   async function handleSubmit() {
@@ -364,7 +375,11 @@ export default function TraumaScanAssessment({ couponCode, prefillData }: Trauma
                 </div>
               </div>
 
-              <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2">
+              <div
+                ref={scrollContainerRef}
+                className="space-y-4 max-h-[600px] overflow-y-auto pr-2"
+                style={{ scrollBehavior: 'auto' }}
+              >
                 {QUESTIONS.map((q, idx) => (
                   <div key={q.id} className="bg-white/5 rounded-xl p-5 border border-white/10">
                     <div className="flex justify-between items-start mb-3">
@@ -373,13 +388,21 @@ export default function TraumaScanAssessment({ couponCode, prefillData }: Trauma
                     </div>
                     <div className="grid grid-cols-5 gap-2">
                       {SCALE.map((opt) => (
-                        <label key={opt.value} className="cursor-pointer">
+                        <label
+                          key={opt.value}
+                          className="cursor-pointer"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setAnswer(q.id, opt.value);
+                          }}
+                        >
                           <input
                             type="radio"
                             name={q.id}
                             checked={answers[q.id] === opt.value}
-                            onChange={() => setAnswer(q.id, opt.value)}
+                            onChange={() => {}}
                             className="sr-only"
+                            tabIndex={-1}
                           />
                           <div className={`text-center p-2 rounded-lg border transition-all ${
                             answers[q.id] === opt.value
