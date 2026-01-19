@@ -1132,26 +1132,52 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
                                 {new Date(assessment.created_at).toLocaleDateString()}
                               </td>
                               <td className="px-6 py-4">
-                                <button
-                                  onClick={async () => {
-                                    if (!confirm('Are you sure you want to delete this assessment?')) return;
-                                    try {
-                                      const { error } = await supabase
-                                        .from('adhd_710_assessments')
-                                        .delete()
-                                        .eq('id', assessment.id);
-                                      if (error) throw error;
-                                      setAdhd710Assessments(adhd710Assessments.filter(a => a.id !== assessment.id));
-                                      alert('Assessment deleted successfully!');
-                                    } catch (error: any) {
-                                      alert('Failed to delete assessment: ' + error.message);
-                                    }
-                                  }}
-                                  className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors font-medium flex items-center gap-2"
-                                >
-                                  <Trash2 size={16} />
-                                  Delete
-                                </button>
+                                <div className="flex gap-2">
+                                  <button
+                                    onClick={() => setViewingTestReport({ ...assessment, type: 'adhd710' })}
+                                    className="bg-[#3DB3E3] text-white px-4 py-2 rounded-lg hover:bg-[#1FAFA3] transition-colors font-medium flex items-center gap-2"
+                                  >
+                                    <Eye size={16} />
+                                    View
+                                  </button>
+                                  <button
+                                    onClick={async () => {
+                                      try {
+                                        const { error } = await supabase.functions.invoke('send-adhd710-reports', {
+                                          body: { assessmentId: assessment.id }
+                                        });
+                                        if (error) throw error;
+                                        alert('Reports sent successfully!');
+                                      } catch (error: any) {
+                                        alert('Failed to send reports: ' + error.message);
+                                      }
+                                    }}
+                                    className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors font-medium flex items-center gap-2"
+                                  >
+                                    <Send size={16} />
+                                    Send Email
+                                  </button>
+                                  <button
+                                    onClick={async () => {
+                                      if (!confirm('Are you sure you want to delete this assessment?')) return;
+                                      try {
+                                        const { error } = await supabase
+                                          .from('adhd_710_assessments')
+                                          .delete()
+                                          .eq('id', assessment.id);
+                                        if (error) throw error;
+                                        setAdhd710Assessments(adhd710Assessments.filter(a => a.id !== assessment.id));
+                                        alert('Assessment deleted successfully!');
+                                      } catch (error: any) {
+                                        alert('Failed to delete assessment: ' + error.message);
+                                      }
+                                    }}
+                                    className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors font-medium flex items-center gap-2"
+                                  >
+                                    <Trash2 size={16} />
+                                    Delete
+                                  </button>
+                                </div>
                               </td>
                             </tr>
                           ))}
@@ -1195,26 +1221,52 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
                                 {new Date(assessment.created_at).toLocaleDateString()}
                               </td>
                               <td className="px-6 py-4">
-                                <button
-                                  onClick={async () => {
-                                    if (!confirm('Are you sure you want to delete this assessment?')) return;
-                                    try {
-                                      const { error } = await supabase
-                                        .from('adhd_1118_assessments')
-                                        .delete()
-                                        .eq('id', assessment.id);
-                                      if (error) throw error;
-                                      setAdhd1118Assessments(adhd1118Assessments.filter(a => a.id !== assessment.id));
-                                      alert('Assessment deleted successfully!');
-                                    } catch (error: any) {
-                                      alert('Failed to delete assessment: ' + error.message);
-                                    }
-                                  }}
-                                  className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors font-medium flex items-center gap-2"
-                                >
-                                  <Trash2 size={16} />
-                                  Delete
-                                </button>
+                                <div className="flex gap-2">
+                                  <button
+                                    onClick={() => setViewingTestReport({ ...assessment, type: 'adhd1118' })}
+                                    className="bg-[#3DB3E3] text-white px-4 py-2 rounded-lg hover:bg-[#1FAFA3] transition-colors font-medium flex items-center gap-2"
+                                  >
+                                    <Eye size={16} />
+                                    View
+                                  </button>
+                                  <button
+                                    onClick={async () => {
+                                      try {
+                                        const { error } = await supabase.functions.invoke('send-adhd1118-reports', {
+                                          body: { assessmentId: assessment.id }
+                                        });
+                                        if (error) throw error;
+                                        alert('Reports sent successfully!');
+                                      } catch (error: any) {
+                                        alert('Failed to send reports: ' + error.message);
+                                      }
+                                    }}
+                                    className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors font-medium flex items-center gap-2"
+                                  >
+                                    <Send size={16} />
+                                    Send Email
+                                  </button>
+                                  <button
+                                    onClick={async () => {
+                                      if (!confirm('Are you sure you want to delete this assessment?')) return;
+                                      try {
+                                        const { error } = await supabase
+                                          .from('adhd_1118_assessments')
+                                          .delete()
+                                          .eq('id', assessment.id);
+                                        if (error) throw error;
+                                        setAdhd1118Assessments(adhd1118Assessments.filter(a => a.id !== assessment.id));
+                                        alert('Assessment deleted successfully!');
+                                      } catch (error: any) {
+                                        alert('Failed to delete assessment: ' + error.message);
+                                      }
+                                    }}
+                                    className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors font-medium flex items-center gap-2"
+                                  >
+                                    <Trash2 size={16} />
+                                    Delete
+                                  </button>
+                                </div>
                               </td>
                             </tr>
                           ))}
@@ -1862,6 +1914,46 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
                     )}
                   />
                 )}
+              </div>
+            </div>
+          ) : viewingTestReport.type === 'adhd710' || viewingTestReport.type === 'adhd1118' ? (
+            <div className="fixed inset-0 bg-black/80 z-[100] overflow-y-auto" onClick={(e) => e.target === e.currentTarget && setViewingTestReport(null)}>
+              <div className="relative min-h-screen">
+                <button
+                  onClick={() => setViewingTestReport(null)}
+                  className="fixed top-4 right-4 z-[110] bg-white text-gray-900 rounded-full p-3 shadow-xl hover:shadow-2xl transition-all border-2 border-gray-300 hover:border-gray-500"
+                  title="Close report"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+                <div className="bg-white p-12">
+                  <h2 className="text-3xl font-bold text-[#0A2A5E] mb-8">
+                    {viewingTestReport.type === 'adhd710'
+                      ? `ADHD 7-10 Assessment for ${viewingTestReport.child_name}`
+                      : `ADHD 11-18 Assessment for ${viewingTestReport.teen_name}`
+                    }
+                  </h2>
+                  <div className="text-gray-600">
+                    <p className="mb-2"><strong>Status:</strong> {viewingTestReport.status.replace(/_/g, ' ')}</p>
+                    <p className="mb-2"><strong>Created:</strong> {new Date(viewingTestReport.created_at).toLocaleDateString()}</p>
+                    {viewingTestReport.type === 'adhd710' && (
+                      <>
+                        <p className="mb-2"><strong>Child Age:</strong> {viewingTestReport.child_age}</p>
+                      </>
+                    )}
+                    {viewingTestReport.type === 'adhd1118' && (
+                      <>
+                        <p className="mb-2"><strong>Teen Age:</strong> {viewingTestReport.teen_age}</p>
+                      </>
+                    )}
+                    <p><strong>Parent Email:</strong> {viewingTestReport.created_by_email}</p>
+                  </div>
+                  <div className="mt-8 p-6 bg-blue-50 rounded-lg border border-blue-200">
+                    <p className="text-gray-700">Report details will be displayed here when responses are available.</p>
+                  </div>
+                </div>
               </div>
             </div>
           ) : (
