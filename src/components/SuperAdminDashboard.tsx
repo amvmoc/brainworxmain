@@ -1166,7 +1166,7 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
             {testResultsTab === 'adhd-1118' && (
               <div className="bg-white rounded-xl p-6 shadow-lg">
                 <h2 className="text-2xl font-bold text-[#0A2A5E] mb-6">ADHD 11-18 Assessments</h2>
-                {adhd1118Assessments.filter(a => a.status === 'both_completed').length === 0 ? (
+                {adhd1118Assessments.filter(a => a.status === 'teen_completed' || a.status === 'both_completed').length === 0 ? (
                   <div className="text-center py-8">
                     <Brain className="mx-auto text-gray-300 mb-2" size={48} />
                     <p className="text-gray-600">No completed ADHD 11-18 assessments yet</p>
@@ -1185,7 +1185,7 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
                       </thead>
                       <tbody>
                         {adhd1118Assessments
-                          .filter(a => a.status === 'both_completed')
+                          .filter(a => a.status === 'teen_completed' || a.status === 'both_completed')
                           .map((assessment) => (
                             <tr key={assessment.id} className="border-b hover:bg-gray-50">
                               <td className="px-6 py-4 font-medium text-[#0A2A5E]">{assessment.teen_name}</td>
