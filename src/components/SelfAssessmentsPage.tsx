@@ -1629,6 +1629,158 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
             </div>
           </div>
         </div>
+
+        {showChoiceModal && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative">
+              <button
+                onClick={() => setShowChoiceModal(false)}
+                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+              >
+                <X size={24} />
+              </button>
+
+              <div className="pt-4">
+                <h2 className="text-3xl font-bold text-teal-700 mb-2">Choose an Option</h2>
+                <p className="text-gray-600 mb-6">
+                  Select what you'd like to do
+                </p>
+
+                <div className="space-y-4">
+                  <button
+                    onClick={() => {
+                      setShowChoiceModal(false);
+                      setShowCouponModal(true);
+                    }}
+                    className="w-full p-4 border-2 border-green-500 rounded-lg hover:bg-green-500/10 transition-all text-left group"
+                  >
+                    <div className="flex items-center gap-3">
+                      <Ticket className="text-green-500 group-hover:scale-110 transition-transform" size={24} />
+                      <div>
+                        <h3 className="font-bold text-teal-700">Redeem Coupon Code</h3>
+                        <p className="text-sm text-gray-600">Enter your free access code</p>
+                      </div>
+                    </div>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setShowChoiceModal(false);
+                      setShowResumeModal(true);
+                    }}
+                    className="w-full p-4 border-2 border-orange-500 rounded-lg hover:bg-orange-500/10 transition-all text-left group"
+                  >
+                    <div className="flex items-center gap-3">
+                      <RotateCcw className="text-orange-500 group-hover:scale-110 transition-transform" size={24} />
+                      <div>
+                        <h3 className="font-bold text-teal-700">Resume My Test</h3>
+                        <p className="text-sm text-gray-600">Continue from where you left off</p>
+                      </div>
+                    </div>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {showResumeModal && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative">
+              <button
+                onClick={() => {
+                  setShowResumeModal(false);
+                  setNoProgressFound(false);
+                  setResumeEmail('');
+                }}
+                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+              >
+                <X size={24} />
+              </button>
+
+              <div className="pt-4">
+                <h2 className="text-3xl font-bold text-teal-700 mb-2">Resume Assessment</h2>
+                <p className="text-gray-600 mb-6">
+                  Enter the email address you used to start the assessment
+                </p>
+
+                <form onSubmit={async (e) => {
+                  e.preventDefault();
+                  setCheckingProgress(true);
+                  setNoProgressFound(false);
+
+                  const { data: existingResponse, error } = await supabase
+                    .from('self_assessment_responses')
+                    .select('*')
+                    .eq('customer_email', resumeEmail.toLowerCase().trim())
+                    .eq('assessment_type', 'trauma-scan')
+                    .eq('status', 'in_progress')
+                    .order('created_at', { ascending: false })
+                    .limit(1)
+                    .maybeSingle();
+
+                  setCheckingProgress(false);
+
+                  if (error) {
+                    console.error('Error checking for progress:', error);
+                    alert('Error checking for saved progress. Please try again.');
+                    return;
+                  }
+
+                  if (existingResponse) {
+                    setTraumaScanAssessmentData({
+                      email: resumeEmail,
+                      customerName: existingResponse.customer_name || '',
+                      couponId: existingResponse.coupon_id || undefined
+                    });
+                    setShowResumeModal(false);
+                    setStartTraumaScanAssessment(true);
+                  } else {
+                    setNoProgressFound(true);
+                  }
+                }} className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Email Address
+                    </label>
+                    <input
+                      type="email"
+                      value={resumeEmail}
+                      onChange={(e) => {
+                        setResumeEmail(e.target.value);
+                        setNoProgressFound(false);
+                      }}
+                      placeholder="your@email.com"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                      required
+                    />
+                  </div>
+
+                  {noProgressFound && (
+                    <div className="bg-orange-50 border border-orange-200 text-orange-800 p-3 rounded-lg text-sm">
+                      No in-progress Trauma Scan assessment found for this email. Please start a new assessment.
+                    </div>
+                  )}
+
+                  <button
+                    type="submit"
+                    disabled={!resumeEmail.trim() || checkingProgress}
+                    className="w-full bg-teal-600 text-white py-3 rounded-lg hover:bg-teal-700 disabled:opacity-50 transition-colors font-medium"
+                  >
+                    {checkingProgress ? 'Checking...' : 'Find My Assessment'}
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {showCouponModal && (
+          <CouponRedemption
+            onRedemptionSuccess={handleCouponRedemption}
+            onCancel={() => setShowCouponModal(false)}
+          />
+        )}
       </div>
     );
   }
