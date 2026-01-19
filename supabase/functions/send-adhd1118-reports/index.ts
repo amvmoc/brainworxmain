@@ -800,6 +800,7 @@ Deno.serve(async (req: Request) => {
         emailsSent: emailPromises.length,
       }),
       {
+        status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       }
     );

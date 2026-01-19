@@ -269,21 +269,17 @@ export default function ADHD1118Assessment({
 
       // Automatically send reports to teen and coach
       try {
-        const reportResponse = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-adhd1118-reports`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
-          },
-          body: JSON.stringify({
+        console.log('Sending ADHD 11-18 reports for assessment:', assessmentId);
+        const { error: reportError } = await supabase.functions.invoke('send-adhd1118-reports', {
+          body: {
             assessmentId: assessmentId
-          })
+          }
         });
 
-        if (!reportResponse.ok) {
-          console.error('Failed to send reports automatically');
+        if (reportError) {
+          console.error('Error sending reports:', reportError);
         } else {
-          console.log('Reports sent automatically to teen and coach');
+          console.log('Reports sent successfully to teen and coach');
         }
       } catch (emailError) {
         console.error('Error sending automatic reports:', emailError);
