@@ -468,32 +468,8 @@ const ClientReport: React.FC<{
               ✓ Get professional guidance and support
             </p>
             <button
-              onClick={async () => {
-                try {
-                  // Query for any active franchise owner
-                  const { data: franchiseOwners, error } = await supabase
-                    .from('franchise_owners')
-                    .select('unique_link_code')
-                    .eq('status', 'active')
-                    .limit(1)
-                    .maybeSingle();
-
-                  if (error) {
-                    console.error('Error loading franchise owners:', error);
-                    alert('Unable to load booking page. Please contact support.');
-                    return;
-                  }
-
-                  if (franchiseOwners?.unique_link_code) {
-                    // Navigate to booking page
-                    window.location.href = `/book/${franchiseOwners.unique_link_code}`;
-                  } else {
-                    alert('Booking calendar is not available at this time. Please contact support.');
-                  }
-                } catch (err) {
-                  console.error('Error:', err);
-                  alert('Unable to load booking page. Please try again later.');
-                }
+              onClick={() => {
+                window.location.href = '/book/ADMIN001';
               }}
               className="inline-block mt-2 px-8 py-3 rounded-full text-lg font-semibold text-white bg-gradient-to-r from-green-500 to-teal-400 shadow-lg hover:-translate-y-0.5 hover:shadow-xl transition-transform cursor-pointer"
             >
