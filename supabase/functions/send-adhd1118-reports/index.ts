@@ -725,7 +725,7 @@ Deno.serve(async (req: Request) => {
     if (assessment.franchise_owner_id) {
       const { data: franchiseOwner } = await supabase
         .from("franchise_owners")
-        .select("email, full_name, unique_link_code")
+        .select("email, name, unique_link_code")
         .eq("id", assessment.franchise_owner_id)
         .single();
 
