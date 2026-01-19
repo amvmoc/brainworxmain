@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Printer, Download } from "lucide-react";
+import { supabase } from '../lib/supabase';
 
 type PatternData = {
   score: number;
@@ -466,12 +467,38 @@ const ClientReport: React.FC<{
               <br />
               ✓ Get professional guidance and support
             </p>
-            <a
-              href="mailto:support@brainworx.com?subject=FREE 45-Minute Coaching Session"
-              className="inline-block mt-2 px-8 py-3 rounded-full text-lg font-semibold text-white bg-gradient-to-r from-green-500 to-teal-400 shadow-lg hover:-translate-y-0.5 hover:shadow-xl transition-transform"
+            <button
+              onClick={async () => {
+                try {
+                  // Query for any active franchise owner
+                  const { data: franchiseOwners, error } = await supabase
+                    .from('franchise_owners')
+                    .select('unique_link_code')
+                    .eq('status', 'active')
+                    .limit(1)
+                    .maybeSingle();
+
+                  if (error) {
+                    console.error('Error loading franchise owners:', error);
+                    alert('Unable to load booking page. Please contact support.');
+                    return;
+                  }
+
+                  if (franchiseOwners?.unique_link_code) {
+                    // Navigate to booking page
+                    window.location.href = `/book/${franchiseOwners.unique_link_code}`;
+                  } else {
+                    alert('Booking calendar is not available at this time. Please contact support.');
+                  }
+                } catch (err) {
+                  console.error('Error:', err);
+                  alert('Unable to load booking page. Please try again later.');
+                }
+              }}
+              className="inline-block mt-2 px-8 py-3 rounded-full text-lg font-semibold text-white bg-gradient-to-r from-green-500 to-teal-400 shadow-lg hover:-translate-y-0.5 hover:shadow-xl transition-transform cursor-pointer"
             >
               Schedule Your FREE Session
-            </a>
+            </button>
           </section>
 
           <section className="bg-gradient-to-r from-emerald-50 to-green-100 border-4 border-green-500 rounded-2xl p-6 md:p-8">
