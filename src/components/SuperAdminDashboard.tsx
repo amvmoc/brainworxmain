@@ -36,12 +36,15 @@ interface SalesLog {
 }
 
 export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLogout }: SuperAdminDashboardProps) {
-  const [currentView, setCurrentView] = useState<'overview' | 'sales' | 'responses' | 'adhd-assessments' | 'invoices' | 'calendar' | 'users' | 'library' | 'coupons' | 'visitor_view'>('overview');
+  const [currentView, setCurrentView] = useState<'overview' | 'sales' | 'test-results' | 'adhd-assessments' | 'invoices' | 'calendar' | 'users' | 'library' | 'coupons' | 'visitor_view'>('overview');
+  const [testResultsTab, setTestResultsTab] = useState<'nip3' | 'self-assessments' | 'adhd-710' | 'adhd-1118' | 'trauma-scan'>('nip3');
   const [adhdTab, setAdhdTab] = useState<'adhd-710' | 'adhd-1118'>('adhd-710');
   const [calendarTab, setCalendarTab] = useState<'availability' | 'bookings'>('bookings');
   const [salesLogs, setSalesLogs] = useState<SalesLog[]>([]);
   const [responses, setResponses] = useState<any[]>([]);
   const [selfAssessments, setSelfAssessments] = useState<any[]>([]);
+  const [adhd710Assessments, setAdhd710Assessments] = useState<any[]>([]);
+  const [adhd1118Assessments, setAdhd1118Assessments] = useState<any[]>([]);
   const [franchiseUsers, setFranchiseUsers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -184,7 +187,7 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
   const loadAllData = async () => {
     setLoading(true);
     try {
-      const [salesData, responsesData, selfAssessmentsData, usersData] = await Promise.all([
+      const [salesData, responsesData, selfAssessmentsData, adhd710Data, adhd1118Data, usersData] = await Promise.all([
         supabase
           .from('sales_log')
           .select(`
@@ -202,6 +205,14 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
           .select('*')
           .order('created_at', { ascending: false }),
         supabase
+          .from('adhd_assessments')
+          .select('*')
+          .order('created_at', { ascending: false }),
+        supabase
+          .from('adhd_1118_assessments')
+          .select('*')
+          .order('created_at', { ascending: false }),
+        supabase
           .from('franchise_owners')
           .select('*')
           .order('created_at', { ascending: false })
@@ -210,6 +221,8 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
       setSalesLogs(salesData.data || []);
       setResponses(responsesData.data || []);
       setSelfAssessments(selfAssessmentsData.data || []);
+      setAdhd710Assessments(adhd710Data.data || []);
+      setAdhd1118Assessments(adhd1118Data.data || []);
       setFranchiseUsers(usersData.data || []);
     } catch (error) {
       console.error('Error loading data:', error);
@@ -469,15 +482,15 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
               All Sales
             </button>
             <button
-              onClick={() => setCurrentView('responses')}
+              onClick={() => setCurrentView('test-results')}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg whitespace-nowrap transition-all ${
-                currentView === 'responses'
+                currentView === 'test-results'
                   ? 'bg-white text-[#0A2A5E] font-semibold'
                   : 'bg-white/20 text-white hover:bg-white/30'
               }`}
             >
-              <Users size={20} />
-              NIP
+              <FileText size={20} />
+              Test Results
             </button>
             <button
               onClick={() => setCurrentView('adhd-assessments')}
@@ -915,23 +928,70 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
           </div>
         )}
 
-        {currentView === 'responses' && (
-          <div className="bg-white rounded-xl p-6 shadow-lg">
-            <h2 className="text-2xl font-bold text-[#0A2A5E] mb-6">All Assessments</h2>
+        {currentView === 'test-results' && (
+          <div className="space-y-6">
+            {/* Sub-navigation tabs */}
+            <div className="flex gap-2 overflow-x-auto pb-2">
+              <button
+                onClick={() => setTestResultsTab('nip3')}
+                className={`px-6 py-3 rounded-lg font-semibold whitespace-nowrap transition-all ${
+                  testResultsTab === 'nip3'
+                    ? 'bg-[#0A2A5E] text-white shadow-lg'
+                    : 'bg-white text-gray-700 hover:bg-gray-50'
+                }`}
+              >
+                NIP3 (344Q)
+              </button>
+              <button
+                onClick={() => setTestResultsTab('self-assessments')}
+                className={`px-6 py-3 rounded-lg font-semibold whitespace-nowrap transition-all ${
+                  testResultsTab === 'self-assessments'
+                    ? 'bg-[#0A2A5E] text-white shadow-lg'
+                    : 'bg-white text-gray-700 hover:bg-gray-50'
+                }`}
+              >
+                Self Assessments
+              </button>
+              <button
+                onClick={() => setTestResultsTab('adhd-710')}
+                className={`px-6 py-3 rounded-lg font-semibold whitespace-nowrap transition-all ${
+                  testResultsTab === 'adhd-710'
+                    ? 'bg-[#0A2A5E] text-white shadow-lg'
+                    : 'bg-white text-gray-700 hover:bg-gray-50'
+                }`}
+              >
+                ADHD 7-10
+              </button>
+              <button
+                onClick={() => setTestResultsTab('adhd-1118')}
+                className={`px-6 py-3 rounded-lg font-semibold whitespace-nowrap transition-all ${
+                  testResultsTab === 'adhd-1118'
+                    ? 'bg-[#0A2A5E] text-white shadow-lg'
+                    : 'bg-white text-gray-700 hover:bg-gray-50'
+                }`}
+              >
+                ADHD 11-18
+              </button>
+              <button
+                onClick={() => setTestResultsTab('trauma-scan')}
+                className={`px-6 py-3 rounded-lg font-semibold whitespace-nowrap transition-all ${
+                  testResultsTab === 'trauma-scan'
+                    ? 'bg-[#0A2A5E] text-white shadow-lg'
+                    : 'bg-white text-gray-700 hover:bg-gray-50'
+                }`}
+              >
+                Trauma Scan
+              </button>
+            </div>
 
-            {loading ? (
-              <div className="text-center py-8">
-                <p className="text-gray-600">Loading assessments...</p>
-              </div>
-            ) : (
-              <>
-                {[
-                  ...responses.filter(r => r.status === 'completed' || r.status === 'analyzed' || r.status === 'sent').map(r => ({ ...r, type: 'nipa' })),
-                  ...selfAssessments.filter(s => s.status === 'completed' || s.status === 'analyzed').map(s => ({ ...s, type: 'self' }))
-                ].length === 0 ? (
+            {/* NIP3 Tab */}
+            {testResultsTab === 'nip3' && (
+              <div className="bg-white rounded-xl p-6 shadow-lg">
+                <h2 className="text-2xl font-bold text-[#0A2A5E] mb-6">NIP3 Assessments (344 Questions)</h2>
+                {responses.filter(r => r.analysis_results?.totalQuestions === 344).length === 0 ? (
                   <div className="text-center py-8">
-                    <Users className="mx-auto text-gray-300 mb-2" size={48} />
-                    <p className="text-gray-600">No completed assessments yet</p>
+                    <FileText className="mx-auto text-gray-300 mb-2" size={48} />
+                    <p className="text-gray-600">No NIP3 assessments yet</p>
                   </div>
                 ) : (
                   <div className="overflow-x-auto">
@@ -940,7 +1000,83 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
                         <tr>
                           <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Client Name</th>
                           <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Email</th>
-                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Franchise</th>
+                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Score</th>
+                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Completed</th>
+                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {responses
+                          .filter(r => r.analysis_results?.totalQuestions === 344)
+                          .map((test) => (
+                            <tr key={test.id} className="border-b hover:bg-gray-50">
+                              <td className="px-6 py-4 font-medium text-[#0A2A5E]">{test.customer_name}</td>
+                              <td className="px-6 py-4 text-gray-600">{test.customer_email}</td>
+                              <td className="px-6 py-4">
+                                <span className="font-bold text-[#3DB3E3]">
+                                  {test.analysis_results?.overallScore || 'N/A'}%
+                                </span>
+                              </td>
+                              <td className="px-6 py-4 text-sm text-gray-600">
+                                {new Date(test.completed_at).toLocaleDateString()}
+                              </td>
+                              <td className="px-6 py-4">
+                                <div className="flex gap-2">
+                                  <button
+                                    onClick={() => setViewingTestReport({ ...test, type: 'nipa' })}
+                                    className="bg-[#3DB3E3] text-white px-4 py-2 rounded-lg hover:bg-[#1FAFA3] transition-colors font-medium flex items-center gap-2"
+                                  >
+                                    <Eye size={16} />
+                                    View
+                                  </button>
+                                  <button
+                                    onClick={() => {
+                                      setShareTest({ ...test, type: 'nipa' });
+                                      setShareEmail(test.customer_email);
+                                      setShowShareModal(true);
+                                    }}
+                                    className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors font-medium flex items-center gap-2"
+                                  >
+                                    <Send size={16} />
+                                    Send Email
+                                  </button>
+                                  <button
+                                    onClick={() => {
+                                      setTestToDelete({ ...test, type: 'nipa' });
+                                      setShowDeleteTestModal(true);
+                                    }}
+                                    className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors font-medium flex items-center gap-2"
+                                  >
+                                    <Trash2 size={16} />
+                                    Delete
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Self Assessments Tab */}
+            {testResultsTab === 'self-assessments' && (
+              <div className="bg-white rounded-xl p-6 shadow-lg">
+                <h2 className="text-2xl font-bold text-[#0A2A5E] mb-6">Self Assessments</h2>
+                {selfAssessments.filter(s => s.status === 'completed' || s.status === 'analyzed').length === 0 ? (
+                  <div className="text-center py-8">
+                    <FileText className="mx-auto text-gray-300 mb-2" size={48} />
+                    <p className="text-gray-600">No self assessments yet</p>
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead className="bg-[#E6E9EF] border-b-2 border-[#0A2A5E]">
+                        <tr>
+                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Client Name</th>
+                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Email</th>
                           <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Assessment Type</th>
                           <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Score</th>
                           <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Completed</th>
@@ -948,93 +1084,272 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
                         </tr>
                       </thead>
                       <tbody>
-                        {[
-                          ...responses.filter(r => r.status === 'completed' || r.status === 'analyzed' || r.status === 'sent').map(r => ({ ...r, type: 'nipa' })),
-                          ...selfAssessments.filter(s => s.status === 'completed' || s.status === 'analyzed').map(s => ({ ...s, type: 'self' }))
-                        ]
-                          .sort((a, b) => new Date(b.completed_at).getTime() - new Date(a.completed_at).getTime())
-                          .map((test) => {
-                            const franchiseOwner = franchiseUsers.find(f => f.id === test.franchise_owner_id);
-                            const isNIP3 = test.type === 'nipa' && test.analysis_results?.totalQuestions === 344;
-                            return (
-                              <tr key={`${test.type}-${test.id}`} className="border-b hover:bg-gray-50">
-                                <td className="px-6 py-4 font-medium text-[#0A2A5E]">{test.customer_name}</td>
-                                <td className="px-6 py-4 text-gray-600">{test.customer_email}</td>
-                                <td className="px-6 py-4 text-gray-600">
-                                  {franchiseOwner?.name || 'Super Admin'}
-                                </td>
-                                <td className="px-6 py-4">
-                                  <span className={`px-3 py-1 rounded-full text-xs font-bold ${
-                                    test.type === 'nipa'
-                                      ? isNIP3 ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800'
-                                      : 'bg-orange-100 text-orange-800'
-                                  }`}>
-                                    {test.type === 'nipa' ? (isNIP3 ? 'NIP Full (344Q)' : 'NIP Full') : test.assessment_type || 'Self Assessment'}
-                                  </span>
-                                </td>
-                                <td className="px-6 py-4">
-                                  <span className="font-bold text-[#3DB3E3]">
-                                    {test.analysis_results?.overallScore || 'N/A'}%
-                                  </span>
-                                </td>
-                                <td className="px-6 py-4 text-sm text-gray-600">
-                                  {new Date(test.completed_at).toLocaleDateString()}
-                                </td>
-                                <td className="px-6 py-4">
-                                  <div className="flex gap-2">
-                                    <button
-                                      onClick={() => setViewingTestReport(test)}
-                                      className="bg-[#3DB3E3] text-white px-4 py-2 rounded-lg hover:bg-[#1FAFA3] transition-colors font-medium flex items-center gap-2"
-                                    >
-                                      <Eye size={16} />
-                                      View
-                                    </button>
-                                    {isNIP3 && (
-                                      <button
-                                        onClick={() => {
-                                          setViewingTestReport(test);
-                                          setTimeout(() => window.print(), 500);
-                                        }}
-                                        className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors font-medium flex items-center gap-2"
-                                        title="Download report"
-                                      >
-                                        <Download size={16} />
-                                        Download
-                                      </button>
-                                    )}
-                                    <button
-                                      onClick={() => {
-                                        setShareTest(test);
-                                        setShareEmail(franchiseOwner?.email || test.customer_email);
-                                        setShowShareModal(true);
-                                      }}
-                                      className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors font-medium flex items-center gap-2"
-                                      title="Send report via email"
-                                    >
-                                      <Send size={16} />
-                                      Send Email
-                                    </button>
-                                    <button
-                                      onClick={() => {
-                                        setTestToDelete(test);
-                                        setShowDeleteTestModal(true);
-                                      }}
-                                      className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors font-medium flex items-center gap-2"
-                                      title="Delete assessment"
-                                    >
-                                      <Trash2 size={16} />
-                                      Delete
-                                    </button>
-                                  </div>
-                                </td>
-                              </tr>
-                            );
-                          })}
+                        {selfAssessments
+                          .filter(s => s.status === 'completed' || s.status === 'analyzed')
+                          .map((test) => (
+                            <tr key={test.id} className="border-b hover:bg-gray-50">
+                              <td className="px-6 py-4 font-medium text-[#0A2A5E]">{test.customer_name}</td>
+                              <td className="px-6 py-4 text-gray-600">{test.customer_email}</td>
+                              <td className="px-6 py-4">
+                                <span className="px-3 py-1 rounded-full text-xs font-bold bg-orange-100 text-orange-800">
+                                  {test.assessment_type || 'Self Assessment'}
+                                </span>
+                              </td>
+                              <td className="px-6 py-4">
+                                <span className="font-bold text-[#3DB3E3]">
+                                  {test.analysis_results?.overallScore || 'N/A'}%
+                                </span>
+                              </td>
+                              <td className="px-6 py-4 text-sm text-gray-600">
+                                {new Date(test.completed_at).toLocaleDateString()}
+                              </td>
+                              <td className="px-6 py-4">
+                                <div className="flex gap-2">
+                                  <button
+                                    onClick={() => setViewingTestReport({ ...test, type: 'self' })}
+                                    className="bg-[#3DB3E3] text-white px-4 py-2 rounded-lg hover:bg-[#1FAFA3] transition-colors font-medium flex items-center gap-2"
+                                  >
+                                    <Eye size={16} />
+                                    View
+                                  </button>
+                                  <button
+                                    onClick={() => {
+                                      setTestToDelete({ ...test, type: 'self' });
+                                      setShowDeleteTestModal(true);
+                                    }}
+                                    className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors font-medium flex items-center gap-2"
+                                  >
+                                    <Trash2 size={16} />
+                                    Delete
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
                       </tbody>
                     </table>
                   </div>
                 )}
-              </>
+              </div>
+            )}
+
+            {/* ADHD 7-10 Tab */}
+            {testResultsTab === 'adhd-710' && (
+              <div className="bg-white rounded-xl p-6 shadow-lg">
+                <h2 className="text-2xl font-bold text-[#0A2A5E] mb-6">ADHD 7-10 Assessments</h2>
+                {adhd710Assessments.filter(a => a.status === 'both_completed').length === 0 ? (
+                  <div className="text-center py-8">
+                    <Brain className="mx-auto text-gray-300 mb-2" size={48} />
+                    <p className="text-gray-600">No completed ADHD 7-10 assessments yet</p>
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead className="bg-[#E6E9EF] border-b-2 border-[#0A2A5E]">
+                        <tr>
+                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Child Name</th>
+                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Age</th>
+                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Parent Email</th>
+                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Status</th>
+                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Created</th>
+                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {adhd710Assessments
+                          .filter(a => a.status === 'both_completed')
+                          .map((assessment) => (
+                            <tr key={assessment.id} className="border-b hover:bg-gray-50">
+                              <td className="px-6 py-4 font-medium text-[#0A2A5E]">{assessment.child_name}</td>
+                              <td className="px-6 py-4 text-gray-600">{assessment.child_age}</td>
+                              <td className="px-6 py-4 text-gray-600">{assessment.created_by_email}</td>
+                              <td className="px-6 py-4">
+                                <span className="px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-800">
+                                  {assessment.status.replace('_', ' ')}
+                                </span>
+                              </td>
+                              <td className="px-6 py-4 text-sm text-gray-600">
+                                {new Date(assessment.created_at).toLocaleDateString()}
+                              </td>
+                              <td className="px-6 py-4">
+                                <div className="flex gap-2">
+                                  <button
+                                    onClick={async () => {
+                                      try {
+                                        const { error } = await supabase.functions.invoke('send-adhd710-reports', {
+                                          body: { assessmentId: assessment.id }
+                                        });
+                                        if (error) throw error;
+                                        alert('Reports sent successfully!');
+                                      } catch (error: any) {
+                                        alert('Failed to send reports: ' + error.message);
+                                      }
+                                    }}
+                                    className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors font-medium flex items-center gap-2"
+                                  >
+                                    <Send size={16} />
+                                    Send Reports
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* ADHD 11-18 Tab */}
+            {testResultsTab === 'adhd-1118' && (
+              <div className="bg-white rounded-xl p-6 shadow-lg">
+                <h2 className="text-2xl font-bold text-[#0A2A5E] mb-6">ADHD 11-18 Assessments</h2>
+                {adhd1118Assessments.filter(a => a.status === 'both_completed').length === 0 ? (
+                  <div className="text-center py-8">
+                    <Brain className="mx-auto text-gray-300 mb-2" size={48} />
+                    <p className="text-gray-600">No completed ADHD 11-18 assessments yet</p>
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead className="bg-[#E6E9EF] border-b-2 border-[#0A2A5E]">
+                        <tr>
+                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Teen Name</th>
+                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Age</th>
+                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Parent Email</th>
+                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Status</th>
+                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Created</th>
+                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {adhd1118Assessments
+                          .filter(a => a.status === 'both_completed')
+                          .map((assessment) => (
+                            <tr key={assessment.id} className="border-b hover:bg-gray-50">
+                              <td className="px-6 py-4 font-medium text-[#0A2A5E]">{assessment.teen_name}</td>
+                              <td className="px-6 py-4 text-gray-600">{assessment.teen_age}</td>
+                              <td className="px-6 py-4 text-gray-600">{assessment.created_by_email}</td>
+                              <td className="px-6 py-4">
+                                <span className="px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-800">
+                                  {assessment.status.replace('_', ' ')}
+                                </span>
+                              </td>
+                              <td className="px-6 py-4 text-sm text-gray-600">
+                                {new Date(assessment.created_at).toLocaleDateString()}
+                              </td>
+                              <td className="px-6 py-4">
+                                <div className="flex gap-2">
+                                  <button
+                                    onClick={async () => {
+                                      try {
+                                        const { error } = await supabase.functions.invoke('send-adhd1118-reports', {
+                                          body: { assessmentId: assessment.id }
+                                        });
+                                        if (error) throw error;
+                                        alert('Reports sent successfully!');
+                                      } catch (error: any) {
+                                        alert('Failed to send reports: ' + error.message);
+                                      }
+                                    }}
+                                    className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors font-medium flex items-center gap-2"
+                                  >
+                                    <Send size={16} />
+                                    Send Reports
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Trauma Scan Tab */}
+            {testResultsTab === 'trauma-scan' && (
+              <div className="bg-white rounded-xl p-6 shadow-lg">
+                <h2 className="text-2xl font-bold text-[#0A2A5E] mb-6">Trauma Scan Assessments</h2>
+                {selfAssessments.filter(s => s.assessment_type === 'trauma-scan' && (s.status === 'completed' || s.status === 'analyzed')).length === 0 ? (
+                  <div className="text-center py-8">
+                    <FileText className="mx-auto text-gray-300 mb-2" size={48} />
+                    <p className="text-gray-600">No trauma scan assessments yet</p>
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead className="bg-[#E6E9EF] border-b-2 border-[#0A2A5E]">
+                        <tr>
+                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Client Name</th>
+                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Email</th>
+                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Score</th>
+                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Completed</th>
+                          <th className="px-6 py-3 text-left font-semibold text-[#0A2A5E]">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {selfAssessments
+                          .filter(s => s.assessment_type === 'trauma-scan' && (s.status === 'completed' || s.status === 'analyzed'))
+                          .map((test) => (
+                            <tr key={test.id} className="border-b hover:bg-gray-50">
+                              <td className="px-6 py-4 font-medium text-[#0A2A5E]">{test.customer_name}</td>
+                              <td className="px-6 py-4 text-gray-600">{test.customer_email}</td>
+                              <td className="px-6 py-4">
+                                <span className="font-bold text-[#3DB3E3]">
+                                  {test.analysis_results?.overallScore || 'N/A'}%
+                                </span>
+                              </td>
+                              <td className="px-6 py-4 text-sm text-gray-600">
+                                {new Date(test.completed_at).toLocaleDateString()}
+                              </td>
+                              <td className="px-6 py-4">
+                                <div className="flex gap-2">
+                                  <button
+                                    onClick={() => setViewingTestReport({ ...test, type: 'self' })}
+                                    className="bg-[#3DB3E3] text-white px-4 py-2 rounded-lg hover:bg-[#1FAFA3] transition-colors font-medium flex items-center gap-2"
+                                  >
+                                    <Eye size={16} />
+                                    View
+                                  </button>
+                                  <button
+                                    onClick={async () => {
+                                      try {
+                                        const { error } = await supabase.functions.invoke('send-trauma-scan-reports', {
+                                          body: { assessmentId: test.id }
+                                        });
+                                        if (error) throw error;
+                                        alert('Report sent successfully!');
+                                      } catch (error: any) {
+                                        alert('Failed to send report: ' + error.message);
+                                      }
+                                    }}
+                                    className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors font-medium flex items-center gap-2"
+                                  >
+                                    <Send size={16} />
+                                    Send Report
+                                  </button>
+                                  <button
+                                    onClick={() => {
+                                      setTestToDelete({ ...test, type: 'self' });
+                                      setShowDeleteTestModal(true);
+                                    }}
+                                    className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors font-medium flex items-center gap-2"
+                                  >
+                                    <Trash2 size={16} />
+                                    Delete
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
             )}
           </div>
         )}
