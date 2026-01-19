@@ -29,7 +29,8 @@ const getAssessmentDatabaseId = (displayName: string): string => {
     'Full Assessment (344 Questions)': 'nipa',
     'Parent/Caregiver ADHD 7-10 Assessment (80 Questions)': 'adhd710',
     'ADHD 11-18 Assessment (50 Questions)': 'adhd1118',
-    'Teen Career & Future Direction': 'teen-career'
+    'Teen Career & Future Direction': 'teen-career',
+    'Trauma & Loss Impact Assessment (Adult 15+)': 'trauma-scan'
   };
 
   return mapping[displayName] || displayName;
@@ -42,6 +43,7 @@ const getAssessmentOptions = () => {
     { value: 'Parent/Caregiver ADHD 7-10 Assessment (80 Questions)', label: 'Parent/Caregiver ADHD 7-10 Assessment (80 Questions)' },
     { value: 'ADHD 11-18 Assessment (50 Questions)', label: 'ADHD 11-18 Assessment (50 Questions)' },
     { value: 'Teen Career & Future Direction', label: 'Teen Career & Future Direction' },
+    { value: 'Trauma & Loss Impact Assessment (Adult 15+)', label: 'Trauma & Loss Impact Assessment (Adult 15+)' },
   ];
 
   return options;
