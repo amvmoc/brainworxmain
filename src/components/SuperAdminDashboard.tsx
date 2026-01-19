@@ -1113,6 +1113,23 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
                                     View
                                   </button>
                                   <button
+                                    onClick={async () => {
+                                      try {
+                                        const { error } = await supabase.functions.invoke('send-self-assessment-email', {
+                                          body: { assessmentId: test.id }
+                                        });
+                                        if (error) throw error;
+                                        alert('Report sent successfully!');
+                                      } catch (error: any) {
+                                        alert('Failed to send report: ' + error.message);
+                                      }
+                                    }}
+                                    className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors font-medium flex items-center gap-2"
+                                  >
+                                    <Send size={16} />
+                                    Send Report
+                                  </button>
+                                  <button
                                     onClick={() => {
                                       setTestToDelete({ ...test, type: 'self' });
                                       setShowDeleteTestModal(true);
