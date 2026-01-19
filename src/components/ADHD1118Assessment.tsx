@@ -48,6 +48,7 @@ export default function ADHD1118Assessment({
   const [currentSection, setCurrentSection] = useState(0);
   const [error, setError] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
+  const [completionScores, setCompletionScores] = useState<any>(null);
 
   const questionsPerSection = 10;
   const totalSections = Math.ceil(QUESTIONS.length / questionsPerSection);
@@ -239,6 +240,15 @@ export default function ADHD1118Assessment({
 
       const nippScores = calculateNIPPScores1118(responses);
 
+      // Create patterns array for display
+      const patterns = Object.keys(nippScores).map(code => ({
+        code,
+        name: PATTERN_INFO[code as PatternId].name,
+        score: nippScores[code as PatternId],
+        percentage: scoreToPercentage(nippScores[code as PatternId]),
+        severity: getSeverityLabel1118(nippScores[code as PatternId])
+      }));
+
       const { data: existingResponse } = await supabase
         .from('adhd_1118_assessment_responses')
         .select('id')
@@ -266,6 +276,9 @@ export default function ADHD1118Assessment({
         .from('adhd_1118_assessments')
         .update({ status: 'teen_completed' })
         .eq('id', assessmentId);
+
+      // Store scores for display
+      setCompletionScores(patterns);
 
       // Automatically send reports to teen and coach
       try {
@@ -319,30 +332,14 @@ export default function ADHD1118Assessment({
             </p>
 
             <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-6 mb-6 text-left">
-              <div className="flex items-start gap-3 mb-4">
-                <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                  <Check className="w-4 h-4 text-white" />
-                </div>
-                <div>
-                  <p className="text-blue-900 font-semibold mb-1">
-                    Your Reports Are Being Prepared
-                  </p>
-                  <p className="text-blue-700 text-sm">
-                    Your comprehensive ADHD assessment report will be emailed to {respondentInfo.email} within 5-10 minutes.
-                  </p>
-                </div>
-              </div>
-
               <div className="flex items-start gap-3">
                 <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                   <Check className="w-4 h-4 text-white" />
                 </div>
                 <div>
-                  <p className="text-blue-900 font-semibold mb-1">
-                    Coach Report Sent
-                  </p>
+                  <p className="text-blue-900 font-semibold mb-1">Reports Sent</p>
                   <p className="text-blue-700 text-sm">
-                    A detailed clinical report has been sent to your coach. They will contact you to schedule a debrief session.
+                    Your comprehensive assessment report is being emailed to {respondentInfo.email}. Your coach has also received a detailed analysis and will contact you soon.
                   </p>
                 </div>
               </div>
@@ -354,13 +351,53 @@ export default function ADHD1118Assessment({
               </p>
             </div>
 
+            {completionScores && completionScores.length > 0 && (
+              <div className="mb-10">
+                <h3 className="text-2xl font-bold text-[#0A2A5E] mb-6">Your ADHD Assessment Scores</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                  {completionScores.map((pattern: any) => {
+                    let scoreColor = 'text-green-600';
+                    let barColor = 'bg-green-500';
+                    if (pattern.percentage > 66) {
+                      scoreColor = 'text-red-600';
+                      barColor = 'bg-red-500';
+                    } else if (pattern.percentage > 33) {
+                      scoreColor = 'text-amber-600';
+                      barColor = 'bg-amber-500';
+                    }
+
+                    return (
+                      <div key={pattern.code} className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                        <div className="flex justify-between items-start mb-3">
+                          <div>
+                            <h4 className="font-semibold text-gray-900">{pattern.name}</h4>
+                            <p className="text-xs text-gray-600">{pattern.code}</p>
+                          </div>
+                          <span className={`text-sm font-bold ${scoreColor}`}>{pattern.severity}</span>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+                          <div className={`${barColor} h-2 rounded-full`} style={{ width: `${pattern.percentage}%` }}></div>
+                        </div>
+                        <div className="flex justify-between text-xs text-gray-600">
+                          <span>Score: {pattern.score.toFixed(2)}</span>
+                          <span>{pattern.percentage}%</span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
             {onClose && (
-              <button
-                onClick={onClose}
-                className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-3 rounded-xl hover:shadow-xl transition-all"
-              >
-                Close
-              </button>
+              <div className="text-center">
+                <button
+                  onClick={onClose}
+                  className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-3 rounded-xl hover:shadow-xl transition-all font-semibold"
+                >
+                  Done
+                </button>
+              </div>
             )}
           </div>
         </div>
