@@ -170,3 +170,54 @@ export function generateClientReportData(
 export function getPatternDefinitions() {
   return PATTERN_DEFINITIONS;
 }
+
+export function generateClientReportFromAnalysis(
+  customerName: string,
+  analysisResults: any,
+  assessmentDate: Date
+): AssessmentResults {
+  const patterns: Record<string, PatternData> = {};
+
+  // Check if this is NIP3 results with neuralImprintPatternScores
+  if (analysisResults?.neuralImprintPatternScores) {
+    analysisResults.neuralImprintPatternScores.forEach((nip: any) => {
+      // Find the pattern definition by code
+      const patternDef = PATTERN_DEFINITIONS.find(p => p.code === nip.code);
+
+      if (patternDef) {
+        patterns[patternDef.name] = {
+          score: Math.round(nip.score), // nip.score is already a percentage
+          code: nip.code,
+          description: patternDef.description
+        };
+      }
+    });
+
+    return {
+      client: {
+        name: customerName,
+        date: assessmentDate.toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        }),
+        totalQuestions: analysisResults.totalQuestions || 344
+      },
+      patterns
+    };
+  }
+
+  // Fallback to empty patterns if no analysis results
+  return {
+    client: {
+      name: customerName,
+      date: assessmentDate.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      }),
+      totalQuestions: 0
+    },
+    patterns: {}
+  };
+}

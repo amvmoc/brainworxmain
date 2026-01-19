@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { X, Download, Calendar, User, FileText } from 'lucide-react';
 import { supabase } from '../lib/supabase';
-import { generateClientReportData } from '../utils/clientReportScoring';
+import { generateClientReportData, generateClientReportFromAnalysis } from '../utils/clientReportScoring';
 import { downloadHTMLReport } from '../utils/htmlReportGenerator';
 import ClientReport from './ClientReport';
 
@@ -89,12 +89,19 @@ export function PublicResultsView({ shareToken }: PublicResultsViewProps) {
     return null;
   }
 
-  const reportData = generateClientReportData(
-    responseData.customer_name,
-    responseData.answers,
-    new Date(responseData.completed_at),
-    Object.keys(responseData.answers).length
-  );
+  // Use analysis_results if available (NIP3 with correct scoring), otherwise fallback to old method
+  const reportData = responseData.analysis_results?.neuralImprintPatternScores
+    ? generateClientReportFromAnalysis(
+        responseData.customer_name,
+        responseData.analysis_results,
+        new Date(responseData.completed_at)
+      )
+    : generateClientReportData(
+        responseData.customer_name,
+        responseData.answers,
+        new Date(responseData.completed_at),
+        Object.keys(responseData.answers).length
+      );
 
   const handleDownloadHTML = () => {
     const patterns = Object.entries(reportData.patterns);
