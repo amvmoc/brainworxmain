@@ -130,7 +130,9 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
           body: {
             recipients: [shareEmail],
             results: results,
-            completedAt: shareTest.completed_at
+            completedAt: shareTest.completed_at,
+            customerName: shareTest.customer_name,
+            customerEmail: shareTest.customer_email
           }
         });
 
