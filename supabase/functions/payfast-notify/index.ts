@@ -75,7 +75,7 @@ Deno.serve(async (req: Request) => {
 
     if (itemName === 'NIP') {
       assessmentType = 'nipa';
-      assessmentDisplayName = 'Full Assessment (343 Questions)';
+      assessmentDisplayName = 'Full Assessment (344 Questions)';
     } else if (itemName === 'ADHD Assessment' || itemName === 'ADHD 11-18 Assessment') {
       assessmentType = 'adhd1118';
       assessmentDisplayName = 'ADHD 11-18 Assessment (50 Questions)';
@@ -85,7 +85,7 @@ Deno.serve(async (req: Request) => {
     } else if (itemName === 'TCF') {
       assessmentType = 'tcf';
       assessmentDisplayName = 'Teen Career & Future Direction';
-    } else if (itemName === 'Trauma Scan' || itemName.includes('Trauma')) {
+    } else if (itemName === 'trauma-scan' || itemName === 'Trauma Scan' || itemName.toLowerCase().includes('trauma')) {
       assessmentType = 'trauma-scan';
       assessmentDisplayName = 'Trauma & Loss Impact Assessment (Adult 15+)';
     } else {
