@@ -276,6 +276,16 @@ Deno.serve(async (req: Request) => {
                     </ul>
                   </div>
 
+                  <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 32px; border-radius: 12px; margin: 40px 0 0 0; text-align: center;">
+                    <h3 style="color: #ffffff; margin: 0 0 12px 0; font-size: 24px; font-weight: 700;">📅 Ready for Your Next Step?</h3>
+                    <p style="color: rgba(255,255,255,0.95); margin: 0 0 24px 0; font-size: 16px; line-height: 1.6;">
+                      Schedule a consultation session to discuss your results and create a personalized action plan.
+                    </p>
+                    <a href="https://www.brainworx.co.za/booking" style="display: inline-block; background: #ffffff; color: #667eea; padding: 16px 48px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 18px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: all 0.3s;">
+                      Book Your Session Now
+                    </a>
+                  </div>
+
                   <div style="margin: 32px 0 0 0; padding: 20px 0 0 0; border-top: 2px solid #E5E7EB;">
                     <p style="color: #6B7280; font-size: 13px; line-height: 1.6; margin: 0;">
                       <strong style="color: #374151;">Professional Use:</strong> This report is intended for qualified coaches and practitioners. Use these insights to guide personalized coaching strategies and interventions.

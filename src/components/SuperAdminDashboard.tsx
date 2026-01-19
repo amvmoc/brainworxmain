@@ -36,9 +36,8 @@ interface SalesLog {
 }
 
 export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLogout }: SuperAdminDashboardProps) {
-  const [currentView, setCurrentView] = useState<'overview' | 'sales' | 'test-results' | 'adhd-assessments' | 'invoices' | 'calendar' | 'users' | 'library' | 'coupons' | 'visitor_view'>('overview');
+  const [currentView, setCurrentView] = useState<'overview' | 'sales' | 'test-results' | 'invoices' | 'calendar' | 'users' | 'library' | 'coupons' | 'visitor_view'>('overview');
   const [testResultsTab, setTestResultsTab] = useState<'nip3' | 'self-assessments' | 'adhd-710' | 'adhd-1118' | 'trauma-scan'>('nip3');
-  const [adhdTab, setAdhdTab] = useState<'adhd-710' | 'adhd-1118'>('adhd-710');
   const [calendarTab, setCalendarTab] = useState<'availability' | 'bookings'>('bookings');
   const [salesLogs, setSalesLogs] = useState<SalesLog[]>([]);
   const [responses, setResponses] = useState<any[]>([]);
@@ -198,7 +197,6 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
         supabase
           .from('responses')
           .select('*')
-          .in('status', ['completed', 'analyzed', 'sent'])
           .order('created_at', { ascending: false }),
         supabase
           .from('self_assessment_responses')
@@ -491,17 +489,6 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
             >
               <FileText size={20} />
               Test Results
-            </button>
-            <button
-              onClick={() => setCurrentView('adhd-assessments')}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg whitespace-nowrap transition-all ${
-                currentView === 'adhd-assessments'
-                  ? 'bg-white text-[#0A2A5E] font-semibold'
-                  : 'bg-white/20 text-white hover:bg-white/30'
-              }`}
-            >
-              <Brain size={20} />
-              ADHD
             </button>
             <button
               onClick={() => setCurrentView('calendar')}
@@ -890,44 +877,6 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
           <CouponManagement />
         )}
 
-        {currentView === 'adhd-assessments' && (
-          <div className="space-y-6">
-            <div className="flex items-center gap-4 mb-6">
-              <button
-                onClick={() => setAdhdTab('adhd-710')}
-                className={`px-6 py-3 rounded-lg font-semibold transition-all ${
-                  adhdTab === 'adhd-710'
-                    ? 'bg-blue-600 text-white shadow-lg'
-                    : 'bg-white text-gray-700 hover:bg-gray-50'
-                }`}
-              >
-                ADHD 7-10
-              </button>
-              <button
-                onClick={() => setAdhdTab('adhd-1118')}
-                className={`px-6 py-3 rounded-lg font-semibold transition-all ${
-                  adhdTab === 'adhd-1118'
-                    ? 'bg-blue-600 text-white shadow-lg'
-                    : 'bg-white text-gray-700 hover:bg-gray-50'
-                }`}
-              >
-                ADHD 11-18
-              </button>
-            </div>
-
-            {adhdTab === 'adhd-710' && (
-              <div className="bg-white rounded-xl p-6 shadow-lg">
-                <h3 className="text-xl font-bold text-[#0A2A5E] mb-4">ADHD 7-10 Assessments</h3>
-                <p className="text-gray-600">ADHD 7-10 Parent/Teacher assessment management coming soon.</p>
-              </div>
-            )}
-
-            {adhdTab === 'adhd-1118' && (
-              <ADHD1118AssessmentsManagement franchiseOwnerId={franchiseOwnerId} isSuperAdmin={true} />
-            )}
-          </div>
-        )}
-
         {currentView === 'test-results' && (
           <div className="space-y-6">
             {/* Sub-navigation tabs */}
@@ -988,7 +937,7 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
             {testResultsTab === 'nip3' && (
               <div className="bg-white rounded-xl p-6 shadow-lg">
                 <h2 className="text-2xl font-bold text-[#0A2A5E] mb-6">NIP3 Assessments (344 Questions)</h2>
-                {responses.filter(r => r.analysis_results?.totalQuestions === 344).length === 0 ? (
+                {responses.filter(r => (r.status === 'completed' || r.status === 'analyzed' || r.status === 'sent') && (r.analysis_results?.totalQuestions === 344 || r.completed_at)).length === 0 ? (
                   <div className="text-center py-8">
                     <FileText className="mx-auto text-gray-300 mb-2" size={48} />
                     <p className="text-gray-600">No NIP3 assessments yet</p>
@@ -1007,7 +956,7 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
                       </thead>
                       <tbody>
                         {responses
-                          .filter(r => r.analysis_results?.totalQuestions === 344)
+                          .filter(r => (r.status === 'completed' || r.status === 'analyzed' || r.status === 'sent') && (r.analysis_results?.totalQuestions === 344 || r.completed_at))
                           .map((test) => (
                             <tr key={test.id} className="border-b hover:bg-gray-50">
                               <td className="px-6 py-4 font-medium text-[#0A2A5E]">{test.customer_name}</td>

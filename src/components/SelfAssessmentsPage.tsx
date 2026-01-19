@@ -146,6 +146,7 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
     setCheckingProgress(true);
     setNoProgressFound(false);
 
+    // Check NIP3/NIPA responses table
     const { data: existingResponse, error } = await supabase
       .from('responses')
       .select('*')
@@ -156,14 +157,89 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
       .limit(1)
       .maybeSingle();
 
+    // Check self assessments table
+    const { data: selfAssessmentResponse, error: selfError } = await supabase
+      .from('self_assessment_responses')
+      .select('*')
+      .eq('customer_email', resumeEmail)
+      .eq('status', 'in_progress')
+      .order('updated_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    // Check ADHD 7-10 assessments table
+    const { data: adhd710Response, error: adhd710Error } = await supabase
+      .from('adhd_assessments')
+      .select('*')
+      .eq('parent_email', resumeEmail)
+      .eq('status', 'in_progress')
+      .order('updated_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    // Check ADHD 11-18 assessments table
+    const { data: adhd1118Response, error: adhd1118Error } = await supabase
+      .from('adhd_1118_assessments')
+      .select('*')
+      .eq('teen_email', resumeEmail)
+      .eq('status', 'in_progress')
+      .order('updated_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
     setCheckingProgress(false);
 
-    if (error) {
-      console.error('Error checking for progress:', error);
+    if (error || selfError || adhd710Error || adhd1118Error) {
+      console.error('Error checking for progress:', error || selfError || adhd710Error || adhd1118Error);
       alert('Error checking for saved progress. Please try again.');
       return;
     }
 
+    // Handle ADHD 11-18 assessment resume
+    if (adhd1118Response) {
+      setShowResumeModal(false);
+      setShowChoiceModal(false);
+      setADHD1118AssessmentData({
+        respondentType: adhd1118Response.teen_completed ? 'parent' : 'teen'
+      });
+      setStartADHD1118Assessment(true);
+      return;
+    }
+
+    // Handle ADHD 7-10 assessment resume
+    if (adhd710Response) {
+      setShowResumeModal(false);
+      setShowChoiceModal(false);
+      setADHD710AssessmentData({
+        respondentType: adhd710Response.parent_completed ? 'caregiver' : 'parent'
+      });
+      setStartADHD710Assessment(true);
+      return;
+    }
+
+    // Handle self assessment resume
+    if (selfAssessmentResponse) {
+      const assessmentTypeMap: Record<string, typeof selfAssessmentTypes[0]> = {};
+      selfAssessmentTypes.forEach(assessment => {
+        assessmentTypeMap[assessment.id] = assessment;
+      });
+
+      const mappedAssessment = assessmentTypeMap[selfAssessmentResponse.assessment_type];
+
+      if (mappedAssessment) {
+        setShowResumeModal(false);
+        setShowChoiceModal(false);
+        setQuestionnaireData({
+          assessmentType: mappedAssessment,
+          email: resumeEmail,
+          franchiseOwnerId: selfAssessmentResponse.franchise_owner_id || ''
+        });
+        setStartQuestionnaire(true);
+        return;
+      }
+    }
+
+    // Handle NIP3/NIPA assessment resume
     if (existingResponse) {
       // Build dynamic mapping from assessment IDs to assessment objects
       const assessmentTypeMap: Record<string, typeof selfAssessmentTypes[0]> = {};
