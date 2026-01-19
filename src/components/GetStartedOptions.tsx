@@ -706,6 +706,11 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
                   type="button"
                   onClick={() => {
                     if (paymentCouponCode.trim()) {
+                      localStorage.setItem('coupon_prefill', JSON.stringify({
+                        name: customerName,
+                        email: email,
+                        code: paymentCouponCode
+                      }));
                       setShowCouponModal(true);
                     }
                   }}
