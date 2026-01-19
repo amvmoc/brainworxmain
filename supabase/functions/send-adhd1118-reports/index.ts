@@ -695,7 +695,7 @@ Deno.serve(async (req: Request) => {
       throw new Error("Assessment not found");
     }
 
-    if (assessment.status !== "teen_completed") {
+    if (assessment.status !== "teen_completed" && assessment.status !== "both_completed") {
       return new Response(
         JSON.stringify({ error: "Teen assessment must be completed" }),
         {
