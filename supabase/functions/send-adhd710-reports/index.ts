@@ -548,15 +548,17 @@ Deno.serve(async (req: Request) => {
     }
 
     let franchiseOwnerEmail = null;
+    let franchiseOwnerLinkCode = null;
     if (assessment.franchise_owner_id) {
       const { data: franchiseOwner } = await supabase
         .from("franchise_owners")
-        .select("email, full_name")
+        .select("email, full_name, unique_link_code")
         .eq("id", assessment.franchise_owner_id)
         .single();
 
       if (franchiseOwner) {
         franchiseOwnerEmail = franchiseOwner.email;
+        franchiseOwnerLinkCode = franchiseOwner.unique_link_code;
       }
     }
 
@@ -789,14 +791,14 @@ Deno.serve(async (req: Request) => {
       </p>
     </div>
 
-    ${assessment.franchise_owner_id ? `
+    ${franchiseOwnerLinkCode ? `
     <div style="background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%); color: white; padding: 24px; border-radius: 12px; margin: 32px 0; text-align: center; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);">
       <h2 style="margin: 0 0 12px 0; font-size: 22px; font-weight: 700;">📅 Next Step: Book Your Consultation</h2>
       <p style="margin: 0 0 20px 0; font-size: 15px; opacity: 0.95; line-height: 1.6;">
         Ready to discuss these results and create a personalized support plan for ${assessment.child_name}?<br>
         Schedule a consultation with your BrainWorx coach to get started.
       </p>
-      <a href="${baseUrl}/booking/${assessment.franchise_owner_id}?name=${encodeURIComponent(assessment.child_name)}&parent=${encodeURIComponent(parentResponse.respondent_name)}&email=${encodeURIComponent(parentResponse.respondent_email)}"
+      <a href="${baseUrl}/book/${franchiseOwnerLinkCode}?name=${encodeURIComponent(assessment.child_name)}&parent=${encodeURIComponent(parentResponse.respondent_name)}&email=${encodeURIComponent(parentResponse.respondent_email)}"
          style="display: inline-block; background: white; color: #3b82f6; padding: 16px 40px; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: transform 0.2s;">
         Book Appointment Now
       </a>

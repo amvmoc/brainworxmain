@@ -246,14 +246,14 @@ function generateTeenClientReport(
       </p>
     </div>
 
-    ${assessment.franchise_owner_id ? `
+    ${franchiseOwnerLinkCode ? `
     <div style="background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%); color: white; padding: 24px; border-radius: 12px; margin: 32px 0; text-align: center; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);">
       <h2 style="margin: 0 0 12px 0; font-size: 22px; font-weight: 700;">📅 Ready to Take the Next Step?</h2>
       <p style="margin: 0 0 20px 0; font-size: 15px; opacity: 0.95; line-height: 1.6;">
         Schedule a session with your BrainWorx coach to discuss your results<br>
         and develop personalized strategies that work for you.
       </p>
-      <a href="${baseUrl}/booking/${assessment.franchise_owner_id}?name=${encodeURIComponent(assessment.teen_name)}&age=${assessment.teen_age}&email=${encodeURIComponent(teenResponse.respondent_email)}"
+      <a href="${baseUrl}/book/${franchiseOwnerLinkCode}?name=${encodeURIComponent(assessment.teen_name)}&age=${assessment.teen_age}&email=${encodeURIComponent(teenResponse.respondent_email)}"
          style="display: inline-block; background: white; color: #3b82f6; padding: 16px 40px; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: transform 0.2s;">
         Book Your Coaching Session
       </a>
@@ -721,15 +721,17 @@ Deno.serve(async (req: Request) => {
     }
 
     let franchiseOwnerEmail = null;
+    let franchiseOwnerLinkCode = null;
     if (assessment.franchise_owner_id) {
       const { data: franchiseOwner } = await supabase
         .from("franchise_owners")
-        .select("email, full_name")
+        .select("email, full_name, unique_link_code")
         .eq("id", assessment.franchise_owner_id)
         .single();
 
       if (franchiseOwner) {
         franchiseOwnerEmail = franchiseOwner.email;
+        franchiseOwnerLinkCode = franchiseOwner.unique_link_code;
       }
     }
 

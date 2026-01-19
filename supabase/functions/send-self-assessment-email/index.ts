@@ -174,7 +174,7 @@ async function sendClientReport(
               Ready to turn these insights into action?<br>
               Schedule a session with your BrainWorx coach to discuss your results.
             </p>
-            <a href="${SITE_URL}/booking/${franchiseOwnerId}?name=${encodeURIComponent(customerName)}&email=${encodeURIComponent(customerEmail)}"
+            <a href="${SITE_URL}/book/ADMIN001?name=${encodeURIComponent(customerName)}&email=${encodeURIComponent(customerEmail)}"
                style="display: inline-block; background: white; color: #0A2A5E; padding: 16px 40px; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
               Schedule Your Session
             </a>
