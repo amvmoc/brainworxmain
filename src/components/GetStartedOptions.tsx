@@ -44,7 +44,10 @@ export function GetStartedOptions({ onClose, franchiseCode, preselectedPaymentTy
     step,
     email,
     customerName,
-    showCouponModal
+    showCouponModal,
+    initialCouponCode,
+    paymentCouponCode,
+    couponId
   });
 
   useEffect(() => {

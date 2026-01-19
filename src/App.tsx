@@ -147,8 +147,11 @@ function App() {
     }
 
     if (coupon) {
+      console.log('Coupon detected in URL:', coupon);
       setCouponCode(coupon);
       setShowGetStarted(true);
+      setLoading(false); // Important: Stop loading so modal can display
+      return; // Skip auth check when redeeming coupon
     }
 
     if (verifyToken) {
