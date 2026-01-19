@@ -1265,7 +1265,7 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
                               <td className="px-6 py-4 text-gray-600">{test.customer_email}</td>
                               <td className="px-6 py-4">
                                 <span className="font-bold text-[#3DB3E3]">
-                                  {test.analysis_results?.overallScore || 'N/A'}%
+                                  {test.analysis_results?.overall?.pct || 'N/A'}%
                                 </span>
                               </td>
                               <td className="px-6 py-4 text-sm text-gray-600">

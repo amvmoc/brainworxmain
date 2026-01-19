@@ -192,10 +192,26 @@ function generateClientReport(participant: any, overall: any, top5: any[], safet
         <p style="margin: 0; color: #1e3a8a;">Higher scores indicate patterns that are more active right now. These patterns can shift with support, routine, and taking small steps forward. Your detailed coach report with specific next steps has been sent to your support team.</p>
       </div>
 
+      <div style="background: #fef3c7; border: 2px solid #f59e0b; padding: 25px; border-radius: 10px; margin-bottom: 20px; text-align: center;">
+        <h2 style="color: #92400e; margin-top: 0; margin-bottom: 15px;">As a thank you, you're eligible for:</h2>
+        <div style="font-size: 28px; font-weight: bold; color: #dc2626; margin-bottom: 15px;">FREE 45-Minute Coaching Session</div>
+        <p style="color: #78350f; margin-bottom: 20px; line-height: 1.8;">
+          Work with a certified BrainWorx coach to:<br>
+          ✓ Review your results in detail<br>
+          ✓ Understand your patterns deeply<br>
+          ✓ Create a personalized action plan<br>
+          ✓ Get professional guidance and support
+        </p>
+        <a href="https://brainworx.co.za/book/ADMIN001" style="display: inline-block; background: linear-gradient(135deg, #10b981, #14b8a6); color: white; padding: 15px 35px; border-radius: 25px; text-decoration: none; font-weight: bold; font-size: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+          Schedule Your FREE Session
+        </a>
+      </div>
+
       <div style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
         <h2 style="color: #0A2A5E; margin-top: 0;">Next Steps</h2>
         <ul style="color: #666; padding-left: 20px;">
           <li>Review this report and reflect on the patterns identified</li>
+          <li>Schedule your FREE 45-minute coaching session</li>
           <li>Reach out to your support team or coach for guidance</li>
           <li>Consider professional support if patterns are significantly impacting your daily life</li>
           <li>Remember: patterns can change with proper support and small, consistent steps</li>
