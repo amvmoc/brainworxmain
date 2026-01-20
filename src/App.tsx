@@ -115,7 +115,7 @@ function App() {
     }
 
     // Check for booking link with path-based routing
-    const bookingMatch = currentPath.match(/\/book\/([a-zA-Z0-9]+)/);
+    const bookingMatch = currentPath.match(/\/book\/([a-zA-Z0-9_-]+)(?:\/|$|\?)/);
     if (bookingMatch && bookingMatch[1]) {
       setBookingFranchiseCode(bookingMatch[1]);
       setShowBooking(true);
