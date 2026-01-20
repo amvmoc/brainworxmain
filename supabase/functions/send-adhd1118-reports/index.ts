@@ -47,7 +47,8 @@ function generateTeenClientReport(
   assessment: any,
   teenResponse: any,
   patterns: any[],
-  baseUrl: string
+  baseUrl: string,
+  franchiseOwnerLinkCode?: string
 ): string {
   const corePatterns = patterns.filter(p =>
     ["FOC", "HYP", "IMP", "ORG", "DIM"].includes(p.code)
@@ -756,7 +757,7 @@ Deno.serve(async (req: Request) => {
 
     patterns.sort((a, b) => b.teenScore - a.teenScore);
 
-    const teenClientHtml = generateTeenClientReport(assessment, teenResponse, patterns, baseUrl);
+    const teenClientHtml = generateTeenClientReport(assessment, teenResponse, patterns, baseUrl, franchiseOwnerLinkCode);
 
     const emailPromises = [
       resend.emails.send({
