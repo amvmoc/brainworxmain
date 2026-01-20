@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X, Download, Calendar, User, FileText } from 'lucide-react';
+import { X, Download, Calendar, User, FileText, ArrowLeft } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { generateClientReportData, generateClientReportFromAnalysis } from '../utils/clientReportScoring';
 import { downloadHTMLReport } from '../utils/htmlReportGenerator';
@@ -13,6 +13,9 @@ export function PublicResultsView({ shareToken }: PublicResultsViewProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [responseData, setResponseData] = useState<any>(null);
+  const [showBookingModal, setShowBookingModal] = useState(false);
+  const [franchiseCode, setFranchiseCode] = useState('');
+  const [bookingError, setBookingError] = useState<string | null>(null);
 
   useEffect(() => {
     loadResultsData();
@@ -149,6 +152,29 @@ export function PublicResultsView({ shareToken }: PublicResultsViewProps) {
     });
   };
 
+  const handleBookingSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setBookingError(null);
+
+    if (!franchiseCode.trim()) {
+      setBookingError('Please enter a franchise code');
+      return;
+    }
+
+    const { data } = await supabase
+      .from('franchise_owners')
+      .select('id')
+      .eq('unique_link_code', franchiseCode.trim().toUpperCase())
+      .maybeSingle();
+
+    if (!data) {
+      setBookingError('Franchise code not found. Please check and try again.');
+      return;
+    }
+
+    window.location.href = `/book/${franchiseCode.trim().toUpperCase()}`;
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#E6E9EF] to-white">
       <header className="bg-white shadow-sm sticky top-0 z-10">
@@ -229,28 +255,114 @@ export function PublicResultsView({ shareToken }: PublicResultsViewProps) {
         <ClientReport results={reportData} />
 
         <div className="max-w-4xl mx-auto mt-8">
-          <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8 text-center">
-            <h3 className="text-2xl font-bold text-[#0A2A5E] mb-4">Want to Learn More?</h3>
-            <p className="text-gray-700 mb-6">
-              Discover how BrainWorx can help you transform your cognitive patterns and unlock your full potential.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
-                href="/?coupon=start"
-                className="inline-flex items-center justify-center bg-[#3DB3E3] text-white px-8 py-3 rounded-full hover:bg-[#1FAFA3] transition-colors font-medium"
-              >
-                Take Your Assessment
-              </a>
-              <a
-                href="/#contact"
-                className="inline-flex items-center justify-center border-2 border-[#3DB3E3] text-[#3DB3E3] px-8 py-3 rounded-full hover:bg-[#3DB3E3] hover:text-white transition-colors font-medium"
-              >
-                Contact Us
-              </a>
+          <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+            <div className="grid md:grid-cols-2 gap-8">
+              <div>
+                <h3 className="text-2xl font-bold text-[#0A2A5E] mb-4">Want to Learn More?</h3>
+                <p className="text-gray-700 mb-6">
+                  Discover how BrainWorx can help you transform your cognitive patterns and unlock your full potential.
+                </p>
+                <div className="flex flex-col gap-3">
+                  <a
+                    href="/?coupon=start"
+                    className="inline-flex items-center justify-center bg-[#3DB3E3] text-white px-6 py-3 rounded-full hover:bg-[#1FAFA3] transition-colors font-medium"
+                  >
+                    Take Another Assessment
+                  </a>
+                  <a
+                    href="/#contact"
+                    className="inline-flex items-center justify-center border-2 border-[#3DB3E3] text-[#3DB3E3] px-6 py-3 rounded-full hover:bg-[#3DB3E3] hover:text-white transition-colors font-medium"
+                  >
+                    Contact Us
+                  </a>
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-br from-[#0A2A5E] to-[#3DB3E3] rounded-xl p-6 text-white flex flex-col justify-between">
+                <div>
+                  <h3 className="text-xl font-bold mb-3 flex items-center gap-2">
+                    <Calendar size={24} />
+                    Book a Coaching Session
+                  </h3>
+                  <p className="text-white/90 text-sm mb-4">
+                    Work one-on-one with a certified coach to dive deeper into your results and create a personalized action plan.
+                  </p>
+                </div>
+                <button
+                  onClick={() => setShowBookingModal(true)}
+                  className="inline-flex items-center justify-center bg-white text-[#0A2A5E] px-6 py-3 rounded-full hover:bg-[#E6E9EF] transition-colors font-semibold"
+                >
+                  Schedule Session
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
+
+      {showBookingModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-[#0A2A5E]">Book a Session</h2>
+              <button
+                onClick={() => {
+                  setShowBookingModal(false);
+                  setFranchiseCode('');
+                  setBookingError(null);
+                }}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <X size={24} />
+              </button>
+            </div>
+
+            <form onSubmit={handleBookingSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Franchise Coach Code
+                </label>
+                <input
+                  type="text"
+                  value={franchiseCode}
+                  onChange={(e) => setFranchiseCode(e.target.value.toUpperCase())}
+                  placeholder="Enter your coach's code"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#3DB3E3] focus:border-transparent"
+                />
+                <p className="text-sm text-gray-600 mt-2">
+                  Your coach should have provided you with a franchise code. If you don't have one, contact your coach directly.
+                </p>
+              </div>
+
+              {bookingError && (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                  <p className="text-sm text-red-700">{bookingError}</p>
+                </div>
+              )}
+
+              <div className="flex gap-3 pt-4">
+                <button
+                  type="submit"
+                  className="flex-1 bg-[#3DB3E3] text-white px-6 py-3 rounded-lg hover:bg-[#1FAFA3] transition-colors font-semibold"
+                >
+                  Continue to Booking
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowBookingModal(false);
+                    setFranchiseCode('');
+                    setBookingError(null);
+                  }}
+                  className="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-semibold"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       <footer className="bg-[#0A2A5E] text-white py-8 px-6 mt-16">
         <div className="container mx-auto text-center">
