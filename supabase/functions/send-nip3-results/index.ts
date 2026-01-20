@@ -16,7 +16,7 @@ Deno.serve(async (req: Request) => {
   }
 
   try {
-    const { recipients, results, completedAt, htmlReport, customerName, customerEmail, isCoachReport = false } = await req.json();
+    const { recipients, results, completedAt, htmlReport, customerName, customerEmail, franchiseOwnerId, isCoachReport = false } = await req.json();
 
     if (!recipients || !Array.isArray(recipients) || recipients.length === 0) {
       throw new Error('Recipients array is required');
@@ -182,6 +182,35 @@ Deno.serve(async (req: Request) => {
     const sanitizedName = customerName.replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '_');
     const pdfFilename = `BrainWorx_NIP3_Report_${sanitizedName}.pdf`;
 
+    let franchiseOwnerLinkCode = null;
+    if (franchiseOwnerId) {
+      try {
+        const supabaseUrl = Deno.env.get("SUPABASE_URL");
+        const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+
+        if (!supabaseUrl || !supabaseServiceKey) {
+          throw new Error("Supabase credentials not configured");
+        }
+
+        const response = await fetch(`${supabaseUrl}/rest/v1/franchise_owners?id=eq.${franchiseOwnerId}&select=unique_link_code`, {
+          headers: {
+            "Authorization": `Bearer ${supabaseServiceKey}`,
+            "Content-Type": "application/json",
+            "apikey": supabaseServiceKey
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data && data.length > 0) {
+            franchiseOwnerLinkCode = data[0].unique_link_code;
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching franchise owner code:', error);
+      }
+    }
+
     const emailPromises = recipients.map((email: string) => {
       console.log('Sending NIP3 Report with PDF attachment to:', email);
       const reportType = isCoachReport ? 'Comprehensive Coach Report' : 'Assessment Results';
@@ -281,7 +310,7 @@ Deno.serve(async (req: Request) => {
                     <p style="color: rgba(255,255,255,0.95); margin: 0 0 24px 0; font-size: 16px; line-height: 1.6;">
                       Schedule a consultation session to discuss your results and create a personalized action plan.
                     </p>
-                    <a href="https://www.brainworx.co.za/booking" style="display: inline-block; background: #ffffff; color: #667eea; padding: 16px 48px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 18px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: all 0.3s;">
+                    <a href="${franchiseOwnerLinkCode ? `https://www.brainworx.co.za/book/${franchiseOwnerLinkCode}?name=${encodeURIComponent(customerName)}&email=${encodeURIComponent(customerEmail)}` : 'https://www.brainworx.co.za/booking'}" style="display: inline-block; background: #ffffff; color: #667eea; padding: 16px 48px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 18px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: all 0.3s;">
                       Book Your Session Now
                     </a>
                   </div>

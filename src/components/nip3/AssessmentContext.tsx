@@ -365,6 +365,7 @@ export const AssessmentProvider: React.FC<AssessmentProviderProps> = ({
               completedAt: new Date().toISOString(),
               customerName: customerName,
               customerEmail: email,
+              franchiseOwnerId: franchiseOwnerId || null,
               isCoachReport: false
             }
           });
@@ -414,6 +415,7 @@ export const AssessmentProvider: React.FC<AssessmentProviderProps> = ({
                 completedAt: new Date().toISOString(),
                 customerName: customerName,
                 customerEmail: email,
+                franchiseOwnerId: franchiseOwnerId,
                 isCoachReport: true
               }
             });
