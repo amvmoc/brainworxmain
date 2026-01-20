@@ -212,7 +212,7 @@ export function CustomerBookingCalendar({ franchiseOwnerId, franchiseOwnerName, 
 
       if (franchiseOwnerData) {
         try {
-          await supabase.functions.invoke('send-booking-reminder', {
+          const { error: emailError } = await supabase.functions.invoke('send-booking-reminder', {
             body: {
               franchiseOwnerEmail: franchiseOwnerData.email,
               franchiseOwnerName: franchiseOwnerData.name,
@@ -225,7 +225,10 @@ export function CustomerBookingCalendar({ franchiseOwnerId, franchiseOwnerName, 
               notes: formData.notes
             }
           });
-        } catch (emailError) {
+          if (emailError) {
+            console.error('Failed to send email notification:', emailError);
+          }
+        } catch (emailError: any) {
           console.error('Failed to send email notification:', emailError);
         }
       }
@@ -236,9 +239,16 @@ export function CustomerBookingCalendar({ franchiseOwnerId, franchiseOwnerName, 
       }
     } catch (error: any) {
       console.error('Error creating booking:', error);
-      alert('Failed to create booking: ' + error.message);
-    } finally {
       setSubmitting(false);
+
+      const errorMessage = error?.message || 'Unknown error occurred';
+      if (errorMessage.includes('check_booking_conflict')) {
+        alert('This time slot is no longer available. Please select another time.');
+      } else if (errorMessage.includes('duplicate')) {
+        alert('This email already has an active booking. Please contact us to reschedule.');
+      } else {
+        alert('Failed to create booking. Please try again or contact support.');
+      }
     }
   };
 
