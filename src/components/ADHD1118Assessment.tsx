@@ -249,12 +249,14 @@ export default function ADHD1118Assessment({
         severity: getSeverityLabel1118(nippScores[code as PatternId])
       }));
 
-      const { data: existingResponse } = await supabase
+      const { data: existingResponse, error: selectError } = await supabase
         .from('adhd_1118_assessment_responses')
-        .select('id')
+        .select('*')
         .eq('assessment_id', assessmentId)
         .eq('respondent_type', respondentType)
         .maybeSingle();
+
+      if (selectError) throw selectError;
 
       if (existingResponse) {
         const { error: updateError } = await supabase
@@ -268,6 +270,22 @@ export default function ADHD1118Assessment({
           .eq('id', existingResponse.id);
 
         if (updateError) throw updateError;
+      } else {
+        const { error: insertError } = await supabase
+          .from('adhd_1118_assessment_responses')
+          .insert({
+            assessment_id: assessmentId,
+            respondent_type: respondentType,
+            respondent_name: respondentInfo.name,
+            respondent_email: respondentInfo.email,
+            respondent_relationship: 'self',
+            responses,
+            scores: { nippScores },
+            completed: true,
+            completed_at: new Date().toISOString()
+          });
+
+        if (insertError) throw insertError;
       }
 
       // ADHD 11-18 is a teen-only self-assessment (no parent input required)
