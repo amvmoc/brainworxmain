@@ -11,6 +11,8 @@ import { ADHD1118AssessmentsManagement } from './ADHD1118AssessmentsManagement';
 import { SelfAssessmentReport } from './SelfAssessmentReport';
 import CoachReport from './coach-report/CoachReport';
 import NIP3CoachReport from './nip3/CoachReport';
+import ADHD1118Report from './ADHD1118Report';
+import ADHD1118CoachReport from './ADHD1118CoachReport';
 import { generateCoachReportData } from '../utils/coachReportGenerator';
 import { selfAssessmentTypes } from '../data/selfAssessmentQuestions';
 
@@ -1318,7 +1320,7 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
                               <td className="px-6 py-4">
                                 <div className="flex gap-2">
                                   <button
-                                    onClick={() => setViewingTestReport({ ...test, type: 'self' })}
+                                    onClick={() => setViewingTestReport({ ...test, type: 'trauma-scan' })}
                                     className="bg-[#3DB3E3] text-white px-4 py-2 rounded-lg hover:bg-[#1FAFA3] transition-colors font-medium flex items-center gap-2"
                                   >
                                     <Eye size={16} />
@@ -1343,7 +1345,7 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
                                   </button>
                                   <button
                                     onClick={() => {
-                                      setTestToDelete({ ...test, type: 'self' });
+                                      setTestToDelete({ ...test, type: 'trauma-scan' });
                                       setShowDeleteTestModal(true);
                                     }}
                                     className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors font-medium flex items-center gap-2"
@@ -1918,7 +1920,15 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
                 )}
               </div>
             </div>
-          ) : viewingTestReport.type === 'adhd710' || viewingTestReport.type === 'adhd1118' ? (
+          ) : viewingTestReport.type === 'adhd1118' ? (
+            <ADHD1118Report
+              assessmentId={viewingTestReport.id}
+              teenName={viewingTestReport.teen_name}
+              teenAge={viewingTestReport.teen_age}
+              parentEmail={viewingTestReport.created_by_email}
+              onClose={() => setViewingTestReport(null)}
+            />
+          ) : viewingTestReport.type === 'adhd710' ? (
             <div className="fixed inset-0 bg-black/80 z-[100] overflow-y-auto" onClick={(e) => e.target === e.currentTarget && setViewingTestReport(null)}>
               <div className="relative min-h-screen">
                 <button
@@ -1932,24 +1942,12 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
                 </button>
                 <div className="bg-white p-12">
                   <h2 className="text-3xl font-bold text-[#0A2A5E] mb-8">
-                    {viewingTestReport.type === 'adhd710'
-                      ? `ADHD 7-10 Assessment for ${viewingTestReport.child_name}`
-                      : `ADHD 11-18 Assessment for ${viewingTestReport.teen_name}`
-                    }
+                    ADHD 7-10 Assessment for {viewingTestReport.child_name}
                   </h2>
                   <div className="text-gray-600">
                     <p className="mb-2"><strong>Status:</strong> {viewingTestReport.status.replace(/_/g, ' ')}</p>
                     <p className="mb-2"><strong>Created:</strong> {new Date(viewingTestReport.created_at).toLocaleDateString()}</p>
-                    {viewingTestReport.type === 'adhd710' && (
-                      <>
-                        <p className="mb-2"><strong>Child Age:</strong> {viewingTestReport.child_age}</p>
-                      </>
-                    )}
-                    {viewingTestReport.type === 'adhd1118' && (
-                      <>
-                        <p className="mb-2"><strong>Teen Age:</strong> {viewingTestReport.teen_age}</p>
-                      </>
-                    )}
+                    <p className="mb-2"><strong>Child Age:</strong> {viewingTestReport.child_age}</p>
                     <p><strong>Parent Email:</strong> {viewingTestReport.created_by_email}</p>
                   </div>
                   <div className="mt-8 p-6 bg-blue-50 rounded-lg border border-blue-200">
@@ -1958,6 +1956,13 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
                 </div>
               </div>
             </div>
+          ) : viewingTestReport.type === 'trauma-scan' ? (
+            <SelfAssessmentReport
+              responseId={viewingTestReport.id}
+              assessmentType={selfAssessmentTypes.find(t => t.type === 'trauma-scan') || selfAssessmentTypes[0]}
+              customerEmail={viewingTestReport.customer_email}
+              onClose={() => setViewingTestReport(null)}
+            />
           ) : (
             <SelfAssessmentReport
               responseId={viewingTestReport.id}

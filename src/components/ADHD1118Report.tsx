@@ -73,7 +73,10 @@ export default function ADHD1118Report({
     );
   }
 
-  if (!teenResponse || !teenResponse.completed) {
+  const hasScores = teenResponse?.scores?.nippScores && Object.keys(teenResponse.scores.nippScores).length > 0;
+  const isCompleted = teenResponse?.completed || hasScores;
+
+  if (!teenResponse || !isCompleted) {
     return (
       <div className="fixed inset-0 bg-black/80 z-[100] overflow-y-auto" onClick={(e) => e.target === e.currentTarget && onClose()}>
         <div className="relative min-h-screen">
@@ -103,6 +106,11 @@ export default function ADHD1118Report({
                 {teenResponse.responses && (
                   <p className="text-blue-600 text-xs mt-3">
                     Progress: {Object.keys(teenResponse.responses).length} questions answered
+                  </p>
+                )}
+                {teenResponse.scores && (
+                  <p className="text-blue-600 text-xs mt-2">
+                    Scores: {Object.keys(teenResponse.scores).length} scoring categories
                   </p>
                 )}
               </div>
