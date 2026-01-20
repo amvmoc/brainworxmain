@@ -13,6 +13,7 @@ import CoachReport from './coach-report/CoachReport';
 import NIP3CoachReport from './nip3/CoachReport';
 import ADHD1118Report from './ADHD1118Report';
 import ADHD1118CoachReport from './ADHD1118CoachReport';
+import TraumaCoachReport from './TraumaCoachReport';
 import { generateCoachReportData } from '../utils/coachReportGenerator';
 import { selfAssessmentTypes } from '../data/selfAssessmentQuestions';
 
@@ -1957,9 +1958,9 @@ export function SuperAdminDashboard({ franchiseOwnerId, franchiseOwnerName, onLo
               </div>
             </div>
           ) : viewingTestReport.type === 'trauma-scan' ? (
-            <SelfAssessmentReport
-              responseId={viewingTestReport.id}
-              assessmentType={selfAssessmentTypes.find(t => t.type === 'trauma-scan') || selfAssessmentTypes[0]}
+            <TraumaCoachReport
+              assessmentId={viewingTestReport.id}
+              customerName={viewingTestReport.customer_name}
               customerEmail={viewingTestReport.customer_email}
               onClose={() => setViewingTestReport(null)}
             />
