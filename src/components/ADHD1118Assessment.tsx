@@ -32,7 +32,6 @@ export default function ADHD1118Assessment({
 }: ADHD1118AssessmentProps) {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [assessment, setAssessment] = useState<any>(null);
   const [assessmentId, setAssessmentId] = useState<string | undefined>(initialAssessmentId);
   const [responses, setResponses] = useState<Record<string, number>>({});
   const [respondentInfo, setRespondentInfo] = useState({
@@ -71,7 +70,6 @@ export default function ADHD1118Assessment({
         .maybeSingle();
 
       if (assessmentError) throw assessmentError;
-      setAssessment(assessmentData);
 
       if (assessmentData) {
         setTeenInfo({
@@ -87,6 +85,8 @@ export default function ADHD1118Assessment({
         .eq('assessment_id', initialAssessmentId)
         .eq('respondent_type', respondentType)
         .maybeSingle();
+
+      if (responseError) throw responseError;
 
       if (responseData) {
         setResponses(responseData.responses || {});
@@ -139,7 +139,6 @@ export default function ADHD1118Assessment({
         if (assessmentError) throw assessmentError;
         currentAssessmentId = newAssessment.id;
         setAssessmentId(currentAssessmentId);
-        setAssessment(newAssessment);
       }
 
       const { data: existingResponse } = await supabase

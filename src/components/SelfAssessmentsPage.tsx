@@ -200,7 +200,7 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
       setShowResumeModal(false);
       setShowChoiceModal(false);
       setADHD1118AssessmentData({
-        respondentType: adhd1118Response.teen_completed ? 'parent' : 'teen'
+        respondentType: 'teen'
       });
       setStartADHD1118Assessment(true);
       return;
@@ -450,7 +450,7 @@ export function SelfAssessmentsPage({ onClose, onStartPayment }: SelfAssessments
       <ADHD1118Assessment
         assessmentId={adhd1118AssessmentData.assessmentId}
         respondentType={adhd1118AssessmentData.respondentType}
-        onComplete={() => {
+        onClose={() => {
           setStartADHD1118Assessment(false);
           setADHD1118AssessmentData(null);
         }}
