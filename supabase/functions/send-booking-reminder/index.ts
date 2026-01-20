@@ -288,12 +288,23 @@ Deno.serve(async (req: Request) => {
       }),
     ]);
 
-    if (!ownerResult.ok || !customerResult.ok || !infoResult.ok) {
-      const errors = [];
-      if (!ownerResult.ok) errors.push(`Franchise owner email failed: ${await ownerResult.text()}`);
-      if (!customerResult.ok) errors.push(`Customer email failed: ${await customerResult.text()}`);
-      if (!infoResult.ok) errors.push(`BrainWorx info email failed: ${await infoResult.text()}`);
-      throw new Error(errors.join('; '));
+    const failedEmails = [];
+
+    if (!ownerResult.ok) {
+      console.error('Franchise owner email failed:', ownerResult.status, await ownerResult.text());
+      failedEmails.push('franchise_owner');
+    }
+    if (!customerResult.ok) {
+      console.error('Customer email failed:', customerResult.status, await customerResult.text());
+      failedEmails.push('customer');
+    }
+    if (!infoResult.ok) {
+      console.error('BrainWorx info email failed:', infoResult.status, await infoResult.text());
+      failedEmails.push('info');
+    }
+
+    if (failedEmails.length > 0) {
+      console.warn(`Some emails failed to send: ${failedEmails.join(', ')}`);
     }
 
     return new Response(

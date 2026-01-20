@@ -71,11 +71,13 @@ export function FranchiseBookingCalendar({
         .order('booking_date', { ascending: true })
         .order('start_time', { ascending: true });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error loading bookings:', error);
+        throw new Error('Failed to load bookings. Please refresh the page.');
+      }
       setBookings(data || []);
     } catch (error: any) {
       console.error('Error loading bookings:', error);
-      alert('Failed to load bookings');
     } finally {
       setLoading(false);
     }
@@ -209,7 +211,7 @@ export function FranchiseBookingCalendar({
       days.push(
         <div
           key={day}
-          className={`h-32 border border-gray-200 p-2 cursor-pointer transition-all ${
+          className={`h-32 border border-gray-200 p-2 cursor-pointer transition-all group ${
             isToday ? 'bg-blue-50 border-blue-400 border-2' : isPast ? 'bg-gray-50' : 'bg-white hover:bg-blue-50'
           }`}
           onClick={() => {
